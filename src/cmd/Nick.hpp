@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:56:24 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/10 13:24:44 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:44:20 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Match_nickname {
 class Nick : public ACommand {
     public:
         Nick();
-        void exec(const std::string &value, Client &cl, Server &sr) const;
+        void exec(const std::string &value, Client &clients, const Server &server) const;
         ~Nick();
     private:
 };

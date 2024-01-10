@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:10:00 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/10 13:31:05 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:45:41 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,14 @@
 
 Nick::Nick() : ACommand("NICK") {}
 
-void Nick::exec(const std::string &value, Client &cl, Server &sr) const {
-    (void)sr;
-    std::map<int, Client*> cls = sr.getClients();
-    std::map<int, Client*>::iterator user = std::find_if(cls.begin(), cls.end(), Match_nickname(value));
-    if (user == cls.end())
-        cl.setNickname(value);
+void Nick::exec(const std::string &value, Client &client, const Server &server) const {
+    std::map<int, Client*> clients = server.getClients();
+    std::map<int, Client*>::iterator user = std::find_if(clients.begin(), clients.end(), Match_nickname(value));
+    if (user == clients.end())
+        client.setNickname(value);
     else {
         std::string error_message = ":server_name 433 nick :Nickname is already in use\r\n";
-        send(cl.getFd(), error_message.c_str(), error_message.size(), 0);
+        send(client.getFd(), error_message.c_str(), error_message.size(), 0);
         std::cout << RED << "nickname already exist\n" << RESET;
     }
 }
