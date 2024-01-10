@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/09 01:24:36 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:16:32 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,31 +21,21 @@ void Server::add_fd(int fd) {
     this->clients_num++;
 }
 
+const std::string& Server::getPassword() const {
+    return (this->password);
+}
+const std::map<int, Client*>& Server::getClients() const {
+    return (this->clients);
+}
+
 void Server::new_client(sockaddr *a, socklen_t len, int fd) {
     int client_fd = accept(fd, a, &len);
     if (client_fd == -1)
         throw std::exception();
     std::cout << BLUE << "Accepted connection from " << inet_ntoa(reinterpret_cast<struct sockaddr_in*>(a)->sin_addr) << RESET << std::endl;
     add_fd(client_fd);
-    Client c(client_fd);
-    clients.push_back(c);
-}
-
-void pass(std::string &password, Client &c, std::string pass) {
-    if (password != pass) {
-        std::string msg = RED + "Error: inalid password\n" + RESET; 
-        send(c.getFd(), msg.c_str(), msg.size(), 0);
-    } else
-        c.setPassword(password);
-}
-
-void nick(std::string &nick, Client &c) {
-    // if (c.getNickname().empty()) {
-    //     for ()
-    // }
-    // else
-    c.setNickname(nick);
-        
+    Client *client = new Client(client_fd);
+    clients.insert(std::make_pair(client_fd, client));
 }
 
 void Server::auth(std::string &data, Client &client) {
@@ -53,13 +43,24 @@ void Server::auth(std::string &data, Client &client) {
     std::stringstream str(data);
     str >> key;
     str >> value;
-    if (key == "PASS" && client.getPassword().empty())
-        pass(value, client, this->password);
-    else if (key == "NICK")
-        nick(value, client);
-    else {
-        std::string msg = RED + "Error: auth failed, invalid command (PASS, NICK, USER)!\n" + RESET; 
+    ACommand *cmds[2] = {new Pass(), new Nick()};
+    int i = (key == "PASS") * 1 + (key == "NICK") * 2;
+    if (!i || i >= 3)
+        return ;
+    try { cmds[i - 1]->exec(value, client, *this); } catch (std::exception &e) {
+        std::map<int , Client*>::iterator user = clients.find(client.getFd());
+        if (user != clients.end())
+        {
+            delete user->second;
+            clients.erase(user);
+        }
+        throw;
+    }
+    if (!client.getPassword().empty() && !client.getNickname().empty()) {
+        std::string msg = ":localhost 001 " + client.getNickname() + " : Welcome to the IRC server : " + client.getNickname() + "!\r\n";
         send(client.getFd(), msg.c_str(), msg.size(), 0);
+        client.setlogedin();
+        std::cout << YELLOW << client.getNickname() << " logedin successfuly!" << RESET << std::endl;
     }
 }
 
@@ -67,31 +68,13 @@ void Server::recive_data(int fd) {
     char buff[500] = {0};
     ssize_t bytes = recv(fd, buff, sizeof(buff), 0);
     
-    std::vector<Client>::iterator user = std::find_if(clients.begin(), clients.end(), Match(fd));
+    std::map<int, Client*>::iterator user = clients.find(fd);
     if (bytes > 0 && user != clients.end()) {
         std::string data = buff;
-        
-        if (!user->islogedin()) {
-            std::cout << "client_fd: " << user->getFd() << " - auth : " << data;
-            auth(data, *user);
-            if (!user->getPassword().empty() && !user->getNickname().empty()) {
-                std::string msg = ":localhost 001 " + user->getNickname() + " : Welcome to the IRC server : " + user->getNickname() + "!\r\n";
-                send(user->getFd(), msg.c_str(), msg.size(), 0);
-                user->setlogedin();
-            }
-        }
-        else {
-            std::cout << user->getNickname() << ": " << data;
-            // if (data == "join\n" && data.size() == 5)
-            //     channels[0]->add_user(user->getFd(), user->getNickname());
-            // else if (data.find("join") != std::string::npos) {
-            //     Channel *ch = new Channel(user->getFd(), "test", user->getNickname());
-            //     channels.push_back(ch);
-            //     // std::cout << CYAN << "Create a channel" << RESET << std::endl;
-            // } else if (data.find("msg") != std::string::npos) {
-            //     channels[0]->brodcast_msg(data);
-            // }
-        }
+        if (!user->second->islogedin())
+            try { auth(data, *user->second); } catch (std::exception &e) { std::cout << RED << e.what() << RESET << std::endl;}
+        else
+            std::cout << user->second->getNickname() << ": " << data;
     } 
 }
 
@@ -123,7 +106,7 @@ void Server::start_server() {
     if (listen(this->server_fd, 1) == -1)
         throw std::exception();
 
-    std::cout << GREEN<< "Server listening on port " << port << RESET << std::endl;
+    std::cout << GREEN<< "Server listening on port " << port << "..." << RESET << std::endl;
     
     struct sockaddr_in client_addr;
     socklen_t len = sizeof(client_addr);
