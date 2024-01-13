@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 11:28:06 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/10 13:45:21 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/11 10:18:24 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../Server.hpp"
 
 Pass::Pass() : ACommand("PASS") {}
+
 
 void Pass::exec(const std::string &pass, Client &client, const Server &server) const {
     if (client.getPassword() == server.getPassword()) {
@@ -24,7 +25,7 @@ void Pass::exec(const std::string &pass, Client &client, const Server &server) c
         std::string error_message = ":server_name 464 nick :Password incorrect\r\n"; 
         send(client.getFd(), error_message.c_str(), error_message.size(), 0);
         close(client.getFd());
-        throw std::logic_error("client auth failed: bad password");
+        throw BADPASS();
     } else
         client.setPassword(pass);
 }

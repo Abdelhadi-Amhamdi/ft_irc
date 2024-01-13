@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/10 13:16:02 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/11 10:42:38 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+
+// 
+#include <sys/types.h>
+#include <netdb.h>
 
 // sockets manipulation
 #include <sys/socket.h>
@@ -60,9 +64,9 @@ class Server {
     private:
         const   int port;
         const   std::string password;
-        struct  pollfd fds[1000];
+        // struct  pollfd fds[1000];
         std::vector<struct pollfd> c_fds;
-        int     clients_num;
+        // int     clients_num;
         int     server_fd;
         std::map<int, Client*> clients;
         std::vector<Channel*> channels;

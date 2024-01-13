@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:10:00 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/10 13:45:41 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:51:46 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void Nick::exec(const std::string &value, Client &client, const Server &server) 
     else {
         std::string error_message = ":server_name 433 nick :Nickname is already in use\r\n";
         send(client.getFd(), error_message.c_str(), error_message.size(), 0);
-        std::cout << RED << "nickname already exist\n" << RESET;
+        throw std::logic_error("nickname already exist");
     }
 }
 

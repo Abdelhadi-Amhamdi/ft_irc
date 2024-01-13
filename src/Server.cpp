@@ -6,19 +6,23 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/10 13:16:32 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/11 10:51:13 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 Server::Server(const std::string &password, const int &port) 
-    : port(port), password(password), clients_num(0) {}
+    : port(port), password(password) {}
 
 void Server::add_fd(int fd) {
-    this->fds[this->clients_num].fd = fd;
-    this->fds[this->clients_num].events = POLLIN;
-    this->clients_num++;
+    struct pollfd a;
+    a.fd = fd;
+    a.events = POLLIN;
+    c_fds.push_back(a);
+    // this->fds[this->clients_num].fd = fd;
+    // this->fds[this->clients_num].events = POLLIN;
+    // this->clients_num++;
 }
 
 const std::string& Server::getPassword() const {
@@ -47,7 +51,8 @@ void Server::auth(std::string &data, Client &client) {
     int i = (key == "PASS") * 1 + (key == "NICK") * 2;
     if (!i || i >= 3)
         return ;
-    try { cmds[i - 1]->exec(value, client, *this); } catch (std::exception &e) {
+    try { cmds[i - 1]->exec(value, client, *this); }
+    catch(Pass::BADPASS &e) {
         std::map<int , Client*>::iterator user = clients.find(client.getFd());
         if (user != clients.end())
         {
@@ -55,7 +60,7 @@ void Server::auth(std::string &data, Client &client) {
             clients.erase(user);
         }
         throw;
-    }
+    } catch (std::exception &e) {throw;}
     if (!client.getPassword().empty() && !client.getNickname().empty()) {
         std::string msg = ":localhost 001 " + client.getNickname() + " : Welcome to the IRC server : " + client.getNickname() + "!\r\n";
         send(client.getFd(), msg.c_str(), msg.size(), 0);
@@ -67,6 +72,11 @@ void Server::auth(std::string &data, Client &client) {
 void Server::recive_data(int fd) {
     char buff[500] = {0};
     ssize_t bytes = recv(fd, buff, sizeof(buff), 0);
+    if (bytes <= 0) {
+        close(fd);
+        clients.erase(clients.find(fd));
+        return ;
+    }
     
     std::map<int, Client*>::iterator user = clients.find(fd);
     if (bytes > 0 && user != clients.end()) {
@@ -79,12 +89,12 @@ void Server::recive_data(int fd) {
 }
 
 void Server::_event(sockaddr *a, socklen_t len) {
-    for (int index = 0; index < this->clients_num; index++) {
-        if ((this->fds[index].revents & POLLIN) == POLLIN) {
-            if (this->fds[index].fd == this->server_fd)
-                new_client(a, len, this->fds[index].fd);
+    for (size_t index = 0; index < c_fds.size(); index++) {
+        if ((c_fds[index].revents & POLLIN) == POLLIN) {
+            if (c_fds[index].fd == this->server_fd)
+                new_client(a, len, c_fds[index].fd);
             else
-                recive_data(this->fds[index].fd);
+                recive_data(c_fds[index].fd);
         }
     }
 }
@@ -95,10 +105,15 @@ void Server::start_server() {
     if (this->server_fd == -1)
         throw std::logic_error("Error: cannot create a socket!");
 
+    // struct addrinfo a;
+
     struct sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(this->port);
     server_addr.sin_addr.s_addr = INADDR_ANY;
+
+    int reuse = 1;
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
 
     if (bind(this->server_fd, reinterpret_cast<struct sockaddr*>(&server_addr), sizeof(server_addr)) == -1)
         throw std::logic_error("Error: cannot bind socket to the give port!");
@@ -114,9 +129,11 @@ void Server::start_server() {
     add_fd(server_fd);
     
     while (true) {
-        if (poll(this->fds, this->clients_num, 10000) > 0)
+        if (poll(&c_fds[0], c_fds.size(), -1) > 0) {
             _event(reinterpret_cast<struct sockaddr*>(&client_addr), len);
+        }
     }
+    close(server_fd);
 }
 
 Server::~Server(){}
