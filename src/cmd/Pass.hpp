@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 11:26:56 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 11:29:57 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 21:36:50 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ class Pass : public ACommand {
             }
         };
         Pass();
-        void exec(const std::string &pass, Client &client, Server &server) const;
+        void exec(std::string &user_infos, std::string &cmd_params, Client &client, Server &server) const;
         ~Pass();
 };

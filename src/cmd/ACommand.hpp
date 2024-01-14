@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 11:24:10 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 11:29:43 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 21:35:58 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@ class Server;
 
 class ACommand {
     public:
-        ACommand(const std::string &name);
-        virtual void exec(const std::string &pass, Client &client, Server &server) const = 0;
+        ACommand();
+        virtual void exec(std::string &user_infos,std::string &cmd_params, Client &client, Server &server) const = 0;
         virtual ~ACommand();
     private:
-        const std::string name;
 };
