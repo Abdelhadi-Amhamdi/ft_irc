@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ACommand.hpp                                       :+:      :+:    :+:   */
+/*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 11:24:10 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 11:29:43 by aamhamdi         ###   ########.fr       */
+/*   Created: 2024/01/13 18:56:25 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/14 11:30:09 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Join.hpp"
 
-#pragma once
-#include <iostream>
-#include <unistd.h>
-#include <sys/socket.h>
-#include "../Client.hpp"
-class Server;
+Join::Join(const std::string &name) : ACommand(name) {}
 
-class ACommand {
-    public:
-        ACommand(const std::string &name);
-        virtual void exec(const std::string &pass, Client &client, Server &server) const = 0;
-        virtual ~ACommand();
-    private:
-        const std::string name;
-};
+void Join::exec(const std::string &value, Client &client, Server &server) const {
+    std::string channel, password;
+    std::stringstream ss(value);
+    
+    ss >> channel;
+    ss >> password;
+
+    std::vector<Channel*> channels = server.getChannels();
+    
+    
+}
+
+Join::~Join(){}

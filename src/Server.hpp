@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/11 10:42:38 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 11:33:18 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "color.hpp"
+#include "ClientSource.hpp"
+#include "ChannelSource.hpp"
 
 // containers
 #include <vector>
@@ -41,33 +43,31 @@ class Pass;
 #include "cmd/Nick.hpp"
 
 class Match {
-    int value;
-    public:
-        Match(int fd) : value(fd) {} 
-        bool operator()(const Client &c) const {
-            return (c.getFd() == value);
-        } 
+	int value;
+	public:
+		Match(int fd) : value(fd) {} 
+		bool operator()(const Client &c) const {
+			return (c.getFd() == value);
+		} 
 };
 
 class Server {
-    public:
-        Server(const std::string &password, const int &port);
-        void    start_server();
-        void    add_fd(int fd);
-        void    recive_data(int fd);
-        void    _event(sockaddr *a, socklen_t len);
-        void    new_client(sockaddr *a, socklen_t len, int fd);
-        void    auth(std::string &data, Client &client);
-        const std::string& getPassword() const;
-        const std::map<int, Client*>& getClients() const;
-        ~Server();
-    private:
-        const   int port;
-        const   std::string password;
-        // struct  pollfd fds[1000];
-        std::vector<struct pollfd> c_fds;
-        // int     clients_num;
-        int     server_fd;
-        std::map<int, Client*> clients;
-        std::vector<Channel*> channels;
+	public:
+		Server(const std::string &password, const int &port);
+		bool	nickNameused(const std::string &name);
+		void    start_server();
+		void    add_fd(int fd);
+		void    recive_data(int fd);
+		void    _event(sockaddr *a, socklen_t len);
+		void    new_client(sockaddr *a, socklen_t len, int fd);
+		void    auth(std::string &data, Client &client);
+		const std::string& getPassword() const;
+		~Server();
+	private:
+		int     port;
+		int     server_fd;
+		const   std::string password;
+		std::vector<struct pollfd>  c_fds;
+		ClientSource cl_manager;
+		ChannelSource ch_manager;
 };

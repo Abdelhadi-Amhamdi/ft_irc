@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/11 10:51:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 11:59:26 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,14 @@ void Server::add_fd(int fd) {
     a.fd = fd;
     a.events = POLLIN;
     c_fds.push_back(a);
-    // this->fds[this->clients_num].fd = fd;
-    // this->fds[this->clients_num].events = POLLIN;
-    // this->clients_num++;
+}
+
+bool Server::nickNameused(const std::string &name) {
+    return (cl_manager.checkNickName(name));
 }
 
 const std::string& Server::getPassword() const {
     return (this->password);
-}
-const std::map<int, Client*>& Server::getClients() const {
-    return (this->clients);
 }
 
 void Server::new_client(sockaddr *a, socklen_t len, int fd) {
@@ -38,8 +36,7 @@ void Server::new_client(sockaddr *a, socklen_t len, int fd) {
         throw std::exception();
     std::cout << BLUE << "Accepted connection from " << inet_ntoa(reinterpret_cast<struct sockaddr_in*>(a)->sin_addr) << RESET << std::endl;
     add_fd(client_fd);
-    Client *client = new Client(client_fd);
-    clients.insert(std::make_pair(client_fd, client));
+    cl_manager.createClient(client_fd);
 }
 
 void Server::auth(std::string &data, Client &client) {
@@ -53,12 +50,7 @@ void Server::auth(std::string &data, Client &client) {
         return ;
     try { cmds[i - 1]->exec(value, client, *this); }
     catch(Pass::BADPASS &e) {
-        std::map<int , Client*>::iterator user = clients.find(client.getFd());
-        if (user != clients.end())
-        {
-            delete user->second;
-            clients.erase(user);
-        }
+        cl_manager.deleteClient(client.getFd());
         throw;
     } catch (std::exception &e) {throw;}
     if (!client.getPassword().empty() && !client.getNickname().empty()) {
@@ -74,17 +66,31 @@ void Server::recive_data(int fd) {
     ssize_t bytes = recv(fd, buff, sizeof(buff), 0);
     if (bytes <= 0) {
         close(fd);
-        clients.erase(clients.find(fd));
+        cl_manager.deleteClient(fd);
         return ;
     }
     
-    std::map<int, Client*>::iterator user = clients.find(fd);
-    if (bytes > 0 && user != clients.end()) {
+    Client* user = cl_manager.getClient(fd);
+    if (bytes > 0 && user ) {
         std::string data = buff;
-        if (!user->second->islogedin())
-            try { auth(data, *user->second); } catch (std::exception &e) { std::cout << RED << e.what() << RESET << std::endl;}
-        else
-            std::cout << user->second->getNickname() << ": " << data;
+        if (!user->islogedin())
+            try { 
+                auth(data, *user);
+            } catch (std::exception &e) {
+                std::cout << RED << e.what() << RESET << std::endl;
+            }
+        else {
+            std::cout << user->getNickname() << ": " << data;
+            std::stringstream ss(data);
+            std::string key, value;
+            ss >> key;
+            ss >> value;
+            if (key == "join" || key == "JOIN") {
+                if (value[0] == '#')
+                    value.erase(value.begin());
+                ch_manager.addUserToChannel(value, fd, user->getNickname());
+            }
+        }
     } 
 }
 
@@ -105,8 +111,6 @@ void Server::start_server() {
     if (this->server_fd == -1)
         throw std::logic_error("Error: cannot create a socket!");
 
-    // struct addrinfo a;
-
     struct sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(this->port);
@@ -121,7 +125,7 @@ void Server::start_server() {
     if (listen(this->server_fd, 1) == -1)
         throw std::exception();
 
-    std::cout << GREEN<< "Server listening on port " << port << "..." << RESET << std::endl;
+    std::cout << GREEN << "Server listening on port " << port << "..." << RESET << std::endl;
     
     struct sockaddr_in client_addr;
     socklen_t len = sizeof(client_addr);
@@ -129,9 +133,8 @@ void Server::start_server() {
     add_fd(server_fd);
     
     while (true) {
-        if (poll(&c_fds[0], c_fds.size(), -1) > 0) {
+        if (poll(&c_fds[0], c_fds.size(), -1) > 0)
             _event(reinterpret_cast<struct sockaddr*>(&client_addr), len);
-        }
     }
     close(server_fd);
 }

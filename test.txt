@@ -1,0 +1,14 @@
+
+
+
+pass root
+
+nick aaa
+
+user a 0 * 0
+
+topic #channel
+topic #channel :"str"
+
+join #abc
+join #abc pass
