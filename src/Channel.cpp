@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 14:17:59 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 19:45:03 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void Channel::add_user(int fd, const std::string &user, const std::string &chann
     std::string RPL_ENDOFNAMES = user + ":localhost 366 " + user + " #" + channel + " :End of /NAMES list.\r\n";
     send(fd, RPL_ENDOFNAMES.c_str(), RPL_ENDOFNAMES.size(), 0);
     
-    brodcast_msg(msg, fd, user, channel);
+    brodcast_msg(msg);
 }
 
 
