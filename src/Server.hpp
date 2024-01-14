@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 11:33:18 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 21:32:42 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 #include "color.hpp"
 #include "ClientSource.hpp"
 #include "ChannelSource.hpp"
+#include "cmd/Join.hpp"
 
 // containers
 #include <vector>
@@ -55,12 +56,14 @@ class Server {
 	public:
 		Server(const std::string &password, const int &port);
 		bool	nickNameused(const std::string &name);
+		void	addUserToChannel(const std::string &channel, int user_fd, std::string user);
 		void    start_server();
 		void    add_fd(int fd);
 		void    recive_data(int fd);
 		void    _event(sockaddr *a, socklen_t len);
 		void    new_client(sockaddr *a, socklen_t len, int fd);
 		void    auth(std::string &data, Client &client);
+		void	executer(const std::string &data, Client &client);
 		const std::string& getPassword() const;
 		~Server();
 	private:
@@ -70,4 +73,5 @@ class Server {
 		std::vector<struct pollfd>  c_fds;
 		ClientSource cl_manager;
 		ChannelSource ch_manager;
+		std::map<std::string, ACommand*> commands;
 };

@@ -6,14 +6,18 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 11:59:26 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 21:32:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 Server::Server(const std::string &password, const int &port) 
-    : port(port), password(password) {}
+    : port(port), password(password) {
+    commands["JOIN"] = new Join();      
+    commands["NICK"] = new Nick();      
+    commands["PASS"] = new Pass();      
+}
 
 void Server::add_fd(int fd) {
     struct pollfd a;
@@ -26,6 +30,10 @@ bool Server::nickNameused(const std::string &name) {
     return (cl_manager.checkNickName(name));
 }
 
+void	Server::addUserToChannel(const std::string &channel, int user_fd, std::string user){
+    ch_manager.addUserToChannel(channel, user_fd, user);
+}
+
 const std::string& Server::getPassword() const {
     return (this->password);
 }
@@ -34,31 +42,24 @@ void Server::new_client(sockaddr *a, socklen_t len, int fd) {
     int client_fd = accept(fd, a, &len);
     if (client_fd == -1)
         throw std::exception();
-    std::cout << BLUE << "Accepted connection from " << inet_ntoa(reinterpret_cast<struct sockaddr_in*>(a)->sin_addr) << RESET << std::endl;
+    std::string hostname = inet_ntoa(reinterpret_cast<struct sockaddr_in*>(a)->sin_addr);
+    std::cout << BLUE << "Accepted connection from " << hostname << RESET << std::endl;
     add_fd(client_fd);
-    cl_manager.createClient(client_fd);
+    cl_manager.createClient(client_fd, hostname);
 }
 
-void Server::auth(std::string &data, Client &client) {
-    std::string key, value;
-    std::stringstream str(data);
-    str >> key;
-    str >> value;
-    ACommand *cmds[2] = {new Pass(), new Nick()};
-    int i = (key == "PASS") * 1 + (key == "NICK") * 2;
-    if (!i || i >= 3)
-        return ;
-    try { cmds[i - 1]->exec(value, client, *this); }
-    catch(Pass::BADPASS &e) {
-        cl_manager.deleteClient(client.getFd());
-        throw;
-    } catch (std::exception &e) {throw;}
-    if (!client.getPassword().empty() && !client.getNickname().empty()) {
-        std::string msg = ":localhost 001 " + client.getNickname() + " : Welcome to the IRC server : " + client.getNickname() + "!\r\n";
-        send(client.getFd(), msg.c_str(), msg.size(), 0);
-        client.setlogedin();
-        std::cout << YELLOW << client.getNickname() << " logedin successfuly!" << RESET << std::endl;
-    }
+void Server::executer(const std::string &data, Client &client) {
+    std::string info,cmd,params,elm;
+    std::stringstream ss(data);
+    
+    if (data[0] == ':')
+        ss >> info;
+    ss >> cmd;
+    while (ss >> elm)
+        params += elm;
+    std::map<std::string, ACommand*>::iterator it = commands.find(cmd);
+    if (it != commands.end())
+        it->second->exec(info, params, client, *this);
 }
 
 void Server::recive_data(int fd) {
@@ -72,24 +73,12 @@ void Server::recive_data(int fd) {
     
     Client* user = cl_manager.getClient(fd);
     if (bytes > 0 && user ) {
-        std::string data = buff;
-        if (!user->islogedin())
-            try { 
-                auth(data, *user);
-            } catch (std::exception &e) {
-                std::cout << RED << e.what() << RESET << std::endl;
-            }
-        else {
-            std::cout << user->getNickname() << ": " << data;
-            std::stringstream ss(data);
-            std::string key, value;
-            ss >> key;
-            ss >> value;
-            if (key == "join" || key == "JOIN") {
-                if (value[0] == '#')
-                    value.erase(value.begin());
-                ch_manager.addUserToChannel(value, fd, user->getNickname());
-            }
+        executer(buff, *user);
+        if (!user->islogedin() && !user->getPassword().empty() && !user->getNickname().empty()) {
+            user->setlogedin();
+            std::string message = ":localhost 001 " + user->getNickname() + " : Welcome to the IRC server : " + user->getNickname() + "!\r\n";
+            send(user->getFd(), message.c_str(), message.size(), 0);
+            std::cout << YELLOW << user->getNickname() << " logedin successfuly!" << RESET << std::endl;
         }
     } 
 }
