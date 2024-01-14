@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:09:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 11:28:43 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 21:18:57 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 ClientSource::ClientSource(){}
 
-void ClientSource::createClient(int fd) {
-    Client *new_client = new Client(fd);
+void ClientSource::createClient(int fd, std::string &hostname) {
+    Client *new_client = new Client(fd, hostname);
 
     clients[fd] = new_client;
 }

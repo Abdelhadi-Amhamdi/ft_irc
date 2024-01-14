@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/09 01:04:14 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 21:10:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ class Client {
 
 	public :
 		Client() : logedin(false) {}
-		Client(int fd) : fd(fd), logedin(false) {}
+		Client(int fd, std::string hostname) : fd(fd), hostname(hostname), logedin(false) {}
 		int getFd() const ;
 		const std::string & getLogin() const ;
 		const std::string & getNickname() const ;
@@ -38,5 +38,6 @@ class Client {
 		std::string password;
 		std::string login;
 		std::string real_name;
+		std::string hostname;
 		bool logedin;
 };

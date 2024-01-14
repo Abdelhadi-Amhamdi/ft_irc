@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:08:25 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 11:27:54 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/14 21:18:43 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class Match_nickname {
 class ClientSource {
     public:
         ClientSource();
-        void createClient(int fd);
+        void createClient(int fd, std::string &hostname);
         Client* getClient(int fd);
         void deleteClient(int fd);
         bool checkNickName(const std::string &name);
