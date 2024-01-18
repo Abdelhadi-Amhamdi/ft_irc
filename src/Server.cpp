@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 21:32:54 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:06:10 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 Server::Server(const std::string &password, const int &port) 
     : port(port), password(password) {
-    commands["JOIN"] = new Join();      
+    commands["PASS"] = new Pass();  
     commands["NICK"] = new Nick();      
-    commands["PASS"] = new Pass();      
+    commands["USER"] = new User();
+    commands["JOIN"] = new Join();      
+    commands["PRIVMSG"] = new PrivMsg();
 }
 
 void Server::add_fd(int fd) {
@@ -30,8 +32,8 @@ bool Server::nickNameused(const std::string &name) {
     return (cl_manager.checkNickName(name));
 }
 
-void	Server::addUserToChannel(const std::string &channel, int user_fd, std::string user){
-    ch_manager.addUserToChannel(channel, user_fd, user);
+void	Server::addUserToChannel(const std::string &channel, const std::string &password, int user_fd, std::string user){
+    ch_manager.addUserToChannel(channel, password, user_fd, user);
 }
 
 const std::string& Server::getPassword() const {
@@ -56,10 +58,17 @@ void Server::executer(const std::string &data, Client &client) {
         ss >> info;
     ss >> cmd;
     while (ss >> elm)
-        params += elm;
+        params += elm + " ";
+    if (params[params.size() - 1] == ' ')
+        params.erase(params.end() - 1);
     std::map<std::string, ACommand*>::iterator it = commands.find(cmd);
-    if (it != commands.end())
-        it->second->exec(info, params, client, *this);
+    if (it != commands.end()) {
+        try {
+            it->second->exec(info, params, client, *this);
+        } catch (...) {}
+    }
+    else
+        std::cout << data << std::endl;
 }
 
 void Server::recive_data(int fd) {
@@ -73,6 +82,7 @@ void Server::recive_data(int fd) {
     
     Client* user = cl_manager.getClient(fd);
     if (bytes > 0 && user ) {
+       // std::cout << bytes << std::endl;
         executer(buff, *user);
         if (!user->islogedin() && !user->getPassword().empty() && !user->getNickname().empty()) {
             user->setlogedin();
@@ -81,6 +91,10 @@ void Server::recive_data(int fd) {
             std::cout << YELLOW << user->getNickname() << " logedin successfuly!" << RESET << std::endl;
         }
     } 
+}
+
+void Server::broadcastMessage(const std::string &channel_name, const std::string &message, std::string user) {
+    ch_manager.broadcastMeassges(channel_name, message, user);
 }
 
 void Server::_event(sockaddr *a, socklen_t len) {

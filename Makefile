@@ -8,7 +8,7 @@ BUILD_DIR = build/
 CP = c++ -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 
 SRC =  main.cpp Server.cpp Client.cpp Channel.cpp ClientSource.cpp ChannelSource.cpp
-CMD =  ACommand.cpp Pass.cpp Nick.cpp Join.cpp
+CMD =  ACommand.cpp Pass.cpp Nick.cpp Join.cpp PrivMsg.cpp User.cpp
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC)) 
 CMDS = $(addprefix $(CMD_DIR), $(CMD))
