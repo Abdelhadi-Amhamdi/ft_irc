@@ -19,3 +19,5 @@ void Client::setPassword(const std::string &arg) {this->password = arg;}
 void Client::setLogin(const std::string &arg) {this->login = arg;}
 void Client::setRealName(const std::string &arg) {this->real_name = arg;}
 void Client::setlogedin() {this->logedin = true;}
+
+

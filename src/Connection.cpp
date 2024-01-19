@@ -45,7 +45,7 @@ void    Connection::handleDAta(Server& server) {
             cmd = new Pass(*this);
         if (nickname.empty())
         // execute nick command
-            
+
         if (cmd)
             cmd->execute(server);
     }
