@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 18:56:25 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:10:07 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 12:15:38 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,13 @@ void Join::exec(std::string &user_infos, std::string &cmd_params, Client &client
     }
     catch (std::exception &e) {
         std::cout << RED << e.what() << RESET << std::endl;
-        if (!strcmp(e.what(), "ERR_INVITEONLYCHAN"))
-            join_response(client.getFd(), client.getNickname(), ERR_INVITEONLYCHAN);
-        else if (!strcmp(e.what(), "ERR_CHANNELISFULL"))
-            join_response(client.getFd(), client.getNickname(), ERR_CHANNELISFULL);
-        else if (!strcmp(e.what(), "ERR_BADCHANNELKEY"))
-            join_response(client.getFd(), client.getNickname(), ERR_BADCHANNELKEY);
+        join_response(client.getFd(), client.getNickname(), e.what());
+        // if (!strcmp(e.what(), "ERR_INVITEONLYCHAN"))
+        //     join_response(client.getFd(), client.getNickname(), ERR_INVITEONLYCHAN);
+        // else if (!strcmp(e.what(), "ERR_CHANNELISFULL"))
+        //     join_response(client.getFd(), client.getNickname(), ERR_CHANNELISFULL);
+        // else if (!strcmp(e.what(), "ERR_BADCHANNELKEY"))
+        //     join_response(client.getFd(), client.getNickname(), ERR_BADCHANNELKEY);
     }
 }
 

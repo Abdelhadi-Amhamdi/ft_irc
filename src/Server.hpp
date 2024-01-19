@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 21:05:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 11:24:52 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,12 @@
 #include "cmd/Join.hpp"
 #include "cmd/PrivMsg.hpp"
 #include "cmd/User.hpp"
+#include "Connection.hpp"
+
 
 
 // containers
+#include <unordered_map>
 #include <vector>
 #include <map>
 
@@ -56,25 +59,35 @@ class Match {
 };
 
 class Server {
-	public:
-		Server(const std::string &password, const int &port);
-		bool	nickNameused(const std::string &name);
-		void	addUserToChannel(const std::string &channel, const std::string &password, int user_fd, std::string user);
-		void	broadcastMessage(const std::string &channel_name, const std::string &message, std::string user);
-		void    start_server();
-		void    add_fd(int fd);
-		void    recive_data(int fd);
-		void    _event(sockaddr *a, socklen_t len);
-		void    new_client(sockaddr *a, socklen_t len, int fd);
-		void	executer(const std::string &data, Client &client);
-		const std::string& getPassword() const;
-		~Server();
-	private:
-		int     port;
-		int     server_fd;
-		const   std::string password;
-		std::vector<struct pollfd>  c_fds;
+    private:
+        const   int port;
+        const   std::string password;
+        int     server_fd;
+        std::vector<struct pollfd> c_fds;
+        std::map<int, Client*> clients;
+        std::unordered_map<int, Connection> connections;
+        std::map<std::string, ACommand*> commands;
 		ClientSource cl_manager;
 		ChannelSource ch_manager;
-		std::map<std::string, ACommand*> commands;
+    public:
+        Server(const std::string &password, const int &port);
+        void    start_server();
+        void    add_fd(int fd);
+        void    recive_data(int fd);
+        void    _event(int fd);
+        void    new_client(sockaddr *a, socklen_t len, int fd);
+        void    auth(std::string &data, Client &client);
+        const std::string& getPassword() const;
+        const std::map<int, Client*>& getClients() const;
+
+		bool nickNameused(const std::string &name);
+		void addUserToChannel(const std::string &channel, const std::string &password, int user_fd, std::string user);
+        ~Server();
+
+
+        void    inializeServer();
+        
+
+        bool    acceptConnetion();
+        void    _event();
 };

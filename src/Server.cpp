@@ -6,14 +6,48 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 21:06:10 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 11:15:11 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "Connection.hpp"
+#include <exception>
+#include <iostream>
+#include <map>
+#include <string>
+#include <sys/_types/_size_t.h>
+#include <sys/poll.h>
+#include <unordered_map>
+
+
+void Server::_event() {
+	for (size_t index = 1; index < c_fds.size(); index++) {
+		if ((c_fds[index].revents & POLLIN) == POLLIN) {
+			Connection&	currenConnection = connections[c_fds[index].fd];
+			currenConnection.receiveData();
+			currenConnection.handleDAta(*this);
+		}
+	}
+}
+
+Server::~Server(){}
+
+
+struct pollfd   getPollfd(int fd)
+{
+	struct pollfd pollFd;
+	pollFd.fd = fd;
+	pollFd.events = POLLIN;
+
+	return pollFd;
+}
 
 Server::Server(const std::string &password, const int &port) 
-    : port(port), password(password) {
+	: port(port), password(password) {
+		
+    inializeServer();
+	this->c_fds.push_back(getPollfd(this->server_fd));
     commands["PASS"] = new Pass();  
     commands["NICK"] = new Nick();      
     commands["USER"] = new User();
@@ -36,110 +70,65 @@ void	Server::addUserToChannel(const std::string &channel, const std::string &pas
     ch_manager.addUserToChannel(channel, password, user_fd, user);
 }
 
+
+void Server::start_server()
+{
+	    try
+    {
+        while (true) {
+            if (poll(&this->c_fds[0], this->c_fds.size(), -1) == -1)
+            {
+                std::cerr << "Error on poll.\n";
+                continue; 
+            }
+
+            //if something hapened the mainSockete, then is connection.
+            if (this->c_fds[0].revents & POLLIN)
+            {
+				try{
+					Connection	newConnection(server_fd);
+					connections[newConnection.getFd()] = newConnection;
+					c_fds.push_back(getPollfd(newConnection.getFd()));
+				}
+                catch (std::exception& e)
+				{
+					std::cerr << e.what() << std::endl;
+					continue;
+				}
+            }
+            _event();
+        }
+    } catch (std::exception& e)
+    {
+        std::cerr << "Exception in startServer: " << e.what() << std::endl;
+    }
+}
+
 const std::string& Server::getPassword() const {
-    return (this->password);
+    return password;
 }
 
-void Server::new_client(sockaddr *a, socklen_t len, int fd) {
-    int client_fd = accept(fd, a, &len);
-    if (client_fd == -1)
-        throw std::exception();
-    std::string hostname = inet_ntoa(reinterpret_cast<struct sockaddr_in*>(a)->sin_addr);
-    std::cout << BLUE << "Accepted connection from " << hostname << RESET << std::endl;
-    add_fd(client_fd);
-    cl_manager.createClient(client_fd, hostname);
-}
-
-void Server::executer(const std::string &data, Client &client) {
-    std::string info,cmd,params,elm;
-    std::stringstream ss(data);
-    
-    if (data[0] == ':')
-        ss >> info;
-    ss >> cmd;
-    while (ss >> elm)
-        params += elm + " ";
-    if (params[params.size() - 1] == ' ')
-        params.erase(params.end() - 1);
-    std::map<std::string, ACommand*>::iterator it = commands.find(cmd);
-    if (it != commands.end()) {
-        try {
-            it->second->exec(info, params, client, *this);
-        } catch (...) {}
-    }
-    else
-        std::cout << data << std::endl;
-}
-
-void Server::recive_data(int fd) {
-    char buff[500] = {0};
-    ssize_t bytes = recv(fd, buff, sizeof(buff), 0);
-    if (bytes <= 0) {
-        close(fd);
-        cl_manager.deleteClient(fd);
-        return ;
-    }
-    
-    Client* user = cl_manager.getClient(fd);
-    if (bytes > 0 && user ) {
-       // std::cout << bytes << std::endl;
-        executer(buff, *user);
-        if (!user->islogedin() && !user->getPassword().empty() && !user->getNickname().empty()) {
-            user->setlogedin();
-            std::string message = ":localhost 001 " + user->getNickname() + " : Welcome to the IRC server : " + user->getNickname() + "!\r\n";
-            send(user->getFd(), message.c_str(), message.size(), 0);
-            std::cout << YELLOW << user->getNickname() << " logedin successfuly!" << RESET << std::endl;
-        }
-    } 
-}
-
-void Server::broadcastMessage(const std::string &channel_name, const std::string &message, std::string user) {
-    ch_manager.broadcastMeassges(channel_name, message, user);
-}
-
-void Server::_event(sockaddr *a, socklen_t len) {
-    for (size_t index = 0; index < c_fds.size(); index++) {
-        if ((c_fds[index].revents & POLLIN) == POLLIN) {
-            if (c_fds[index].fd == this->server_fd)
-                new_client(a, len, c_fds[index].fd);
-            else
-                recive_data(c_fds[index].fd);
-        }
-    }
-}
-
-void Server::start_server() {
-    
+void    Server::inializeServer() {
     this->server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->server_fd == -1)
-        throw std::logic_error("Error: cannot create a socket!");
+        throw std::runtime_error("Creation socket failed.");
 
-    struct sockaddr_in server_addr;
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(this->port);
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+    sockaddr_in serverAddr;
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(port);
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
 
-    int reuse = 1;
-    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
-
-    if (bind(this->server_fd, reinterpret_cast<struct sockaddr*>(&server_addr), sizeof(server_addr)) == -1)
-        throw std::logic_error("Error: cannot bind socket to the give port!");
-    
-    if (listen(this->server_fd, 1) == -1)
-        throw std::exception();
-
-    std::cout << GREEN << "Server listening on port " << port << "..." << RESET << std::endl;
-    
-    struct sockaddr_in client_addr;
-    socklen_t len = sizeof(client_addr);
-
-    add_fd(server_fd);
-    
-    while (true) {
-        if (poll(&c_fds[0], c_fds.size(), -1) > 0)
-            _event(reinterpret_cast<struct sockaddr*>(&client_addr), len);
+    if (bind(this->server_fd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == -1)
+    {
+        close(this->server_fd);
+        throw std::runtime_error("Error in binding.");
     }
-    close(server_fd);
-}
 
-Server::~Server(){}
+    if (listen(this->server_fd, SOMAXCONN) == -1)
+    {
+        close(this->server_fd);
+        throw std::runtime_error("Error listening for connections.");
+    }
+
+    std::cout << "Server started on port " << port << std::endl;
+}
