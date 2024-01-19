@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 21:06:10 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:23:12 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ Server::Server(const std::string &password, const int &port)
     commands["USER"] = new User();
     commands["JOIN"] = new Join();      
     commands["PRIVMSG"] = new PrivMsg();
+    commands["MODE"] = new Mode();
 }
 
 void Server::add_fd(int fd) {
@@ -140,6 +141,10 @@ void Server::start_server() {
             _event(reinterpret_cast<struct sockaddr*>(&client_addr), len);
     }
     close(server_fd);
+}
+
+void Server::editChannelMode() {
+    
 }
 
 Server::~Server(){}

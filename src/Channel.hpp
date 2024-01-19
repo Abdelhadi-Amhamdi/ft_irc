@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:01:59 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:33:30 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ class Channel {
         std::vector<int> invites;
         std::vector<std::pair<int, std::string> > members;
     public:
+        void setMode(const std::string &mode);
+        void removeMode(const std::string &mode);
+
         Channel(const std::string &channel_name, const std::string &channel_key);
         // Channel(int admin, std::string topic, std::string name);
         void add_user(int fd, const std::string &user, const std::string &channel);

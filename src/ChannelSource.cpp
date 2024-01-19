@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:16:04 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:28:56 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ void ChannelSource::deleteChannel(const std::string &name) {
 		delete ch->second;
 		channels.erase(ch);
 	}
+}
+
+void ChannelSource::setChannelMode(Channel *channel, std::pair<std::string,std::string> >mode) {
+	if (channel) {
+		channel->setMode();
+	}	
 }
 
 void ChannelSource::addUserToChannel(const std::string &channel_name, const std::string &password, int user_fd, const std::string &user) {

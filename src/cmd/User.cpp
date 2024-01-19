@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 21:02:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 21:26:48 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:13:58 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void User::exec(std::string &user_infos,std::string &cmd_params, Client &client,
         realname += " ";
         realname += item;
     }
-    std::cout << username << "|" << hostname << "|" << servername << "|" << realname << std::endl;
+    //std::cout << username << "|" << hostname << "|" << servername << "|" << realname << std::endl;
 }
 
 User::~User(){}

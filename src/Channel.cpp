@@ -6,13 +6,22 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:16:22 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:36:31 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 #include <sys/socket.h>
 #include "color.hpp"
+
+
+void Channel::setMode(const std::string &mode) {
+    modes.push_back(mode);
+}
+
+void Channel::removeMode(const std::string &mode) {
+    modes.erase(mode);
+}
 
 Channel::Channel(const std::string &channel_name, const std::string &channel_key) 
     : users_limit(2), name(channel_name), key(channel_key) {

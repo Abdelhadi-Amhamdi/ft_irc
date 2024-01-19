@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 21:05:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:22:45 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 class Pass;
 #include "cmd/Pass.hpp"
 #include "cmd/Nick.hpp"
+#include "cmd/Mode.hpp"
 
 class Match {
 	int value;
@@ -58,9 +59,6 @@ class Match {
 class Server {
 	public:
 		Server(const std::string &password, const int &port);
-		bool	nickNameused(const std::string &name);
-		void	addUserToChannel(const std::string &channel, const std::string &password, int user_fd, std::string user);
-		void	broadcastMessage(const std::string &channel_name, const std::string &message, std::string user);
 		void    start_server();
 		void    add_fd(int fd);
 		void    recive_data(int fd);
@@ -68,6 +66,14 @@ class Server {
 		void    new_client(sockaddr *a, socklen_t len, int fd);
 		void	executer(const std::string &data, Client &client);
 		const std::string& getPassword() const;
+		void	broadcastMessage(const std::string &channel_name, const std::string &message, std::string user);
+
+		// channels managment methods
+		void	addUserToChannel(const std::string &channel, const std::string &password, int user_fd, std::string user);
+		void	editChannelMode();
+		// clients managment methods
+		bool	nickNameused(const std::string &name);
+		
 		~Server();
 	private:
 		int     port;
