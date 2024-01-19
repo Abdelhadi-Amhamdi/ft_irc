@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/11 10:42:38 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 09:24:49 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,18 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "color.hpp"
+#include "Connection.hpp"
 
 // containers
+#include <unordered_map>
 #include <vector>
 #include <map>
 
 // algorithms
 #include <algorithm>
 class Pass;
-#include "cmd/Pass.hpp"
-#include "cmd/Nick.hpp"
+// #include "cmd/Pass.hpp"
+// #include "cmd/Nick.hpp"
 
 class Match {
     int value;
@@ -50,24 +52,30 @@ class Match {
 };
 
 class Server {
+    private:
+        const   int port;
+        const   std::string password;
+        int     server_fd;
+        std::vector<struct pollfd> c_fds;
+        std::map<int, Client*> clients;
+        std::unordered_map<int, Connection> connections;
+        // std::vector<Channel*> channels;
     public:
         Server(const std::string &password, const int &port);
         void    start_server();
         void    add_fd(int fd);
         void    recive_data(int fd);
-        void    _event(sockaddr *a, socklen_t len);
+        void    _event(int fd);
         void    new_client(sockaddr *a, socklen_t len, int fd);
         void    auth(std::string &data, Client &client);
         const std::string& getPassword() const;
         const std::map<int, Client*>& getClients() const;
         ~Server();
-    private:
-        const   int port;
-        const   std::string password;
-        // struct  pollfd fds[1000];
-        std::vector<struct pollfd> c_fds;
-        // int     clients_num;
-        int     server_fd;
-        std::map<int, Client*> clients;
-        std::vector<Channel*> channels;
+
+
+        void    inializeServer();
+        
+
+        bool    acceptConnetion();
+        void    _event();
 };
