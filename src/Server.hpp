@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/19 15:30:57 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:48:07 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ class Server {
 		int		server_fd;
 		const	int port;
 		const	std::string password;
-		std::vector<struct pollfd>			connection_fds;
-		std::unordered_map<int, Client*>	clients;
+		std::vector<struct pollfd>				connection_fds;
+		std::unordered_map<int, Client*>		clients;
 		std::unordered_map<int, Connection*>	connections;
 	public:
 		Server(const std::string &password, const int &port);
