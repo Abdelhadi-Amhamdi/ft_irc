@@ -1,62 +1,55 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Connection.cpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/19 15:43:52 by aamhamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Connection.hpp"
-#include <algorithm>
-#include <cstddef>
-#include <sstream>
-#include <stdexcept>
-#include <sys/socket.h>
-#include <unistd.h>
-#include "Server.hpp"
-#include "commands/Command.hpp"
 
-#include "commands/Pass.hpp"
-
-Connection::Connection()
-    : isConnected(false), buffer("")
-{
-    
-}
-
-Connection::Connection(int serverSocket)
-    : isConnected(false)
-{
-    sockaddr clienAdrr;
+Connection::Connection(const int &serverSocket)
+    : isConnected(false), buffer("") {
+    sockaddr    clienAdrr;
 	socklen_t   clienAdrrLen = sizeof(clienAdrr);
-    fd = accept(serverSocket, (struct sockaddr*)&clienAdrr, &clienAdrrLen);
-    if (fd == -1)
+    connection_fd = accept(serverSocket, (struct sockaddr*)&clienAdrr, &clienAdrrLen);
+    if (connection_fd == -1)
         throw std::runtime_error("accept of connection failed.");
 }
 
 Connection::~Connection(){}
 
-void Connection::receiveData()
+void Connection::receiveDataFromConnection()
 {
     char buff[1024] = {0};
-    ssize_t bytes = recv(fd, buff, sizeof(buff), 0);
+    ssize_t bytes = recv(connection_fd, buff, sizeof(buff), 0);
     if (bytes < 0)
         throw std::runtime_error("Error: in receving of message");
     buffer += buff;
 }
 
 void    Connection::handleDAta(Server& server) {
-    if (buffer[buffer.size() - 1 == '\n'])
-    {
-        Command*    cmd = NULL;
+    Command*    cmd = NULL;
+    if (buffer.find("\n") != std::string::npos) {
         if (isConnected == false)
             cmd = new Pass(*this);
-        if (nickname.empty())
-        // execute nick command
-
-        if (cmd)
+        if (cmd) {
             cmd->execute(server);
+            delete cmd;   
+        }
+        buffer = "";
     }
-    buffer = "";
 }
 
 void    Connection::connecte(Server& sever, std::string& pass) {
     if (pass == sever.getPassword())
     {
         isConnected = true;
-        std::cout << fd << " hase connected.\n"; 
+        std::cout << connection_fd << " hase connected.\n"; 
     }
     else {
         std::cout << "bad password.\n";
