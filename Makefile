@@ -40,7 +40,7 @@
 
 
 
-SRC_DIRS = src/cmd src/commands src
+SRC_DIRS = src/commands src
 INCLUDE_DIR = src
 OBJ_DIR = obj
 
