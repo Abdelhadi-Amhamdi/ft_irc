@@ -1,23 +1,63 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/20 17:26:07 by aamhamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Client.hpp"
 
-// Client::Client(int fd, std::string nickname, std::string password, std::string login, std::string real_name) 
-//     : fd(fd), nickname(nickname), password(password), login(login), real_name(real_name), logedin(false) {}
+Client::Client(const int &fd, const std::string &nickname)
+    : client_fd(fd), nickname(nickname), is_registred(false) {}
 
-int Client::getFd() const {return (fd);}
-const std::string & Client::getNickname() const {return (nickname);}
-const std::string & Client::getPassword() const {return (password);}
-const std::string & Client::getLogin() const {return (login);}
-const std::string & Client::getRealName() const {return (real_name);} 
-bool Client::islogedin() const {return this->logedin;}
+int Client::getFd() const {
+    return (client_fd);
+}
+const std::string & Client::getNickname() const {
+    return (nickname);
+}
 
+const std::string & Client::getPassword() const {
+    return (password);
+}
 
-void Client::setFd(int arg) {this->fd = arg;}
-void Client::setNickname(const std::string &arg) {this->nickname = arg;}
-void Client::setPassword(const std::string &arg) {this->password = arg;}
-void Client::setLogin(const std::string &arg) {this->login = arg;}
-void Client::setRealName(const std::string &arg) {this->real_name = arg;}
-void Client::setlogedin() {this->logedin = true;}
+const std::string & Client::getLogin() const {
+    return (login);
+}
 
+const std::string & Client::getRealName() const {
+    return (real_name);
+}
 
+bool Client::isRegistred() const {
+    return this->is_registred;
+}
+
+void Client::setFd(const int &fd) {
+    this->client_fd = fd;
+}
+
+void Client::setNickname(const std::string &arg) {
+    this->nickname = arg;
+}
+
+void Client::setPassword(const std::string &arg) {
+    this->password = arg;
+}
+
+void Client::setLogin(const std::string &arg) {
+    this->login = arg;
+}
+    
+void Client::setRealName(const std::string &arg) {
+    this->real_name = arg;
+}
+
+void Client::setIsRegistred() {
+    this->is_registred = true;
+}
