@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/19 15:32:31 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/20 17:48:27 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 
 const std::string& Server::getPassword() const {
 	return (this->password);
+}
+
+const std::unordered_map<std::string, ACommand*> & Server::getCommands() const {
+	return (commands);
+}
+
+ClientSource *Server::getClientManager() const {
+	return (clients_manager);
 }
 
 void Server::addConnectionFd(const int &connection_fd) {
@@ -35,8 +43,11 @@ void Server::eventsHandler() {
 
 Server::Server(const std::string &password, const int &port) 
 	: port(port), password(password) {
+	clients_manager = new ClientSource();
 	inializeServer();
 	addConnectionFd(this->server_fd);
+	commands["PASS"] = new Pass();
+	commands["NICK"] = new Nick();
 }
 
 void Server::start_server() {

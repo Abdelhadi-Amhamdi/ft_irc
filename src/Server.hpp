@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/19 15:48:07 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/20 20:28:26 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@
 #include "ClientSource.hpp"
 #include "ChannelSource.hpp"
 #include "Connection.hpp"
+#include "commands/ACommand.hpp"
+#include "commands/Pass.hpp"
+#include "commands/Nick.hpp"
 
 // STL 
 #include <algorithm>
@@ -37,6 +40,7 @@
 #include <vector>
 #include <map>
 
+// #define OUT(const std::string a) std::cout << a << std::endl;
 
 class Connection;
 
@@ -45,17 +49,24 @@ class Server {
 		int		server_fd;
 		const	int port;
 		const	std::string password;
-		std::vector<struct pollfd>				connection_fds;
-		std::unordered_map<int, Client*>		clients;
-		std::unordered_map<int, Connection*>	connections;
+		std::vector<struct pollfd>					connection_fds;
+		std::unordered_map<int, Connection*>		connections;
+		std::unordered_map<std::string, ACommand*>	commands;
+		ClientSource *clients_manager;
 	public:
 		Server(const std::string &password, const int &port);
 		~Server();
 		// server geters
 		const std::string& getPassword() const;
+		const std::unordered_map<std::string, ACommand*> & getCommands() const ;
+		ClientSource *getClientManager() const;
+		
 		// server main functions
 		void    inializeServer();
 		void    eventsHandler();
 		void    start_server();
-		void    addConnectionFd(const int &connection_fd); 
+		void    addConnectionFd(const int &connection_fd);
+
+		// clients manager methods
+		
 };
