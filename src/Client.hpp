@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 17:26:28 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/20 20:49:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 class Client {
 	public:
-		Client(const int &fd, const std::string &nickname);
+		Client(const int &fd, std::string nickname);
 		// geters
 		int getFd() const ;
 		const std::string & getLogin() const ;
@@ -33,7 +33,7 @@ class Client {
 		void setIsRegistred();
 	private:
 		int client_fd;
-		std::string nickname;
+		std::string nick_name;
 		std::string password;
 		std::string login;
 		std::string real_name;
