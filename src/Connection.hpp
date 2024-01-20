@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:31 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 11:23:34 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/20 13:10:14 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 // user defined classes
 #include "Server.hpp"
-#include "commands/Command.hpp"
+#include "commands/ACommand.hpp"
 #include "commands/Pass.hpp"
 
 class Server;

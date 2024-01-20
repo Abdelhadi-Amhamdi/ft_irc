@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 11:23:18 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/20 20:16:39 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void Connection::receiveDataFromConnection()
     buffer += buff;
 }
 
-const std::string& wichCommand(const std::string& str)
+const std::string wichCommand(const std::string& str)
 {
     std::string res;
     std::stringstream strStream(str);
@@ -47,20 +47,21 @@ void    Connection::handleDAta(Server& server)
     if (buffer.find("\n") != std::string::npos)
     {
         std::string cmd = wichCommand(buffer);
-        std::unordered_map<std::string, Command*>::iterator command = commands.find(cmd);
+        std::unordered_map<std::string, ACommand*> commands = server.getCommands();
+        std::unordered_map<std::string, ACommand*>::iterator command = commands.find(cmd);
         if (command != commands.end()) 
         {
             if (isConnected == false)
             {
                 if (cmd == "PASS")
-                    command->second->execute(buffer, *this, server);
+                    command->second->Execute(buffer, *this, server);
             }
             else if (nickname.empty())
             {
                 if (cmd == "NICK")
-                    command->second->execute(buffer, *this, server);
+                    command->second->Execute(buffer, *this, server);
             } else
-                command->second->execute(buffer, *this, server);
+                command->second->Execute(buffer, *this, server);
         }
         buffer.clear();
     }
