@@ -1,43 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Pass.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/20 11:52:11 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/20 13:37:44 by aamhamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Pass.hpp"
 
-// Pass::Pass(Connection& executer)
-//     : Command("PASS", false), executer(executer)
-// {
-    
-// }
 
-Pass::Pass(Connection& executer)
-    : Command("PASS", false), executer(executer)
+Pass::Pass() : ACommand("PASS") {}
 
-{}
-
-bool    Pass::valide()
-{
-    if (params.empty())
+void Pass::Execute(std::string &buffer, Connection &user, Server &server) {
+    commandFormater(buffer);
+    if (params[0][0] == ':')
     {
-        std::cout << "invalid argument.\n";
-        return false;
+        userInfosChecker(params[0]);
+        params.erase(params.begin());
     }
-    return true;
+    params.erase(params.begin());
+    if (user.getIsConnected())
+        sendResponse(":server_name 462 nick :You may not reregister\r\n" , user.getFd());
+    else if (server.getPassword() != params[0])
+        sendResponse(":server_name 464 nick :Password incorrect\r\n", user.getFd());
+    else
+        user.setIsConnected(true);
+    params.clear();
 }
 
-void Pass::execute(Server& server)
-{
-    if (executer.getIsConnected() == true)
-    {
-        std::cout << executer.getFd() << " is already connected.\n";
-        return;
-    }
-    this->getCommand(executer.getBuffer());
-    
-    if (valide() == false)
-        return;
-    if (!params.empty() && this->params[0] == server.getPassword())
-    {
-        executer.setIsConnected(true);
-        std::cout << executer.getFd() << " hase connected.\n";
-    }
-    else {
-        std::cout << "bad password\n";
-    }
-}
+Pass::~Pass() {}

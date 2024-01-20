@@ -1,30 +1,26 @@
-#ifndef Pass_HPP
-#define Pass_HPP
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Pass.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/20 11:48:38 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/20 13:27:22 by aamhamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include <sstream>
-#include <stdexcept>
-
-#include "../Server.hpp"
-class   Server;
-class   Connection;
-
-#include "Command.hpp"
+#pragma once
+#include "ACommand.hpp"
 #include "../Connection.hpp"
 
-#include <string>
-#include <vector>
-
-class Pass : public Command {
+class Pass : public ACommand{
     private:
-        Connection& executer;
-
+        // Connection& executer;
     public:
-        Pass(Connection& executer);
-        bool    valide();
-
-
-        void execute(Server& server);
-        
+        Pass();
+        ~Pass();
+        void Execute(std::string &buffer, Connection &user, Server &server);
 };
 
-#endif // Pass_HPP
+
