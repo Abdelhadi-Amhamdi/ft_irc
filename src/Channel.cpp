@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:16:22 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 18:08:16 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,31 @@ int Channel::modeExist_users_limit(const std::string &mode) {
     return (0);
 }
 
-void Channel::ClientResponse(int client_fd, const std::string &username, const std::string &channel_name) {    
-    std::string usersList_message = ":localhost 353 " + username + " = #" + channel_name + " :";
-    for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++) {
-        if (std::find(admins.begin(), admins.end(), it->first) != admins.end())
-            usersList_message += "@";
-        usersList_message += it->second;
-        usersList_message += " ";
-    }
-    usersList_message += "\r\n";
-    send(client_fd, usersList_message.c_str(), usersList_message.size(), 0);
+void Channel::ClientResponse(int client_fd, const std::string &username, const std::string &channel_name) { 
+    (void)channel_name;
+    (void)username;  
+    std::string c = ":abc JOIN #irc\r\n";
+    send(client_fd, c.c_str(), c.size(), 0);
+    std::string b = ":localhost 353 abc = #irc :abc\r\n";
+    // for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++) {
+    //     // if (std::find(admins.begin(), admins.end(), it->first) != admins.end())
+    //     //     usersList_message += "@";
+    //     usersList_message += it->second;
+    //     usersList_message += " ";
+    // }
+    // usersList_message.erase(usersList_message.end()-1);
+    // usersList_message += "\r\n";
+    // std::cout << usersList_message;
+    send(client_fd, b.c_str(), b.size(), 0);
 
-    std::string RPL_ENDOFNAMES = username + ":localhost 366 " + username + " #" + channel_name + " :End of /NAMES list.\r\n";
-    send(client_fd, RPL_ENDOFNAMES.c_str(), RPL_ENDOFNAMES.size(), 0);
+    std::string a = ":localhost 366 abc #irc :End of /NAMES list.\r\n";
+    send(client_fd, a.c_str(), a.size(), 0);
+    // std::cout << RPL_ENDOFNAMES;
 }
 
 void Channel::add_user(int fd, const std::string &user, const std::string &channel) {
     members.push_back(std::make_pair(fd, user));
-    std::string join_message = ":" + user + " JOIN #" + channel + "\r\n";
-    send(fd, join_message.c_str(), join_message.size(), 0);
+    
 
     for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++)
         ClientResponse(it->first, it->second, channel);

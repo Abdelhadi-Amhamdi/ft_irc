@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 15:12:21 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:05:56 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,22 @@ void User::Execute(std::string &buffer, Connection &user, Server &server) {
     Client *client = clients_manager->getClientByNickname(user.getNickname());
     if (client && !client->isRegistred())
     {
+        std::string prefix = ":server_name 001 nick :";
         commandFormater(buffer);
         userInfosChecker();
         client->setLogin(params[0]);
         client->setHostname(params[1]);
         client->setRealName(params[3]);
         client->setIsRegistred();
-        sendResponse(":server_name 001 nick: Welcome to the IRC server!\r\n", user.getFd());
+        sendResponse(":server_name 001 " + user.getNickname() + " :Welcome to the IRC network\r\n", user.getFd());
+        sendResponse(prefix + "   .---------.\r\n" , user.getFd());
+        sendResponse(prefix + "   |.-------.|\r\n" , user.getFd());
+        sendResponse(prefix + "   ||>run#  ||\r\n" , user.getFd());
+        sendResponse(prefix + "   ||       ||\r\n" , user.getFd());
+        sendResponse(prefix + "   |\"-------'|etf\r\n" , user.getFd());
+        sendResponse(prefix + ".-^---------^-.\r\n" , user.getFd());
+        sendResponse(prefix + "| ---~   AMiGA|\r\n" , user.getFd());
+        sendResponse(prefix + "\"-------------' .  enjoy ;)\r\n" , user.getFd());
         params.clear();
     } else if (client) {
         sendResponse(":server_name 462 nick: You may not register!\r\n", user.getFd());

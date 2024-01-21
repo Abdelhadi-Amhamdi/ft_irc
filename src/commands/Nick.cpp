@@ -6,15 +6,11 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:40:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 12:41:05 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:06:34 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Nick.hpp"
-
-void OUT(const std::string &a) {
-    std::cout << a << std::endl;
-}
 
 Nick::Nick() : ACommand("Nick") {}
 
