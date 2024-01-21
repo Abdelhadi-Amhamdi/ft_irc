@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 20:16:39 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 15:21:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ Connection::Connection(const int &serverSocket)
     connection_fd = accept(serverSocket, (struct sockaddr*)&clienAdrr, &clienAdrrLen);
     if (connection_fd == -1)
         throw std::runtime_error("accept of connection failed.");
+    std::cout << BLUE << "Accepted connection from ";
+    std::cout << inet_ntoa(reinterpret_cast<struct sockaddr_in*>(&clienAdrr)->sin_addr) << RESET << std::endl;
 }
 
 Connection::~Connection(){}
@@ -62,6 +64,8 @@ void    Connection::handleDAta(Server& server)
                     command->second->Execute(buffer, *this, server);
             } else
                 command->second->Execute(buffer, *this, server);
+        } else {
+            std::cout << RED << "Invalid Command" << RESET << std::endl;
         }
         buffer.clear();
     }
