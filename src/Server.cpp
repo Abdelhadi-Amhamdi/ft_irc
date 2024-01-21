@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 13:12:28 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/21 21:39:15 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ Server::Server(const std::string &password, const int &port)
 	commands["PASS"] = new Pass();
 	commands["NICK"] = new Nick();
 	commands["TOPIC"] = new Topic();
+	commands["USER"] = new User();
+	commands["JOIN"] = new Join();
 }
 
 void Server::start_server() {
@@ -93,6 +95,8 @@ void    Server::inializeServer() {
 	serverAddr.sin_port = htons(port);
 	serverAddr.sin_addr.s_addr = INADDR_ANY;
 
+	int reuse = 1;
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
 	if (bind(this->server_fd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == -1)
 	{
 		close(this->server_fd);

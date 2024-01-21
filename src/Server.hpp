@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 13:14:10 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:12:21 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,20 @@
 #include <poll.h>
 
 // user defined classes
+#include "color.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
-#include "color.hpp"
+#include "Connection.hpp"
 #include "ClientSource.hpp"
 #include "ChannelSource.hpp"
-#include "Connection.hpp"
+
+// commands
 #include "commands/ACommand.hpp"
-#include "commands/Pass.hpp"
 #include "commands/Nick.hpp"
 #include "commands/Topic.hpp"
+#include "commands/Pass.hpp"
+#include "commands/User.hpp"
+#include "commands/Join.hpp"
 
 // STL 
 #include <algorithm>
@@ -41,7 +45,7 @@
 #include <vector>
 #include <map>
 
-// #define OUT(const std::string a) std::cout << a << std::endl;
+#define OUT(x) std::cout << x << std::endl;
 
 class Connection;
 
@@ -50,19 +54,19 @@ class Server {
 		int		server_fd;
 		const	int port;
 		const	std::string password;
+		ClientSource	*clients_manager;
+		ChannelSource	*channels_manager;
 		std::vector<struct pollfd>					connection_fds;
 		std::unordered_map<int, Connection*>		connections;
 		std::unordered_map<std::string, ACommand*>	commands;
-		ClientSource *clients_manager;
-		ChannelSource *channels_manager;
 	public:
 		Server(const std::string &password, const int &port);
 		~Server();
 		// server geters
-		const std::string& getPassword() const;
+		const std::string&	getPassword() const;
+		ClientSource		*getClientManager() const;
+		ChannelSource		*getChannelManager() const;
 		const std::unordered_map<std::string, ACommand*> & getCommands() const ;
-		ClientSource *getClientManager() const;
-		ChannelSource *getChannelManager() const;
 		
 		// server main functions
 		void    inializeServer();

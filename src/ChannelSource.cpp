@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 13:28:11 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:14:42 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,33 +28,31 @@ void ChannelSource::deleteChannel(const std::string &name) {
 	}
 }
 
-Channel* ChannelSource::getChannelByName(const std::string &name) {
-	std::map<std::string, Channel*>::iterator ch = channels.find(name);
-	if (ch != channels.end())
-		return (ch->second);
-	else
-		return (NULL);
+Channel* ChannelSource::getChannelByName(const std::string &channel_name) {
+	std::map<std::string, Channel*>::iterator channel = channels.find(channel_name);
+	if (channel != channels.end())
+		return (channel->second);
+	return (NULL);
 }
 
-
-
+// void ChannelSource::addUserToChannel(const int &fd, const std::string &user, const std::string channel_name) {
+// 	std::map<std::string, Channel*>::iterator channel = channels.find(channel_name);
+// 	if (channel != channels.end()) {
+// 		channel->second->setAdmin(fd);
+// 		channel->second->add_user(fd, user, channel_name);
+// 	}	
+// }
 void ChannelSource::addUserToChannel(const std::string &channel_name, const std::string &password, int user_fd, const std::string &user) {
 	std::map<std::string, Channel*>::iterator channel = channels.find(channel_name);
 	if (channel != channels.end()) {
 		if (channel->second->getKey() != password)
 			throw std::logic_error("ERR_BADCHANNELKEY");
-		if (channel->second->modeExist_invite_only("+i", user_fd))
-			throw std::logic_error("ERR_INVITEONLYCHAN");
-		if (channel->second->modeExist_users_limit("+l"))
-			throw std::logic_error("ERR_CHANNELISFULL");
 		channel->second->add_user(user_fd, user, channel_name);
 	} else {
 		createChannel(channel_name, password);
-		// std::string a = ":" + user + " MODE #" + name + " +s \r\n";
 		channels[channel_name]->setAdmin(user_fd);
 		channels[channel_name]->add_user(user_fd, user, channel_name);
-		// send(user_fd, a.c_str(), a.size(), 0);
-		// std::cout << a ;
+		std::cout << channels.size() << std::endl;
 	}
 }
 

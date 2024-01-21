@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 20:48:52 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:58:29 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@ Client::Client(const int &fd, std::string nickname)
 int Client::getFd() const {
     return (client_fd);
 }
+
 const std::string & Client::getNickname() const {
     return (nick_name);
 }
 
-const std::string & Client::getPassword() const {
-    return (password);
+const std::string & Client::getHostname() const {
+    return (hostname);
 }
 
 const std::string & Client::getLogin() const {
@@ -46,16 +47,16 @@ void Client::setNickname(const std::string &arg) {
     this->nick_name = arg;
 }
 
-void Client::setPassword(const std::string &arg) {
-    this->password = arg;
-}
-
 void Client::setLogin(const std::string &arg) {
     this->login = arg;
 }
     
 void Client::setRealName(const std::string &arg) {
     this->real_name = arg;
+}
+
+void Client::setHostname(const std::string &arg) {
+    this->hostname = arg;
 }
 
 void Client::setIsRegistred() {
