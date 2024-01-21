@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 18:08:16 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 22:12:42 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 #include "color.hpp"
 
 Channel::Channel(const std::string &channel_name, const std::string &channel_key) 
-    : users_limit(2), name(channel_name), key(channel_key) {
-        modes.push_back("+l");
-    }
+    : users_limit(2), name(channel_name), key(channel_key) {}
 
 void Channel::setAdmin(int user_fd) {
     admins.push_back(user_fd);
@@ -31,7 +29,6 @@ const std::string & Channel::getKey() const {
     return (this->key);
 }
 
-
 int Channel::modeExist_invite_only(const std::string &mode, int user_fd) {
     std::vector<std::string>::iterator m = std::find(modes.begin(), modes.end(), mode);
     if (m != modes.end()) {
@@ -40,6 +37,7 @@ int Channel::modeExist_invite_only(const std::string &mode, int user_fd) {
     }
     return (0);
 }
+
 int Channel::modeExist_users_limit(const std::string &mode) {
     std::vector<std::string>::iterator m = std::find(modes.begin(), modes.end(), mode);
     if (m != modes.end() && members.size() == users_limit)
@@ -48,31 +46,24 @@ int Channel::modeExist_users_limit(const std::string &mode) {
 }
 
 void Channel::ClientResponse(int client_fd, const std::string &username, const std::string &channel_name) { 
-    (void)channel_name;
-    (void)username;  
-    std::string c = ":abc JOIN #irc\r\n";
-    send(client_fd, c.c_str(), c.size(), 0);
-    std::string b = ":localhost 353 abc = #irc :abc\r\n";
-    // for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++) {
-    //     // if (std::find(admins.begin(), admins.end(), it->first) != admins.end())
-    //     //     usersList_message += "@";
-    //     usersList_message += it->second;
-    //     usersList_message += " ";
-    // }
-    // usersList_message.erase(usersList_message.end()-1);
-    // usersList_message += "\r\n";
-    // std::cout << usersList_message;
-    send(client_fd, b.c_str(), b.size(), 0);
+    std::string join_message = ":" + username + " JOIN #" + channel_name + "\r\n";
+    send(client_fd, join_message.c_str(), join_message.size(), 0);
+    std::string members_list = ":server_name 353 " + username + " = #" + channel_name + "   :";
+    for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++) {
+        if (std::find(admins.begin(), admins.end(), it->first) != admins.end())
+            members_list += "@";
+        members_list += it->second;
+        members_list += " ";
+    }
+    members_list += "\r\n";
+    send(client_fd, members_list.c_str(), members_list.size(), 0);
 
-    std::string a = ":localhost 366 abc #irc :End of /NAMES list.\r\n";
-    send(client_fd, a.c_str(), a.size(), 0);
-    // std::cout << RPL_ENDOFNAMES;
+    std::string end_list_message = ":server_name 366 " + username + " " + channel_name + " :End of /NAMES list.\r\n";
+    send(client_fd, end_list_message.c_str(), end_list_message.size(), 0);
 }
 
 void Channel::add_user(int fd, const std::string &user, const std::string &channel) {
     members.push_back(std::make_pair(fd, user));
-    
-
     for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++)
         ClientResponse(it->first, it->second, channel);
 }
@@ -85,7 +76,6 @@ void Channel::brodcast_msg(std::string msg, std::string &user_name) {
         send(members[i].first, a.c_str(), a.size(), 0);
     }
 }
-
 
 Channel::~Channel(){
     std::cout << "Channel destroyed" << std::endl;

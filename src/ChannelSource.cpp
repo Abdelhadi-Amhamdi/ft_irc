@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 17:47:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 21:47:16 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void ChannelSource::addUserToChannell(const std::string &channel_name, const std
 		createChannel(channel_name, password);
 		channels[channel_name]->setAdmin(user_fd);
 		channels[channel_name]->add_user(user_fd, user, channel_name);
-		std::cout << channels.size() << std::endl;
 	}
 }
 
