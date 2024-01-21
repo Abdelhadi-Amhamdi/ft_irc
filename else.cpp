@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 16:20:34 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/21 11:56:35 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/21 19:08:52 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ if (!operator)//operator means(@user) == "+o" as a mode
 A message is typically broadcast to all users in the channel:
 [User] sets topic: New topic text goes here
 
+Clients joining the channel in the future will receive a RPL_TOPIC numeric (or lack thereof) accordingly.
 ______________________________________________________________
 
 QUIT :(quit the server)
