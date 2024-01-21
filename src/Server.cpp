@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 17:48:27 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:51:28 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ Server::Server(const std::string &password, const int &port)
 	addConnectionFd(this->server_fd);
 	commands["PASS"] = new Pass();
 	commands["NICK"] = new Nick();
+	commands["USER"] = new User();
 }
 
 void Server::start_server() {

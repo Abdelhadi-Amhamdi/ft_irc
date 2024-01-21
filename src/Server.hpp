@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 20:28:26 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:52:28 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,18 @@
 #include <poll.h>
 
 // user defined classes
+#include "color.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
-#include "color.hpp"
+#include "Connection.hpp"
 #include "ClientSource.hpp"
 #include "ChannelSource.hpp"
-#include "Connection.hpp"
+
+// commands
 #include "commands/ACommand.hpp"
-#include "commands/Pass.hpp"
 #include "commands/Nick.hpp"
+#include "commands/Pass.hpp"
+#include "commands/User.hpp"
 
 // STL 
 #include <algorithm>
