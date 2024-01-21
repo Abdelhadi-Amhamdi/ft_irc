@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:01:59 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:20:57 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ class Channel {
         void ClientResponse(int client_fd, const std::string &username, const std::string &channel_name);
         void brodcast_msg(std::string msg, std::string &user);
         void setAdmin(int user_fd);
+        void setTopic(std::string new_topic);
+        const std::string & getTopic();
         void setMode(std::string &mode);
         int modeExist_invite_only(const std::string &mode, int user_fd);
         int modeExist_users_limit(const std::string &mode);

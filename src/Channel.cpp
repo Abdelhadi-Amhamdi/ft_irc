@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:16:22 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:21:24 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,16 @@ void Channel::setAdmin(int user_fd) {
     admins.push_back(user_fd);
 }
 
+void Channel::setTopic(std::string new_topic) {
+   this->topic = new_topic;
+}
+
 void Channel::setMode(std::string &mode) {
     modes.push_back(mode);
 }
-
+const std::string & Channel::getTopic()const {
+    return (this->topic);
+}
 const std::string & Channel::getKey() const {
     return (this->key);
 }

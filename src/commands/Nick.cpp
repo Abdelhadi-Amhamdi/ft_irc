@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:40:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 20:50:37 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:34:57 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
         params.erase(params.begin());
     }
     params.erase(params.begin());
+    
     Client *client = client_manager->getClientByNickname(params[0]);
     if (user.getNickname().empty())
     {

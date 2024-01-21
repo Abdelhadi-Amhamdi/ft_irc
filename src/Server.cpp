@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 17:48:27 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 13:12:28 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ const std::unordered_map<std::string, ACommand*> & Server::getCommands() const {
 
 ClientSource *Server::getClientManager() const {
 	return (clients_manager);
+}
+
+ChannelSource *Server::getChannelManager() const {
+	return (channels_manager);
 }
 
 void Server::addConnectionFd(const int &connection_fd) {
@@ -44,10 +48,12 @@ void Server::eventsHandler() {
 Server::Server(const std::string &password, const int &port) 
 	: port(port), password(password) {
 	clients_manager = new ClientSource();
+    channels_manager = new ChannelSource();
 	inializeServer();
 	addConnectionFd(this->server_fd);
 	commands["PASS"] = new Pass();
 	commands["NICK"] = new Nick();
+	commands["TOPIC"] = new Topic();
 }
 
 void Server::start_server() {

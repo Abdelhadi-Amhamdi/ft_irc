@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelSource.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:16:04 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 13:28:11 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,16 @@ void ChannelSource::deleteChannel(const std::string &name) {
 		channels.erase(ch);
 	}
 }
+
+Channel* ChannelSource::getChannelByName(const std::string &name) {
+	std::map<std::string, Channel*>::iterator ch = channels.find(name);
+	if (ch != channels.end())
+		return (ch->second);
+	else
+		return (NULL);
+}
+
+
 
 void ChannelSource::addUserToChannel(const std::string &channel_name, const std::string &password, int user_fd, const std::string &user) {
 	std::map<std::string, Channel*>::iterator channel = channels.find(channel_name);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 20:28:26 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/21 13:14:10 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 #include "commands/ACommand.hpp"
 #include "commands/Pass.hpp"
 #include "commands/Nick.hpp"
+#include "commands/Topic.hpp"
 
 // STL 
 #include <algorithm>
@@ -53,6 +54,7 @@ class Server {
 		std::unordered_map<int, Connection*>		connections;
 		std::unordered_map<std::string, ACommand*>	commands;
 		ClientSource *clients_manager;
+		ChannelSource *channels_manager;
 	public:
 		Server(const std::string &password, const int &port);
 		~Server();
@@ -60,6 +62,7 @@ class Server {
 		const std::string& getPassword() const;
 		const std::unordered_map<std::string, ACommand*> & getCommands() const ;
 		ClientSource *getClientManager() const;
+		ChannelSource *getChannelManager() const;
 		
 		// server main functions
 		void    inializeServer();
