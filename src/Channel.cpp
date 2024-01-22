@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/22 10:28:47 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/22 11:20:39 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void Channel::brodCastMessage(const std::string &message, const std::string &use
     for (size_t i = 0; i < members.size(); i++) {
         if (members[i].second == user_name)
             continue;
-        std::string message = ":" + user_name + " PRIVMSG #" + name + " :" + message + "\r\n";
-        send(members[i].first, message.c_str(), message.size(), 0);
+        std::string response = ":" + user_name + " PRIVMSG #" + name + " :" + message + "\r\n";
+        send(members[i].first, response.c_str(), response.size(), 0);
     }
 }
 
