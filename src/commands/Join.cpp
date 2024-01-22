@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 22:11:01 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:13:29 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
             channels_manager->addUserToChannel(user.getFd(), user.getNickname(), channels[i].first);
         } else {
             if (ch->getKey() == channels[i].second) {
-                ch->add_user(user.getFd(), user.getNickname(), channels[i].first);
+                ch->add_user(user.getFd(), user.getNickname());
             } else {
                 sendResponse(":server_name 475 nick " + channels[i].first + ":Cannot join channel (+k)\r\n", user.getFd());
             }

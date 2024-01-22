@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 18:01:59 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/22 10:20:36 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 class Channel {
     private:
-        size_t users_limit;
+        // size_t users_limit;
         std::string topic;
         std::string name;
         std::string key;
@@ -26,16 +26,17 @@ class Channel {
         std::vector<int> invites;
         std::vector<std::pair<int, std::string> > members;
     public:
-        Channel(const std::string &channel_name, const std::string &channel_key);
-        // Channel(int admin, std::string topic, std::string name);
-        void add_user(int fd, const std::string &user, const std::string &channel);
-        void ClientResponse(int client_fd, const std::string &username, const std::string &channel_name);
-        void brodcast_msg(std::string msg, std::string &user);
-        void setAdmin(int user_fd);
-        void setMode(std::string &mode);
-        int modeExist_invite_only(const std::string &mode, int user_fd);
-        int modeExist_users_limit(const std::string &mode);
+        void setAdmin(const int &user_fd);
+        void setMode(const std::string &mode);
         const std::string & getKey() const ;
+        
+        Channel(const std::string &channel_name, const std::string &channel_key);
+        std::string generateMemebrsList(const std::string &username);
+        void add_user(const int &fd, const std::string &user);
+        void ClientResponse(const int &client_fd, const std::string &username);
+        void brodCastMessage(const std::string &message, const std::string &user);
+        // int modeExist_users_limit(const std::string &mode);
+        // int modeExist_invite_only(const std::string &mode, int user_fd);
         ~Channel();
 };
 

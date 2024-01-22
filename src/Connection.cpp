@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 15:21:06 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/22 10:26:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,7 @@ void    Connection::handleDAta(Server& server)
                     command->second->Execute(buffer, *this, server);
             } else
                 command->second->Execute(buffer, *this, server);
-        } else {
-            std::cout << RED << "Invalid Command" << RESET << std::endl;
-        }
+        } 
         buffer.clear();
     }
 
