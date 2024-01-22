@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 16:17:17 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:57:23 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 #include "commands/Pass.hpp"
 #include "commands/User.hpp"
 #include "commands/Join.hpp"
+#include "commands/PrivMsg.hpp"
 
 // STL 
 #include <algorithm>

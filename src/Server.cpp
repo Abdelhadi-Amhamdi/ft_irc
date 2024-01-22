@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 18:11:23 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:57:05 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ Server::Server(const std::string &password, const int &port)
 	commands["NICK"] = new Nick();
 	commands["USER"] = new User();
 	commands["JOIN"] = new Join();
+	commands["PRIVMSG"] = new PrivMsg();
 }
 
 void Server::start_server() {
