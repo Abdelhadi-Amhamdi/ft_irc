@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/22 13:19:44 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/23 20:20:44 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
             channel_name.erase(channel_name.begin());
         Channel *channel = channel_manager->getChannelByName(channel_name);
         if (channel) {
-            channel->del_user(user.getFd());   
+            channel->broadCastResponse(":" + user.getNickname() + " Part #" + channel_name + "\r\n");
+            channel->delUserFromChannel(user.getFd());
+            channel->broadCastResponse(channel->generateMemebrsList());
+            channel->broadCastResponse(":server_name 366 nick " + channel_name + " :End of /NAMES list.\r\n");
         }
         if (!channel->getMembersCount()) {
             channel_manager->deleteChannel(channel_name);
