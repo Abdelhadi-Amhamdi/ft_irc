@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 21:59:36 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 18:45:08 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 Channel::Channel(const std::string &channel_name, const std::string &channel_key) 
     : users_limit(2), name(channel_name), key(channel_key) {
+        topic = "";
         // modes.push_back("+l");
     }
 
@@ -82,11 +83,11 @@ void Channel::add_user(int fd, const std::string &user, const std::string &chann
         ClientResponse(it->first, it->second, channel);
 }
 
-void Channel::brodcast_msg(std::string msg, std::string &user_name) {
+void Channel::brodcast_msg(std::string msg, std::string &user_name, const std::string &channel) {
     for (size_t i = 0; i < members.size(); i++) {
         if (members[i].second == user_name)
             continue;
-        std::string a = ":" + user_name + " PRIVMSG #irc :" + msg + "\r\n";
+        std::string a = ":" + user_name + " PRIVMSG #" + channel + " :" + msg + "\r\n";
         send(members[i].first, a.c_str(), a.size(), 0);
     }
 }

@@ -6,12 +6,11 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/21 20:54:31 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 18:50:33 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Topic.hpp"
-
 
 #define ERR_NOSUCHCHANNEL ":server_name 403 Topic <channel> :No such channel\r\n"
 #define ERR_NOTONCHANNEL ": server_name 442 Topic <channel> :You're not on that channel\r\n"
@@ -22,38 +21,51 @@ Topic::Topic() : ACommand("Topic") {}
 
 void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 {
+    std::string c;
     commandFormater(buffer);
     userInfosChecker();
-    // ClientSource *client_manager = server.getClientManager();
     ChannelSource *channel_manager = server.getChannelManager();
     if (params[0][0] == '#')
         params[0].erase(params[0].begin());
     Channel *tmp = channel_manager->getChannelByName(params[0]);
     if (tmp == NULL)
+    {
+        c = ":" +  user.getNickname()+" 442 " + user.getNickname() + " #" + params[0] + " :You're not on that channel " + "\r\n";
+            sendResponse(c, user.getFd());
     	throw std::logic_error("ERR_NOSUCHCHANNEL");
+    }
     else
     {
-        if (!params[1].empty())
+        int a  = params.size();
+        if (a == 1)
         {
-    	    std::cout << tmp->getTopic();
-            return;
+            std::string topic = tmp->getTopic();
+            std::cout <<"**" <<topic << "***\n";
+            if (topic.empty())
+            {
+                c = ":" + user.getNickname() + " 331 " + user.getNickname() + " #" + params[0] + " :No topic is set.\r\n";
+                std::cout << c;
+            }
+            else  
+                c = ":" +  user.getNickname()+ " 332 " + user.getNickname() + " #" + params[0] + " " + topic + "\r\n";
+            sendResponse(c, user.getFd());
         }
-
-        if (params[1][0] == ':')
+        else if (params[1][0] == ':')
         {
             params[1].erase(params[1].begin());
             //set_topic after check mode (if +t "just operators can change it else throw above")
+            // :irc.example.com 482 dan #v5 :You're not channel operator
     	    // throw std::logic_error("ERR_CHANOPRIVSNEEDED");
             tmp->setTopic(params[1]);
+            c = ":" +  user.getNickname()+" TOPIC #" + params[0] + " " + params[1] + " \r\n";
+            // sendResponse(c, user.getFd());
+            // //check broadcast
+            channel_manager->broadcastMeassges(params[0], c, user.getNickname());
         }
         else
     	    throw std::logic_error("ERR_NEEDMOREPARAMS");
-        
+        params.clear();
     }
-    std::string message = "sets topic:" + params[1];
-    //check broadcast
-    channel_manager->broadcastMeassges(params[0], message, user.getNickname());
-    params.clear();
 }
 
 Topic::~Topic(){}

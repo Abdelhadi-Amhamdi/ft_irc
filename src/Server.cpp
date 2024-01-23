@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 21:39:15 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/21 22:02:19 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ Server::Server(const std::string &password, const int &port)
 	commands["TOPIC"] = new Topic();
 	commands["USER"] = new User();
 	commands["JOIN"] = new Join();
+	commands["QUIT"] = new Quit();
 }
 
 void Server::start_server() {

@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 18:46:07 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 17:49:10 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ class Channel {
         // Channel(int admin, std::string topic, std::string name);
         void add_user(int fd, const std::string &user, const std::string &channel);
         void ClientResponse(int client_fd, const std::string &username, const std::string &channel_name);
-        void brodcast_msg(std::string msg, std::string &user);
+        // void brodcast_msg(std::string msg, std::string &user);
+        void brodcast_msg(std::string msg, std::string &user_name, const std::string &channel);
         void setAdmin(int user_fd);
         void setTopic(std::string new_topic);
         const std::string & getTopic() const;

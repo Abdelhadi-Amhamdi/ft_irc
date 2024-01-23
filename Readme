@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   else.cpp                                           :+:      :+:    :+:   */
+/*   Readme                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 16:20:34 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/21 19:08:52 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 17:38:10 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,3 +209,4 @@ void splt(const std::string& input, char delimiter, std::vector<std::string>& re
 }
 
 
+:irc.server.com 332 YourNick #channel :New topic for the channel

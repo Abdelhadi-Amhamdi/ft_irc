@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 20:14:42 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 17:49:19 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void ChannelSource::addUserToChannel(const std::string &channel_name, const std:
 void ChannelSource::broadcastMeassges(const std::string &channel_name, const std::string &message, std::string user) {
 	std::map<std::string, Channel*>::iterator ch = channels.find(channel_name);
 	if (ch != channels.end())
-		ch->second->brodcast_msg(message, user);
+		ch->second->brodcast_msg(message, user, channel_name);
 }
 
 
