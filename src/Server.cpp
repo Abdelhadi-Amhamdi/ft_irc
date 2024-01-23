@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 22:02:19 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 19:00:38 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ Server::Server(const std::string &password, const int &port)
 	commands["USER"] = new User();
 	commands["JOIN"] = new Join();
 	commands["QUIT"] = new Quit();
+	commands["PRIVMSG"] = new PrivMsg();
 }
 
 void Server::start_server() {

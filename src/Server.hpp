@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 22:03:10 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 19:00:48 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 #include "commands/User.hpp"
 #include "commands/Join.hpp"
 #include "commands/Quit.hpp"
+#include "commands/PrivMsg.hpp"
 
 // STL 
 #include <algorithm>

@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 21:58:58 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 19:04:01 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ void User::Execute(std::string &buffer, Connection &user, Server &server) {
         client->setHostname(params[1]);
         client->setRealName(params[3]);
         client->setIsRegistred();
-        std::string a = ":localhost 001 " + user.getNickname() + " :Welcome to the IRC network\r\n";
-        sendResponse(a, user.getFd());
+        sendResponse(":localhost 001 " + user.getNickname() + " :Welcome to the IRC network\r\n", user.getFd());
         sendResponse(prefix + "   .---------.\r\n" , user.getFd());
         sendResponse(prefix + "   |.-------.|\r\n" , user.getFd());
         sendResponse(prefix + "   ||>run#  ||\r\n" , user.getFd());

@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/23 18:50:33 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 19:53:16 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,13 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
             c = ":" +  user.getNickname()+" TOPIC #" + params[0] + " " + params[1] + " \r\n";
             // sendResponse(c, user.getFd());
             // //check broadcast
-            channel_manager->broadcastMeassges(params[0], c, user.getNickname());
+            // sendResponse(c, user.getFd());
+            // channel_manager->send_to_all(params[0], c, user.getNickname());
+
         }
         else
     	    throw std::logic_error("ERR_NEEDMOREPARAMS");
-        params.clear();
+               params.clear();
     }
 }
 
