@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:40:03 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 12:40:45 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/23 22:50:17 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ ACommand::ACommand(const std::string& name): name(name) {}
 ACommand::~ACommand() {}
 
 void ACommand::commandFormater(const std::string &data) {
+    params.clear();
     std::stringstream dataStream(data);
     std::string item;
     while (dataStream >> item)
