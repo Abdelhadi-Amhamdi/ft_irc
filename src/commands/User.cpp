@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/22 09:22:37 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/24 13:44:15 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,25 @@ void User::Execute(std::string &buffer, Connection &user, Server &server) {
     Client *client = clients_manager->getClientByNickname(user.getNickname());
     if (client && !client->isRegistred())
     {
-        std::string prefix = ":localhost 001 " + user.getNickname() + " :";
         commandFormater(buffer);
         userInfosChecker();
+        if (params.size() < 4) 
+        {
+            sendResponse(":server_name 461 " + user.getNickname() + " USER :Not enough parameters\r\n", user.getFd());
+            return ;
+        }
         client->setLogin(params[0]);
-        client->setHostname(params[1]);
-        client->setRealName(params[3]);
+        user_name = params[3];
+        for (size_t i = 4; i < params.size(); i++)
+            user_name += " " + params[i];
+        if (user_name[0] == ':')
+            user_name.erase(user_name.begin());
+        client->setRealName(user_name);
         client->setIsRegistred();
-        sendResponse(":localhost 001 " + user.getNickname() + " :Welcome to the IRC network\r\n", user.getFd());
-        sendResponse(prefix + "   .---------.\r\n" , user.getFd());
-        sendResponse(prefix + "   |.-------.|\r\n" , user.getFd());
-        sendResponse(prefix + "   ||>run#  ||\r\n" , user.getFd());
-        sendResponse(prefix + "   ||       ||\r\n" , user.getFd());
-        sendResponse(prefix + "   |\"-------'|etf\r\n" , user.getFd());
-        sendResponse(prefix + ".-^---------^-.\r\n" , user.getFd());
-        sendResponse(prefix + "| ---~   AMiGA|\r\n" , user.getFd());
-        sendResponse(prefix + "\"-------------' .  enjoy ;)\r\n" , user.getFd());
-        params.clear();
+        sendResponse(":server_name 001 " + user.getNickname() + " :Welcome to the IRC network\r\n", user.getFd());
+        user_name.clear();
     } else if (client) {
-        sendResponse(":server_name 462 nick: You may not register!\r\n", user.getFd());
+        sendResponse(":server_name 462 " + user.getNickname() + ": You may not register!\r\n", user.getFd());
     }
 }
 

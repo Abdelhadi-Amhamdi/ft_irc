@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:44:55 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 12:47:57 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/24 13:33:52 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 class User : public ACommand {
     private:
-        // 
+        std::string user_name; 
     public:
         User();
         void Execute(std::string &buffer, Connection &user, Server &server);
