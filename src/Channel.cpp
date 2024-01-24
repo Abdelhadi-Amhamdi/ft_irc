@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 20:34:03 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/24 17:54:40 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,12 @@ void Channel::brodCastMessage(const std::string &message, const std::string &use
     }
 }
 
+bool Channel::checkIfAdmin(const int &user_fd) {
+    std::vector<int>::iterator it = std::find(admins.begin(), admins.end(), user_fd);
+    if (it != admins.end())
+        return (true);
+    return (false);
+}
 
 Channel::~Channel(){
     std::cout << "Channel destroyed" << std::endl;

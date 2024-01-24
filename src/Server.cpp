@@ -6,11 +6,12 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/24 17:44:05 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/24 17:57:27 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "commands/Mode.hpp"
 
 const std::string& Server::getPassword() const {
 	return (this->password);
@@ -35,9 +36,9 @@ void Server::addConnectionFd(const int &connection_fd) {
 	connection_fds.push_back(new_fd);
 }
 
-void Server::deleteConnectionFd(const int &connection_fd) {
-	connection_fds.erase(new_fd);
-}
+// void Server::deleteConnectionFd(const int &connection_fd) {
+// 	// connection_fds.erase(connection_fd);
+// }
 
 void Server::eventsHandler() {
 	for (size_t index = 1; index < connection_fds.size(); index++) {
@@ -61,6 +62,7 @@ Server::Server(const std::string &password, const int &port)
 	commands["USER"] = new User();
 	commands["JOIN"] = new Join();
 	commands["QUIT"] = new Quit();
+	commands["MODE"] = new Mode();
 	commands["PRIVMSG"] = new PrivMsg();
 	commands["PART"] = new Part();
 	// commands["KICK"] = new Kick();
