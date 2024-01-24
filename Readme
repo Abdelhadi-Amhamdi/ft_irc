@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 16:20:34 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/23 17:38:10 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 22:12:08 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,41 +172,3 @@ Since channels starting with the character '+' as prefix do not
    support channel modes, no member can therefore have the status of
    channel operator.
 
-
-
-
-
-
-
-
-
-
-
-
-
-#include "Server.hpp"
-
-std::vector<std::string> tokens;
-
-void splt(const std::string& input, char delimiter, std::vector<std::string>& result)
-{
-	std::string token;
-	
-	for (size_t i = 0; i < input.length(); ++i) {
-		if (input[i] != delimiter)
-		{
-			token += input[i];
-		} 
-		else
-		{
-			result.push_back(token);
-			token.clear();
-		}
-	}
-	// Add the last token (if any)
-	if (!token.empty())
-		result.push_back(token);
-}
-
-
-:irc.server.com 332 YourNick #channel :New topic for the channel

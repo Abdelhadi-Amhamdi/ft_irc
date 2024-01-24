@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 19:51:15 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/23 20:34:03 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,22 @@ Channel::Channel(const std::string &channel_name, const std::string &channel_key
         // modes.push_back("+l");
     }
 
-void Channel::setAdmin(const int &user_fd) {
+void Channel::addAdmin(const int &user_fd) {
     admins.push_back(user_fd);
 }
 
 void Channel::setTopic(std::string new_topic) {
    this->topic = new_topic;
+}
+
+const std::string &Channel::getName() const {
+    return (name);
+}
+
+void Channel::delAdmin(const int &user_fd) {
+    std::vector<int>::iterator it = std::find(admins.begin(), admins.end(), user_fd);
+    if (it != admins.end())
+        admins.erase(it);
 }
 
 void Channel::setMode(const std::string &mode) {
@@ -38,12 +48,17 @@ const std::string & Channel::getKey() const {
     return (this->key);
 }
 
-const std::vector<std::pair<int, std::string> > & Channel::getMembers() const {
-    return (this->members);
+// const std::vector<std::pair<int, std::string> > & Channel::getMembers() const {
+//     return (this->members);
+// }
+
+
+size_t Channel::getMembersCount() const {
+    return (members.size());
 }
 
-std::string Channel::generateMemebrsList(const std::string &username) {
-    std::string members_list = ":server_name 353 " + username + " = #" + name + "   :";
+std::string Channel::generateMemebrsList() {
+    std::string members_list = ":server_name 353 nick = #" + name + "   :";
     for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++) {
         if (std::find(admins.begin(), admins.end(), it->first) != admins.end())
             members_list += "@";
@@ -73,22 +88,28 @@ std::string Channel::generateMemebrsList(const std::string &username) {
 
 //     std::string a = ":localhost 366 " + username + " #" + channel_name + " :End of /NAMES list.\r\n";
 //     send(client_fd, a.c_str(), a.size(), 0);
-void Channel::ClientResponse(const int &client_fd, const std::string &username) { 
-    std::string join_message = ":" + username + " JOIN #" + name + "\r\n";
-    send(client_fd, join_message.c_str(), join_message.size(), 0);
-    
-    std::string members_list = generateMemebrsList(username);
-    send(client_fd, members_list.c_str(), members_list.size(), 0);
 
-    std::string end_list_message = ":server_name 366 " + username + " " + name + " :End of /NAMES list.\r\n";
-    send(client_fd, end_list_message.c_str(), end_list_message.size(), 0);
+void Channel::addUserToChannel(const int &fd, const std::string &user) {
+    members.push_back(std::make_pair(fd, user));
 }
 
-void Channel::add_user(const int &fd, const std::string &user) {
-    members.push_back(std::make_pair(fd, user));
+void Channel::delUserFromChannel(const int &fd) {
+    for (size_t i = 0; i < members.size(); i++)
+    {
+        if (members[i].first == fd) 
+        {
+            delAdmin(fd);
+            std::vector<std::pair<int, std::string> >::iterator item = members.begin() + i;
+            members.erase(item);
+        }
+    }
+}
+
+void Channel::broadCastResponse(const std::string &message) {
     std::vector<std::pair<int, std::string> >::iterator it = members.begin();
-    for (; it != members.end(); it++)
-        ClientResponse(it->first, it->second);
+    for (; it != members.end(); it++) {
+        send(it->first, message.c_str(), message.size(), 0);
+    }   
 }
 
 // void Channel::brodcast_msg(std::string msg, std::string &user_name, const std::string &channel) {
@@ -108,30 +129,8 @@ void Channel::brodCastMessage(const std::string &message, const std::string &use
         send(members[i].first, response.c_str(), response.size(), 0);
     }
 }
-void Channel::to_all(const std::string &message, const std::string &user_name) {
-    for (size_t i = 0; i < members.size(); i++) {
-        if (members[i].second == user_name)
-            continue;
-        send(members[i].first, message.c_str(), message.size(), 0);
-    }
-}
+
 
 Channel::~Channel(){
     std::cout << "Channel destroyed" << std::endl;
 }
-
-// int Channel::modeExist_invite_only(const std::string &mode, int user_fd) {
-//     std::vector<std::string>::iterator m = std::find(modes.begin(), modes.end(), mode);
-//     if (m != modes.end()) {
-//         if (std::find(invites.begin(), invites.end(), user_fd) == invites.end())
-//             return (1);
-//     }
-//     return (0);
-// }
-
-// int Channel::modeExist_users_limit(const std::string &mode) {
-//     std::vector<std::string>::iterator m = std::find(modes.begin(), modes.end(), mode);
-//     if (m != modes.end() && members.size() == users_limit)
-//         return (1);
-//     return (0);
-// }

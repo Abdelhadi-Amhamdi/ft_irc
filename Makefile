@@ -8,7 +8,7 @@ BUILD_DIR = build/
 CP = c++ -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 
 SRC =  main.cpp Server.cpp Client.cpp Channel.cpp Connection.cpp ClientSource.cpp ChannelSource.cpp
-CMD =  ACommand.cpp Pass.cpp Nick.cpp User.cpp Join.cpp Topic.cpp Quit.cpp PrivMsg.cpp
+CMD =  ACommand.cpp Pass.cpp Nick.cpp User.cpp Join.cpp Topic.cpp  PrivMsg.cpp Part.cpp Quit.cpp
 
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC)) 
@@ -29,13 +29,14 @@ $(SERVER) : $(BUILD_DIR) $(OBJS)
 	$(CP) $(OBJS) -o $@
 
 $(BUILD_DIR):
-	mkdir $(BUILD_DIR)
+	@mkdir $(BUILD_DIR)
 
 clean :
-	rm -rf $(BUILD_DIR)
+	@echo cleaning... 
+	@rm -rf $(BUILD_DIR)
 
 fclean: clean
-	rm -f $(SERVER)
+	@rm -f $(SERVER)
 
 re : fclean all
 

@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 19:00:38 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/24 17:44:05 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ void Server::addConnectionFd(const int &connection_fd) {
 	connection_fds.push_back(new_fd);
 }
 
+void Server::deleteConnectionFd(const int &connection_fd) {
+	connection_fds.erase(new_fd);
+}
+
 void Server::eventsHandler() {
 	for (size_t index = 1; index < connection_fds.size(); index++) {
 		if ((connection_fds[index].revents & POLLIN) == POLLIN) {
@@ -58,6 +62,8 @@ Server::Server(const std::string &password, const int &port)
 	commands["JOIN"] = new Join();
 	commands["QUIT"] = new Quit();
 	commands["PRIVMSG"] = new PrivMsg();
+	commands["PART"] = new Part();
+	// commands["KICK"] = new Kick();
 }
 
 void Server::start_server() {

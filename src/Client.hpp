@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 12:57:39 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/24 17:30:39 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <iostream>
+#include <vector>
 #include "color.hpp"
 
 class Client {
@@ -23,6 +24,7 @@ class Client {
 		const std::string & getNickname() const ;
 		const std::string & getRealName() const ;
 		const std::string & getHostname() const ;
+		const std::vector<std::string>  & getgroupsin() const ;
 		bool isRegistred() const ;
 		// seters
 		void setFd(const int &fd);
@@ -30,6 +32,7 @@ class Client {
 		void setNickname(const std::string &arg);
 		void setRealName(const std::string &arg);
 		void setHostname(const std::string &arg);
+		void setgroupsin(const std::string &arg);
 		void setIsRegistred();
 	private:
 		int client_fd;
@@ -38,4 +41,5 @@ class Client {
 		std::string real_name;
 		std::string hostname;
 		bool is_registred;
+		std::vector<std::string> groups_in;
 };

@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 19:04:31 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/24 17:30:39 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,30 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
         sendResponse(":server_name 461 nick JOIN :Not enough parameters\r\n", user.getFd());
         return ;
     }
+    ClientSource *client_manager = server.getClientManager();
+    Client *tmp = client_manager->getClientByNickname(user.getNickname());
     channels_formater();
     for (size_t i = 0; i < channels.size(); i++) {
         Channel *ch = channels_manager->getChannelByName(channels[i].first);
-        if (!ch) {
+        if (!ch)
+        {
             channels_manager->createChannel(channels[i].first, channels[i].second);
-            channels_manager->addUserToChannel(user.getFd(), user.getNickname(), channels[i].first);
+            Channel *channel = channels_manager->getChannelByName(channels[i].first);
+            if (channel) {
+                channel->addAdmin(user.getFd());
+                channel->addUserToChannel(user.getFd(), user.getNickname());
+                channel->broadCastResponse(":" + user.getNickname() + " Join #" + channels[i].first + "\r\n");
+                channel->broadCastResponse(channel->generateMemebrsList());
+                channel->broadCastResponse(":server_name 366 nick " + channels[i].first + " :End of /NAMES list.\r\n");
+                tmp->setgroupsin(channels[i].first);
+            }
         } else {
             if (ch->getKey() == channels[i].second) {
-                ch->add_user(user.getFd(), user.getNickname());
+                ch->addUserToChannel(user.getFd(), user.getNickname());
+                ch->broadCastResponse(":" + user.getNickname() + " Join #" + channels[i].first + "\r\n");
+                ch->broadCastResponse(ch->generateMemebrsList());
+                ch->broadCastResponse(":server_name 366 nick " + channels[i].first + " :End of /NAMES list.\r\n");
+                tmp->setgroupsin(channels[i].first);
             } else {
                 sendResponse(":server_name 475 nick " + channels[i].first + ":Cannot join channel (+k)\r\n", user.getFd());
             }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/21 12:58:29 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/24 17:41:27 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ const std::string & Client::getLogin() const {
 const std::string & Client::getRealName() const {
     return (real_name);
 }
+const std::vector<std::string> & Client::getgroupsin() const {
+    return (groups_in);
+}
 
 bool Client::isRegistred() const {
     return this->is_registred;
@@ -57,6 +60,9 @@ void Client::setRealName(const std::string &arg) {
 
 void Client::setHostname(const std::string &arg) {
     this->hostname = arg;
+}
+void Client::setgroupsin(const std::string &arg) {
+    this->groups_in.push_back(arg);
 }
 
 void Client::setIsRegistred() {

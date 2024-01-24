@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 19:00:48 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/24 17:35:45 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 #include "commands/Join.hpp"
 #include "commands/Quit.hpp"
 #include "commands/PrivMsg.hpp"
+#include "commands/Part.hpp"
+// #include "commands/Kick.hpp"
 
 // STL 
 #include <algorithm>
@@ -75,6 +77,7 @@ class Server {
 		void    eventsHandler();
 		void    start_server();
 		void    addConnectionFd(const int &connection_fd);
+		void    deleteConnectionFd(const int &connection_fd);
 
 		// clients manager methods
 		
