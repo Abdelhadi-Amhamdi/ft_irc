@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 22:32:36 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/24 08:55:53 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Channel {
         void    delAdmin(const int &user_fd);
         const   std::string & getKey() const ;
         void    setMode(const std::string &mode);
+        void    addInvite(const int &user_fd);
         
         Channel(const std::string &channel_name, const std::string &channel_key);
         std::string generateMemebrsList();

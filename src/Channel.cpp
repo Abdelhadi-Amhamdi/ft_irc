@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 22:33:35 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/24 08:56:17 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ Channel::Channel(const std::string &channel_name, const std::string &channel_key
 
 void Channel::addAdmin(const int &user_fd) {
     admins.push_back(user_fd);
+}
+
+void Channel::addInvite(const int &user_fd) {
+    invites.push_back(user_fd);
 }
 
 const std::string &Channel::getName() const {

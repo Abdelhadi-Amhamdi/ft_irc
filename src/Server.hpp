@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 16:26:37 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/24 09:15:59 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 #include "commands/PrivMsg.hpp"
 #include "commands/Part.hpp"
 #include "commands/Kick.hpp"
+#include "commands/Invite.hpp"
 
 // STL 
 #include <algorithm>
