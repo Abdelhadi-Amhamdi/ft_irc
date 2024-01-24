@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 20:20:01 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/23 22:32:36 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class Channel {
         
         Channel(const std::string &channel_name, const std::string &channel_key);
         std::string generateMemebrsList();
+        bool    checkIfAdmin(const int &user_fd);
         void    delUserFromChannel(const int &fd);
         void    addUserToChannel(const int &fd, const std::string &user);
         void    brodCastMessage(const std::string &message, const std::string &user);

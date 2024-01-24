@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 20:19:55 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/23 22:33:35 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,13 @@ void Channel::brodCastMessage(const std::string &message, const std::string &use
         std::string response = ":" + user_name + " PRIVMSG #" + name + " :" + message + "\r\n";
         send(members[i].first, response.c_str(), response.size(), 0);
     }
+}
+
+bool Channel::checkIfAdmin(const int &user_fd) {
+    std::vector<int>::iterator it = std::find(admins.begin(), admins.end(), user_fd);
+    if (it != admins.end())
+        return (true);
+    return (false);
 }
 
 Channel::~Channel(){
