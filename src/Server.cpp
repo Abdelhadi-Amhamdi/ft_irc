@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 16:26:16 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/24 10:09:27 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "commands/Mode.hpp"
 
 const std::string& Server::getPassword() const {
 	return (this->password);
@@ -55,6 +56,7 @@ Server::Server(const std::string &password, const int &port)
 	commands["NICK"] = new Nick();
 	commands["USER"] = new User();
 	commands["JOIN"] = new Join();
+	commands["MODE"] = new Mode();
 	commands["PRIVMSG"] = new PrivMsg();
 	commands["PART"] = new Part();
 	commands["KICK"] = new Kick();
