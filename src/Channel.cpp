@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 21:09:30 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/25 23:32:51 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ void Channel::addAdmin(const int &user_fd) {
 void Channel::addInvite(const int &user_fd) {
     invites.push_back(user_fd);
 }
+
+// void Channel::setTopic(std::string new_topic) {
+//    this->topic = new_topic;
+// }
 
 const std::string &Channel::getName() const {
     return (name);
@@ -87,6 +91,7 @@ void Channel::broadCastResponse(const std::string &message) {
         send(it->first, message.c_str(), message.size(), 0);
     }   
 }
+
 
 void Channel::brodCastMessage(const std::string &message, const std::string &user_name) {
     std::map<int, std::string>::iterator it = members.begin(); 

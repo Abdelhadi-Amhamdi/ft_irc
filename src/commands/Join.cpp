@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 21:07:27 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/25 23:26:11 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
         sendResponse(":server_name 461 nick JOIN :Not enough parameters\r\n", user.getFd());
         return ;
     }
+    ClientSource *client_manager = server.getClientManager();
+    Client *tmp = client_manager->getClientByNickname(user.getNickname());
     channels_formater();
     for (size_t i = 0; i < channels.size(); i++) {
         Channel *ch = channels_manager->getChannelByName(channels[i].first);
@@ -58,6 +60,7 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
                 channel->broadCastResponse(":" + user.getNickname() + " Join #" + channels[i].first + "\r\n");
                 channel->broadCastResponse(channel->generateMemebrsList());
                 channel->broadCastResponse(":server_name 366 nick " + channels[i].first + " :End of /NAMES list.\r\n");
+                tmp->setgroupsin(channels[i].first);
             }
         } 
         else
@@ -78,6 +81,7 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
                     ch->broadCastResponse(ch->generateMemebrsList());
                     ch->broadCastResponse(":server_name 366 nick " + channels[i].first + " :End of /NAMES list.\r\n");
                     sendResponse(":server_name 332 nick #" + channels[i].first + " :" + ch->getTopic() + "\r\n" , user.getFd());
+                    tmp->setgroupsin(channels[i].first);
                 }
                 else {
                     sendResponse(":server_name 475 nick #" + channels[i].first + " :Cannot join channel (+k)\r\n", user.getFd());

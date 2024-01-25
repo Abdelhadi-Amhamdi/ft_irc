@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 17:14:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/25 23:31:57 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@
 // commands
 #include "commands/ACommand.hpp"
 #include "commands/Nick.hpp"
+#include "commands/Topic.hpp"
 #include "commands/Pass.hpp"
 #include "commands/User.hpp"
 #include "commands/Join.hpp"
+#include "commands/Quit.hpp"
 #include "commands/PrivMsg.hpp"
 #include "commands/Part.hpp"
 #include "commands/Kick.hpp"
@@ -77,6 +79,8 @@ class Server {
 		void    eventsHandler();
 		void    start_server();
 		void    addConnectionFd(const int &connection_fd);
+		void    deleteConnectionFd(const int &connection_fd);
+		void    deleteConnection(const int &connection_fd);
 
 		// clients manager methods
 		

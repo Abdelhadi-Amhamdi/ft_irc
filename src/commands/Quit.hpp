@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   User.hpp                                           :+:      :+:    :+:   */
+/*   Quit.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/21 12:44:55 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 23:27:27 by aamhamdi         ###   ########.fr       */
+/*   Created: 2024/01/21 20:53:58 by kben-ham          #+#    #+#             */
+/*   Updated: 2024/01/21 20:54:09 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 #include "ACommand.hpp"
 #include "../Server.hpp"
 
-class User : public ACommand {
-    private:
-        std::string user_name; 
+class Quit : public ACommand {
     public:
-        User();
+        Quit();
         void Execute(std::string &buffer, Connection &user, Server &server);
-        ~User();
+        ~Quit();
 };
