@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/24 17:57:27 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/25 23:15:46 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,25 @@ void Server::addConnectionFd(const int &connection_fd) {
 	connection_fds.push_back(new_fd);
 }
 
-// void Server::deleteConnectionFd(const int &connection_fd) {
-// 	// connection_fds.erase(connection_fd);
-// }
+
+void Server::deleteConnectionFd(const int &connection_fd) {
+	std::vector<struct pollfd>::iterator it = connection_fds.begin();
+	std::vector<struct pollfd>::iterator ite = connection_fds.end();
+	for(std::vector<struct pollfd>::iterator t = it; t != ite; t++)
+	{
+		if (t->fd == connection_fd)
+		{
+			connection_fds.erase(t);
+			break;
+		}
+	}
+}
+
+void Server::deleteConnection(const int &connection_fd) {
+	std::unordered_map<int, Connection*>::iterator it = connections.find(connection_fd);
+	if (it != connections.end())
+        connections.erase(it);
+}
 
 void Server::eventsHandler() {
 	for (size_t index = 1; index < connection_fds.size(); index++) {

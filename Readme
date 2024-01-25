@@ -99,19 +99,6 @@ Invite list (refers to a list of users who are allowed to join an invite-only ch
 
 ____________________________________________________________
 
-NOTICE : (is used similarly to PRIVMSG)
---------
-The difference between NOTICE and PRIVMSG
-	is that automatic replies MUST NEVER be
-	sent in response to a NOTICE message
-
-NOTICE nickname :message
-NOTICE #channel :message
-
--!- nickname :message.
-
-____________________________________________________________
-
 PART : (to leave a channel)
 --------
 PART #channel,#channel
@@ -140,6 +127,20 @@ New private message from nickname :message
 
 
 ____________________________________________________________
+
+NOTICE : (is used similarly to PRIVMSG)
+--------
+The difference between NOTICE and PRIVMSG
+	is that automatic replies MUST NEVER be
+	sent in response to a NOTICE message
+
+NOTICE nickname :message
+NOTICE #channel :message
+
+-!- nickname :message.
+
+____________________________________________________________
+
 
 MODE : (to set modes to channel)
 -------

@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/24 17:42:02 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/25 20:47:05 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	std::vector<std::string> k = tmp_client->getgroupsin();
 	int a = k.size();
 	std::string c;
-	std::string message = " QUIT :";
+	std::string message = " QUIT ";
 	commandFormater(buffer);
 	userInfosChecker();
 	if (params.size() != 0)
 	{
 		if (params[0][0] == ':')
 		{
-			params[0].erase(params[0].begin());
+			params[0].erase(params[0].begin());//ila drt message fih bzf makayosloch kolchi nafs lblan f topic 
 			message += params[0];
 		}
+		for (size_t i = 1; i < params.size(); i++)
+			message +=  " " + params[i];
 	}
 	ChannelSource *channel_manager = server.getChannelManager();
 	Channel *tmp;
@@ -42,6 +44,8 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	   tmp->broadCastResponse(c);
 	   tmp->delUserFromChannel(user.getFd());
 	}
+	server.deleteConnection(user.getFd());
+	server.deleteConnectionFd(user.getFd());
 	close(user.getFd());
 	client_manager->deleteClient(user.getNickname());
 	params.clear();

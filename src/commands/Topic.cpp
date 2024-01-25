@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/24 17:02:03 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/25 17:49:49 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Topic::Topic() : ACommand("Topic") {}
 
 void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 {
-    std::string message;
+    std::string message, new_one;
     commandFormater(buffer);
     userInfosChecker();
     ChannelSource *channel_manager = server.getChannelManager();
@@ -51,8 +51,14 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
             //set_topic after check mode (if +t "just operators can change it else throw above")
             // :irc.example.com 482 dan #v5 :You're not channel operator
     	    // ERR_CHANOPRIVSNEEDED
-            tmp->setTopic(params[1]);
-            message = ":" +  user.getNickname() + " TOPIC #" + params[0] + " " + params[1] + " \r\n";
+            new_one = params[1];
+            if (a > 1)
+            {
+                for (size_t i = 2; i < params.size(); i++)
+			        new_one +=  " " + params[i];    
+            }
+            tmp->setTopic(new_one);
+            message = ":" +  user.getNickname() + " TOPIC #" + params[0] + " " + new_one + " \r\n";
             tmp->broadCastResponse(message);
         }
         else
