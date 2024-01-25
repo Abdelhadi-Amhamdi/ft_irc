@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/24 21:42:42 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:57:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@ void    Connection::handleDAta(Server& server)
                     command->second->Execute(buffer, *this, server);
                 else if (cmd == "NICK")
                     command->second->Execute(buffer, *this, server);
-            } else
+            } else {
                 command->second->Execute(buffer, *this, server);
-        } 
+            }
+        }
         buffer.clear();
     }
 

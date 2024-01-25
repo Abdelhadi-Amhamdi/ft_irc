@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/24 21:50:52 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/25 17:15:02 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ ChannelSource *Server::getChannelManager() const {
 
 void Server::addConnectionFd(const int &connection_fd) {
 	struct pollfd new_fd;
+	fcntl(connection_fd, F_SETFL, O_NONBLOCK);
 	new_fd.fd = connection_fd;
 	new_fd.events = POLLIN;
 	connection_fds.push_back(new_fd);

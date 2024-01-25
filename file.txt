@@ -1,0 +1,27 @@
+
+
+
+
+/help
+    . PASS <password>
+    . NICK <nickname>
+    . USER <login> <hostname> <servername> <realname>
+    . INVITE <channel> <target>
+    . JOIN <channel_list> <keys_list>
+    . KICK <channel> <target>
+    . MODE <channel> <modes> <parameters>
+    . PART <channel> <reason>
+    . PRIVMSG <target> <message>
+
+
+/help PASS
+    PASS <password>
+
+
+// logtime
+
+
+// channel_list
+
+// weather
+    

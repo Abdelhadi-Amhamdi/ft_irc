@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/24 09:15:59 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/25 17:14:13 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <netdb.h>
+#include <fcntl.h>
 
 // sockets manipulation
 #include <sys/socket.h>
