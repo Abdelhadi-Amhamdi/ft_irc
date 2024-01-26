@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 23:31:36 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/26 00:14:32 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ Server::Server(const std::string &password, const int &port)
 	commands["PART"] = new Part();
 	commands["KICK"] = new Kick();
 	commands["INVITE"] = new Invite();
+	commands["BOT"] = new Bot();
 }
 
 void Server::start_server() {

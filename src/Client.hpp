@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/24 17:30:39 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/26 04:06:58 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class Client {
 		const std::string & getHostname() const ;
 		const std::vector<std::string>  & getgroupsin() const ;
 		bool isRegistred() const ;
+		time_t getstart() const {return start;}
 		// seters
 		void setFd(const int &fd);
 		void setLogin(const std::string &arg);
@@ -35,6 +36,7 @@ class Client {
 		void setgroupsin(const std::string &arg);
 		void setIsRegistred();
 	private:
+		time_t start;
 		int client_fd;
 		std::string nick_name;
 		std::string login;

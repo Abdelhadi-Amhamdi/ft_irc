@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:09:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/20 20:49:21 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/26 03:52:41 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ Client* ClientSource::getClientByNickname(const std::string &nickname) {
     if (user != clients.end())
         return (user->second);
     return (NULL);
+}
+
+size_t ClientSource::getClientsCount() const {
+    return (clients.size());
 }
 
 void ClientSource::print() {

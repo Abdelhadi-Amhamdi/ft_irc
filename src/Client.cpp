@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/24 17:41:27 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/26 04:04:51 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 
 Client::Client(const int &fd, std::string nickname)
-    : client_fd(fd), nick_name(nickname), is_registred(false) {}
+    : client_fd(fd), nick_name(nickname), is_registred(false) {
+    start = std::time(NULL);     
+}
 
 int Client::getFd() const {
     return (client_fd);

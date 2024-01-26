@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 23:31:57 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/26 00:14:17 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 #include "commands/Part.hpp"
 #include "commands/Kick.hpp"
 #include "commands/Invite.hpp"
+#include "commands/Bot.hpp"
 
 // STL 
 #include <algorithm>

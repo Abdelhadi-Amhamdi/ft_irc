@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientSource.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:08:25 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 22:46:56 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/26 01:31:50 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class ClientSource {
         void deleteClient(const std::string &nickname);
         const std::unordered_map<std::string, Client*>& getClients() const;
         Client* getClientByNickname(const std::string &nickname);
+        size_t getClientsCount() const;
         void print();
         ~ClientSource();
 };

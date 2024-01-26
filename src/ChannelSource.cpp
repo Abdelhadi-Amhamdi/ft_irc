@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelSource.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 20:32:35 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/26 01:31:00 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void ChannelSource::deleteChannel(const std::string &name) {
 		delete ch->second;
 		channels.erase(ch);
 	}
+}
+
+size_t ChannelSource::getChannelsCount() const {
+	return (channels.size());
 }
 
 Channel* ChannelSource::getChannelByName(const std::string &channel_name) {
