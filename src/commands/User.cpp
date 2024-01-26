@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 23:27:23 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/26 17:29:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void User::Execute(std::string &buffer, Connection &user, Server &server) {
             user_name.erase(user_name.begin());
         client->setRealName(user_name);
         client->setIsRegistred();
-        sendResponse(":server_name 001 " + user.getNickname() + " :Welcome to the IRC network\r\n", user.getFd());
+        sendResponse(":server_name 001 " + user.getNickname() + " :Welcome to the IRC network : " + user.getNickname() + " \r\n", user.getFd());
         user_name.clear();
     } else if (client) {
         sendResponse(":server_name 462 " + user.getNickname() + ": You may not register!\r\n", user.getFd());
