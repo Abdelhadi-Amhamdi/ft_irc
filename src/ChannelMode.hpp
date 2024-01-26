@@ -8,7 +8,7 @@
 class ChannelMode {
 	private:
         bool    inviteOnly;
-        bool    topic;
+        bool    hasTopic;
         bool    hasLimit;
         int     limit;
         bool    hasKey;
@@ -26,10 +26,12 @@ class ChannelMode {
         void setTopic(char sign);
 
         std::string getKey() const;
-        void setKey(const std::string &key_);
+        void setKey(char sing, const std::string &key_, int& inexKey);
 
         int getLimit() const;
-        void setLimit(char sign, std::string key);
+        void setLimit(char sign, std::string key, int& indexKey);
+
+        bool getHasLimit() const;
 
 };
 

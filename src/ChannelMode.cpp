@@ -2,11 +2,11 @@
 #include <cassert>
 #include <string>
 
-ChannelMode::ChannelMode() :  inviteOnly(false), topic(false), hasLimit(false), hasKey(false)
+ChannelMode::ChannelMode() :  inviteOnly(false), hasTopic(false), hasLimit(false), hasKey(false)
 {}
 
 ChannelMode::ChannelMode(const std::string& key)
-    : inviteOnly(false), topic(false), hasLimit(false)
+    : inviteOnly(false), hasTopic(false), hasLimit(false)
 {
     if (key.empty())
         hasKey = false;
@@ -26,28 +26,36 @@ void ChannelMode::setInvitOnly(char sign)
         inviteOnly = false;
 }
 
-bool ChannelMode::getTopic() const { return topic; }
+bool ChannelMode::getTopic() const { return hasTopic; }
 
 void ChannelMode::setTopic(char sign)
 {
     assert(sign == '+' || sign == '-');
     if (sign == '+')
-        topic = true;
+        hasTopic = true;
     else
-        topic = false;
+        hasTopic = false;
 }
 
 std::string ChannelMode::getKey() const { return key; }
 
-void ChannelMode::setKey(const std::string &key_)
+void ChannelMode::setKey(char sing, const std::string &key_, int& indexKey)
 {
-    hasLimit = true;
-    key = key_;
+    if (sing == '+')
+    {    
+        hasLimit = true;    
+        key = key_;
+        indexKey++;
+    }
+    else {
+        hasKey = false;
+        key = "";
+    }
 }
 
 int ChannelMode::getLimit() const { return limit; }
 
-void ChannelMode::setLimit(char sign, std::string key)
+void ChannelMode::setLimit(char sign, std::string key, int& indexKey)
 {
     assert(sign == '+' || sign == '-');
 
@@ -56,6 +64,7 @@ void ChannelMode::setLimit(char sign, std::string key)
     else
     {
         this->hasLimit = true;
+        indexKey++;
         limit = std::stoi(key);
     }
 
@@ -67,3 +76,5 @@ void ChannelMode::setLimit(char sign, std::string key)
     // else
     //     std::cout << __LINE__ << "response for invalid argurment\n";
 }
+
+bool ChannelMode::getHasLimit() const { return hasLimit; }
