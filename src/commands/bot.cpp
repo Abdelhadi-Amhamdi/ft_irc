@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 01:19:16 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 04:09:16 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/26 05:41:32 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ Bot::Bot()
 void Bot::Manual(const int &fd) {
 	if (params.size() == 1) {
 		std::map<std::string,std::string>::iterator it = manual.begin();
-		sendResponse(prefix + "-----manual: ------------------\r\n", fd);
+		sendResponse(prefix + "-----manual: -----------\r\n", fd);
 		for (; it != manual.end(); it++)
 			sendResponse(prefix + it->second, fd);
-		sendResponse(prefix + "-------------------------------\r\n", fd);
+		sendResponse(prefix + "-------------------------\r\n", fd);
 	} else {
 		std::map<std::string, std::string>::iterator it = manual.find(params[1]);
 		if (it != manual.end()) {
-			sendResponse(prefix + "-----" + it->first + ": ------------------\r\n", fd);
+			sendResponse(prefix + "-----" + it->first + ": -----------\r\n", fd);
 			sendResponse(prefix + it->second, fd);
-			sendResponse(prefix + "-------------------------------\r\n", fd);
+			sendResponse(prefix + "----------------------------\r\n", fd);
 		}
 	}
 }
@@ -49,11 +49,11 @@ std::string weatherHelper(const std::string &data, const std::string &elm, const
 	std::string ret;
 	size_t pos = data.find(elm);
 	if (pos == std::string::npos)
-		return (ret);
+		throw std::logic_error("City Not Found... 🙃");
 	size_t start = pos + elm.size() + 2;
 	size_t end = data.find(del, start);
 	if (end == std::string::npos)
-		return (ret);	
+		throw std::logic_error("City Not Found... 🙃");
 	ret = data.substr(start, end - start);
 	return (ret);
 }
@@ -81,15 +81,21 @@ void Bot::Weather(const int &fd) {
 				std::cout << "Error\n";
 			}
 
-			sendResponse(prefix + "------ Weather: ------------------\n", fd);
-			sendResponse(prefix + "City        : " + weatherHelper(data, "name\"", "\"") + "\r\n", fd);
-			sendResponse(prefix + "Country     : " + weatherHelper(data, "country\"", "\"") + "\r\n", fd);
-			sendResponse(prefix + "Description : " + weatherHelper(data, "description\"", "\"") + "\r\n", fd);
-			sendResponse(prefix + "tempuratue  : " + weatherHelper(data, "temp", ",") + "\r\n", fd);
-			sendResponse(prefix + "pressure    : " + weatherHelper(data, "pressure", ",") + "\r\n", fd);
-			sendResponse(prefix + "humidity    : " + weatherHelper(data, "humidity", ",") + "\r\n", fd);
-			sendResponse(prefix + "visibility  : " + weatherHelper(data, "visibility", ",") + "\r\n", fd);
-			sendResponse(prefix + "---------------------------------\n", fd);
+			sendResponse(prefix + "----- Weather⛅: -----------\n", fd);
+			try 
+			{
+				sendResponse(prefix + "City        : " + weatherHelper(data, "name\"", "\"") + "\r\n", fd);
+				sendResponse(prefix + "Country     : " + weatherHelper(data, "country\"", "\"") + "\r\n", fd);
+				sendResponse(prefix + "Description : " + weatherHelper(data, "description\"", "\"") + "\r\n", fd);
+				sendResponse(prefix + "tempuratue  : " + weatherHelper(data, "temp", ",") + "\r\n", fd);
+				sendResponse(prefix + "pressure    : " + weatherHelper(data, "pressure", ",") + "\r\n", fd);
+				sendResponse(prefix + "humidity    : " + weatherHelper(data, "humidity", ",") + "\r\n", fd);
+				sendResponse(prefix + "visibility  : " + weatherHelper(data, "visibility", ",") + "\r\n", fd);	
+			}
+			catch (std::exception &e) {
+				sendResponse(prefix + e.what() + "\r\n", fd);
+			}
+			sendResponse(prefix + "--------------------------\n", fd);
 			curl_easy_cleanup(curl);
 		}		
 	}
@@ -102,7 +108,9 @@ void Bot::LogTime(Connection &user, Server &server) {
 		
 		time_t start_time = cl->getstart();
 		time_t end_time = std::time(NULL);
+		sendResponse(prefix + "----- LogTime: -----------\r\n", user.getFd());
 		sendResponse(prefix + "Logtime for " + user.getNickname() + " :" + std::to_string(end_time - start_time) + "s\r\n", user.getFd());
+		sendResponse(prefix + "--------------------------\r\n", user.getFd());
 	}
 }
 
@@ -112,10 +120,10 @@ void Bot::ServerInfos(Server &server, const int &fd) {
 	ChannelSource *channel_mnager = server.getChannelManager();
 	size_t clients = client_manager->getClientsCount();
 	size_t channels = channel_mnager->getChannelsCount();
-	sendResponse(prefix + "-------- Network Infos: --------------------\r\n", fd);
+	sendResponse(prefix + "----- Network Infos: -----------\r\n", fd);
 	sendResponse(prefix + "+ clients  : " + std::to_string(clients) + "\r\n", fd);
 	sendResponse(prefix + "+ channels : " + std::to_string(channels) + "\r\n", fd);
-	sendResponse(prefix + "--------------------------------------------\r\n", fd);
+	sendResponse(prefix + "--------------------------------\r\n", fd);
 }
 
 void Bot::Execute(std::string &buffer, Connection &user, Server &server) {
@@ -136,7 +144,14 @@ void Bot::Execute(std::string &buffer, Connection &user, Server &server) {
 		ServerInfos(server, user.getFd());
 	}
 	else {
-		sendResponse(prefix + "Hey I'm Bot, How i can help you...\r\n", user.getFd());
+		sendResponse(prefix + "Hey I'm Bot, How i can help you... 😊\r\n", user.getFd());
+		sendResponse(prefix + "-----usage: -----------\r\n", user.getFd());
+		sendResponse(prefix + ". bot help\r\n", user.getFd());
+		sendResponse(prefix + ". bot help <command>\r\n", user.getFd());
+		sendResponse(prefix + ". bot server-infos\r\n", user.getFd());
+		sendResponse(prefix + ". bot weather <city>\r\n", user.getFd());
+		sendResponse(prefix + ". bot logtime\r\n", user.getFd());
+		sendResponse(prefix + "----------------------\r\n", user.getFd());
 	}
 
 }
