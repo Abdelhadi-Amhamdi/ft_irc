@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 23:29:49 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/26 20:02:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Channel {
     public:
         size_t  getMembersCount() const;
         void    addInvite(const int &user_fd);
+        void    delInvite(const int &fd);
         void    addAdmin(const int &user_fd);
         void    delAdmin(const int &user_fd);
         const ChannelMode& getMode() const;
@@ -39,8 +40,6 @@ class Channel {
         void    setTopic(const std::string &topic);
         
         void    setMode(const std::string &mode);
-        // void setTopic(std::string new_topic);
-        // const std::string & getTopic() const;
         
         Channel(const std::string &channel_name, const std::string &channel_key);
         std::string generateMemebrsList();

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 23:32:51 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/26 20:04:40 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ void Channel::addAdmin(const int &user_fd) {
 }
 
 void Channel::addInvite(const int &user_fd) {
-    invites.push_back(user_fd);
+    std::vector<int>::iterator it = std::find(invites.begin(), invites.end(), user_fd);
+    if (it == invites.end())
+        invites.push_back(user_fd);
 }
 
-// void Channel::setTopic(std::string new_topic) {
-//    this->topic = new_topic;
-// }
+void Channel::delInvite(const int &fd) {
+  std::vector<int>::iterator it = std::find(invites.begin(), invites.end(), fd);
+  if (it != invites.end())
+    invites.erase(it);
+}
 
 const std::string &Channel::getName() const {
     return (name);

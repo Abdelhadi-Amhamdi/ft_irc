@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 23:26:11 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/26 19:53:33 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
                     ch->broadCastResponse(":server_name 366 nick " + channels[i].first + " :End of /NAMES list.\r\n");
                     sendResponse(":server_name 332 nick #" + channels[i].first + " :" + ch->getTopic() + "\r\n" , user.getFd());
                     tmp->setgroupsin(channels[i].first);
+                    if (mode.getInvitOnly()) {
+                        ch->delInvite(user.getFd());
+                    }
                 }
                 else {
                     sendResponse(":server_name 475 nick #" + channels[i].first + " :Cannot join channel (+k)\r\n", user.getFd());
