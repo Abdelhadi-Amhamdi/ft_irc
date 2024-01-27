@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 19:53:33 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/27 04:45:22 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
         } 
         else
         {
-            const ChannelMode& mode = ch->getMode();
+            ChannelMode& mode = ch->getMode();
             if (!ch->isMemberInChannel(user.getFd()))
             { 
                 if ((size_t)mode.getLimit() == ch->getMembersCount()) {

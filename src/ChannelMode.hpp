@@ -20,18 +20,20 @@ class ChannelMode {
         ChannelMode(const std::string& key);
 
         bool getInvitOnly() const;
-        void setInvitOnly(char sign);
+        void setInvitOnly(bool value);
 
         bool getTopic() const;
-        void setTopic(char sign);
+        void setTopic(bool value);
 
         std::string getKey() const;
-        void setKey(char sing, const std::string &key_, int& inexKey);
+        void setKey(bool hasKey, const std::string &key_);
 
         int getLimit() const;
-        void setLimit(char sign, std::string key, int& indexKey);
+        void setLimit(bool hasLimit, size_t limit); 
 
         bool getHasLimit() const;
+
+        bool getHasKey() const { return hasKey; }
 
 };
 
