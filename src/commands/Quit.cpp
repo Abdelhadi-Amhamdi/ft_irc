@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/28 09:45:15 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 10:29:02 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	std::string c;
 	std::string message = " QUIT ";
 	commandFormater(buffer);
-	params.erase(params.begin());	
 	if (params.size() != 0)
 	{
 		if (params[0][0] == ':')

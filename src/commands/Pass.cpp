@@ -6,24 +6,22 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:52:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 09:44:40 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 15:53:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Pass.hpp"
 
-
 Pass::Pass() : ACommand("PASS") {}
 
 void Pass::Execute(std::string &buffer, Connection &user, Server &server) {
     commandFormater(buffer);
-    params.erase(params.begin());
-    if (server.getPassword() != params[0]) {
-        sendResponse(":server_name 464 nick :Password incorrect\r\n", user.getFd());
+    if (params.size() && server.getPassword() != params[0]) {
+        sendResponse(ERR_BADPASS, user.getFd());
         close(user.getFd());
     }
     else if (user.getIsConnected() && !user.getNickname().empty()) {
-       sendResponse(":server_name 462 nick :You may not reregister\r\n" , user.getFd());
+       throw sendResponse(ERR_ALREADYREGISTRED(user.getNickname()) , user.getFd());
        return ;
     }
     else {

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 09:22:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 18:40:21 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 class Client {
 	public:
-		Client(const int &fd, std::string nickname);
+		Client(const int &fd, std::string nickname, std::string arg_hostname);
 		// geters
 		int getFd() const ;
 		const std::string & getLogin() const ;

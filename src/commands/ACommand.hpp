@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:39:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 09:29:52 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 19:15:41 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 
 class Server;
 class Connection;
+class Client;
+
+#include "../Client.hpp"
+#include "../Replies.hpp"
 
 
 class ACommand {
@@ -25,9 +29,10 @@ class ACommand {
         std::string name;
         std::string Messge;
         std::vector<std::string> params;
+        Client *executer;
     public:
         ACommand(const std::string& name);
-        void    sendResponse(const std::string &message, int connection_fd);
+        int    sendResponse(const std::string &message, int connection_fd);
         virtual ~ACommand();
         virtual void Execute(std::string &buffer, Connection &user, Server &server) = 0;
         void    commandFormater(const std::string& data);

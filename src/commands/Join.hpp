@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Join.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:22:21 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 23:14:31 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/28 19:07:19 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,7 @@
 #include "ACommand.hpp"
 #include "../Server.hpp"
 
-template<typename I, typename F>
-void for_each(I begin, I end, F func) {
-    for(I it = begin ; it != end; it++)
-        func(it);
-}
+
 
 class Join : public ACommand {
     private:

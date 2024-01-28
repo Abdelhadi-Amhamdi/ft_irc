@@ -1,12 +1,13 @@
 #include "ChannelMode.hpp"
 #include <cassert>
 #include <string>
+#include <sys/_types/_size_t.h>
 
-ChannelMode::ChannelMode() :  inviteOnly(false), topic(false), hasLimit(false), hasKey(false)
+ChannelMode::ChannelMode() :  inviteOnly(false), hasTopic(false), hasLimit(false), hasKey(false)
 {}
 
 ChannelMode::ChannelMode(const std::string& key)
-    : inviteOnly(false), topic(false), hasLimit(false)
+    : inviteOnly(false), hasTopic(false), hasLimit(false)
 {
     if (key.empty())
         hasKey = false;
@@ -17,53 +18,31 @@ ChannelMode::ChannelMode(const std::string& key)
 
 bool ChannelMode::getInvitOnly() const { return inviteOnly; }
 
-void ChannelMode::setInvitOnly(char sign)
+void ChannelMode::setInvitOnly(bool value)
 {
-    assert(sign == '+' || sign == '-');
-    if (sign == '+')
-        inviteOnly = true;
-    else
-        inviteOnly = false;
+    this->inviteOnly = value;
 }
 
-bool ChannelMode::getTopic() const { return topic; }
+bool ChannelMode::getTopic() const { return hasTopic; }
 
-void ChannelMode::setTopic(char sign)
+void ChannelMode::setTopic(bool value)
 {
-    assert(sign == '+' || sign == '-');
-    if (sign == '+')
-        topic = true;
-    else
-        topic = false;
+    this->hasTopic = value;
 }
 
 std::string ChannelMode::getKey() const { return key; }
 
-void ChannelMode::setKey(const std::string &key_)
+void ChannelMode::setKey(bool hasKey, const std::string &key_)
 {
-    hasLimit = true;
-    key = key_;
+    this->hasKey = hasKey;
+    this->key = key_;
 }
 
 int ChannelMode::getLimit() const { return limit; }
 
-void ChannelMode::setLimit(char sign, std::string key)
-{
-    assert(sign == '+' || sign == '-');
-
-    if (sign == '-')
-        this->hasLimit = false;
-    else
-    {
-        this->hasLimit = true;
-        limit = std::stoi(key);
-    }
-
-    // if (limit_ > 0)
-    // {
-    //     hasLimit = true;
-    //     limit = limit_;
-    // }
-    // else
-    //     std::cout << __LINE__ << "response for invalid argurment\n";
+void ChannelMode::setLimit(bool hasLimit, size_t limit) {
+    this->hasLimit = hasLimit;
+    this->limit = limit;
 }
+
+bool ChannelMode::getHasLimit() const { return hasLimit; }

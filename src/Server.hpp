@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/27 18:09:27 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 17:18:00 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ class Server {
 		const std::string&	getPassword() const;
 		ClientSource		*getClientManager() const;
 		ChannelSource		*getChannelManager() const;
+		int getFd() const {return server_fd;}
 		const std::unordered_map<std::string, ACommand*> & getCommands() const ;
 		
 		// server main functions

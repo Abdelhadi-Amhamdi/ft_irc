@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:44:01 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 09:45:06 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 21:11:50 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,13 @@
 
 PrivMsg::PrivMsg() : ACommand("PrivMsg") {}
 
-bool PrivMsg::commandArgsChecker(const int &fd) {
+void PrivMsg::commandArgsChecker(const int &fd) {
     if (!params.size()) {
-        sendResponse(":server_name 411 nick :No recipient given (PRIVMSG)\r\n", fd);
-        return (false);
+        throw sendResponse(ERR_NORECIP(executer->getNickname()), fd);
     }
     targets = params[0];
     if (params.size() == 1) {
-        sendResponse(":server_name 412 nick :No text to send\r\n", fd);
-        return (false); 
+        throw sendResponse(ERR_NOTEXTTOSEND(executer->getNickname()), fd);
     }
     message += params[1];
     for (size_t i = 2; i < params.size(); i++)
@@ -33,17 +31,17 @@ bool PrivMsg::commandArgsChecker(const int &fd) {
     if (!message.empty() && message[0] == ':') {
         message.erase(message.begin());
     }
-    return (true);
 }
 
 void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
-    commandFormater(buffer);
-    params.erase(params.begin());
-    if (!commandArgsChecker(user.getFd()))
-        return ;
+    message.clear();
+    targets.clear();
+    target.clear();
     ChannelSource *channels_manager = server.getChannelManager();
     ClientSource *clients_manager = server.getClientManager();
-    
+    executer = clients_manager->getClientByNickname(user.getNickname());
+    commandFormater(buffer);
+    commandArgsChecker(user.getFd());
     std::stringstream targetsStream(targets);
     while (std::getline(targetsStream, target, ','))
     {
@@ -55,10 +53,10 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
                 if (channel->isMemberInChannel(user.getFd())) {
                    channel->brodCastMessage(message, user.getNickname());    
                 } else {
-                    sendResponse(":server_name 404 nick #" + target + " :Cannot send to channel\r\n", user.getFd());
+                    sendResponse(ERR_CANNOTSENDTOCHAN(executer->getNickname(), target), user.getFd());
                 }
             } else {
-                sendResponse(":server_name 401 nick :No such nick/channel\r\n", user.getFd());
+                sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), target), user.getFd());
             }
         } 
         else
@@ -68,13 +66,10 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
                 Client *cl = clients_manager->getClientByNickname(user.getNickname());
                 sendResponse(":" + cl->getNickname() + "!~" + cl->getLogin() + "@localhost" + " PRIVMSG " + client->getNickname() + " :" + message + "\r\n", client->getFd());
             } else {
-                sendResponse(":server_name 401 nick :No such nick/channel\r\n", user.getFd());
+                sendResponse(ERR_NOSUCHNICK(executer->getNickname(), target), user.getFd());
             }
         }    
     }
-    message.clear();
-    targets.clear();
-    target.clear();
 }
 
 PrivMsg::~PrivMsg(){}

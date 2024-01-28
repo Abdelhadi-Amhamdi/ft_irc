@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 09:29:33 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 19:05:42 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-Client::Client(const int &fd, std::string nickname)
+Client::Client(const int &fd, std::string nickname, std::string arg_hostname)
     : client_fd(fd), nick_name(nickname), is_registred(false) {
     start = std::time(NULL);
-    struct sockaddr_in cl;
-    socklen_t size = sizeof(cl);
-    if(getsockname(fd, (struct sockaddr*)&cl, &size) == -1)
-        exit (1);
-    this->hostname = inet_ntoa(cl.sin_addr);
+    if (arg_hostname == "127.0.0.1") {
+        char buff[500] = {0};
+        gethostname(buff, sizeof(buff)); 
+        this->hostname = buff;
+    } else
+        this->hostname = arg_hostname;
 }
 
 int Client::getFd() const {

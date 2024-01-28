@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:43:56 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 17:50:24 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 19:17:05 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class PrivMsg: public ACommand {
         std::string target;
     public:
         PrivMsg();
-        bool commandArgsChecker(const int &fd);
+        void commandArgsChecker(const int &fd);
         void Execute(std::string &buffer, Connection &user, Server &server);
         ~PrivMsg();
 };

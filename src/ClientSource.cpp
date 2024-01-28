@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:09:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 08:51:57 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 18:42:13 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ ClientSource& ClientSource::operator=(const ClientSource &c) {
     return (*this);
 }
 
-void ClientSource::createClient(const int &fd, const std::string &nickname) {
-    Client *new_client = new Client(fd, nickname);
+void ClientSource::createClient(const int &fd, const std::string &nickname, std::string sfd) {
+    Client *new_client = new Client(fd, nickname, sfd);
 
     clients[nickname] = new_client; 
 }

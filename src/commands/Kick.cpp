@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 09:44:07 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 16:18:29 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ void Kick::getComment() {
 }
 
 void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
+    ChannelSource *channels_manager = server.getChannelManager();
+    ClientSource *clients_mananger = server.getClientManager();
+    executer = clients_mananger->getClientByNickname(user.getNickname());
     commandFormater(buffer);
-    params.erase(params.begin());
-    if (params.size() < 2 || params[1] == ":") {
-        sendResponse(":server_name 461 nick Part :Not enough parameters\r\n", user.getFd());
-        return;
+    if (params.size() < 2) {
+        throw sendResponse(ERR_NEEDMOREPARAMSS(user.getNickname(), this->name), user.getFd());
     }
     std::string channel_name,users;
     channel_name = params[0];
@@ -39,22 +40,16 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
     if (channel_name[0] == '#')
         channel_name.erase(channel_name.begin());
     else {
-        sendResponse(":server_name 403 nick " + channel_name + " :No such channel\r\n", user.getFd());
-        return ;
+        throw sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
     }
-    ChannelSource *channels_manager = server.getChannelManager();
-    ClientSource *clients_mananger = server.getClientManager();
     Channel *channel = channels_manager->getChannelByName(channel_name);
     if (channel) 
     {
         if (!channel->isMemberInChannel(user.getFd())) {
-            sendResponse(":server_name 442 nick #" + channel_name + " :You're not on that channel", user.getFd());
-            return ;
+            throw sendResponse(ERR_NOTONCHANNELL(executer->getNickname(), channel_name), user.getFd());
         }
-        if (!channel->checkIfAdmin(user.getFd())) 
-        {
-            sendResponse(":server_name 482 " + user.getNickname() + " #" + channel_name + " :You're not channel operator\r\n", user.getFd());
-            return ;
+        if (!channel->checkIfAdmin(user.getFd())) {
+            throw sendResponse(ERR_NOTCHANOPER(executer->getNickname(), channel_name), user.getFd());
         }
         std::stringstream ss(users);
         std::string username;
@@ -63,22 +58,20 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
             Client *client = clients_mananger->getClientByNickname(username);
             if (client) 
             {
-                channel->broadCastResponse(":" + user.getNickname() + " Kick #" + channel_name + " " + username + " " + comment + "\r\n");
+                channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Kick #" + channel_name + " " + username + " " + comment + "\r\n");
                 channel->delUserFromChannel(client->getFd());
                 channel->broadCastResponse(channel->generateMemebrsList());
-                channel->broadCastResponse(":server_name 366 nick " + channel_name + " :End of /NAMES list.\r\n");
+                channel->broadCastResponse(RPL_NAMESEND(executer->getNickname(), channel_name));
             } 
             else 
             {
-                sendResponse(":server_name 441 nick " + username + " #" + channel_name + " :They aren't on that channel\r\n", user.getFd());
+                sendResponse(ERR_USERNOTONCHANNEL(executer->getNickname(), channel_name), user.getFd());
                 continue;
             }
         }
     } 
-    else 
-    {
-        sendResponse(":server_name 403 nick " + channel_name + " :No such channel\r\n", user.getFd());
-        return ;
+    else {
+        throw sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
     }
 }
 

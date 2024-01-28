@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 00:14:32 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/27 18:44:49 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ Server::Server(const std::string &password, const int &port)
 	commands["USER"] = new User();
 	commands["JOIN"] = new Join();
 	commands["QUIT"] = new Quit();
-	commands["MODE"] = new Mode();
+	commands["MODE"] = new Mode(*this);
 	commands["PRIVMSG"] = new PrivMsg();
 	commands["PART"] = new Part();
 	commands["KICK"] = new Kick();
@@ -139,4 +139,7 @@ void    Server::inializeServer() {
 	std::cout << GREEN << "Server started listening on port " << port << RESET << std::endl;
 }
 
-Server::~Server() {}
+Server::~Server()
+{
+	// delete commands["MODE"];
+}

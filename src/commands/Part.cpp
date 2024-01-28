@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 09:43:49 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 16:19:29 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void Part::getReason() {
 }
 
 void Part::Execute(std::string &buffer, Connection &user, Server &server) {
-    commandFormater(buffer);
-    params.erase(params.begin());
-    if (!params.size()) {
-        sendResponse(":server_name 461 nick Part :Not enough parameters\r\n", user.getFd());
-        return ;
-    }
     ChannelSource *channel_manager = server.getChannelManager();
+    ClientSource *clients_manager = server.getClientManager();
+    executer = clients_manager->getClientByNickname(user.getNickname());
+    commandFormater(buffer);
+    if (!params.size()) {
+        throw sendResponse(ERR_NEEDMOREPARAMSS(executer->getNickname(), this->name), user.getFd());
+    }
     std::string channel_name;
     std::stringstream channelsStream(params[0]);
     getReason();
@@ -41,21 +41,21 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
         if (!channel_name.empty() && channel_name[0] == '#')
             channel_name.erase(channel_name.begin());
         else {
-            sendResponse(":server_name 403 nick " + channel_name + " :No such channel\r\n", user.getFd());
+            sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
             continue; 
         }
         Channel *channel = channel_manager->getChannelByName(channel_name);
         if (channel) {
             if (!channel->isMemberInChannel(user.getFd())) {
-                sendResponse(":server_name 442 nick #" + channel_name + " :You're not on that channel\r\n", user.getFd());
+                sendResponse(ERR_NOTONCHANNELL(executer->getNickname(), channel_name), user.getFd());
                 continue;
             }
-            channel->broadCastResponse(":" + user.getNickname() + " Part #" + channel_name + " " + reason + "\r\n");
+            channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Part #" + channel_name + " " + reason + "\r\n");
             channel->delUserFromChannel(user.getFd());
             channel->broadCastResponse(channel->generateMemebrsList());
-            channel->broadCastResponse(":server_name 366 nick " + channel_name + " :End of /NAMES list.\r\n");
+            channel->broadCastResponse(RPL_NAMESEND(executer->getNickname(), channel_name));
         } else {
-            sendResponse(":server_name 403 nick #" + channel_name + " :No such channel\r\n", user.getFd());
+            sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
             continue;
         }
         if (!channel->getMembersCount()) {

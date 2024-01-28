@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/27 19:42:58 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 18:39:21 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ Connection::Connection(const int &serverSocket)
     if (connection_fd == -1)
         throw std::runtime_error("accept of connection failed.");
     std::cout << BLUE << "Accepted connection from ";
-    std::cout << inet_ntoa(reinterpret_cast<struct sockaddr_in*>(&clienAdrr)->sin_addr) << RESET << std::endl;
+    hostname = inet_ntoa(reinterpret_cast<struct sockaddr_in*>(&clienAdrr)->sin_addr);
+    std::cout << hostname << RESET << std::endl;
 }
 
 Connection::~Connection(){}
@@ -60,16 +61,20 @@ void    Connection::handleDAta(Server& server)
                 else if (cmd == "NICK")
                     command->second->Execute(buffer, *this, server);
             } else {
-                command->second->Execute(buffer, *this, server);
+                try {
+                    command->second->Execute(buffer, *this, server);
+                } catch (...) {}
             }
         } else {
-            std::cout << buffer;
+            if (cmd != "PONG") {
+                std::string response = ":server_name 421 nick :" + cmd + " Unknown command\r\n";
+                send(this->connection_fd, response.c_str(), response.size(), 0);    
+            }
         }
         buffer.clear();
     }
 
 }
-// map<char, pair<bool, string> > 
 
 void    Connection::connecte(Server& sever, std::string& pass) {
     if (pass == sever.getPassword())

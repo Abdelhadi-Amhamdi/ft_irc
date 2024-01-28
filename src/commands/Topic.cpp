@@ -6,16 +6,16 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/28 09:45:30 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 21:13:02 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Topic.hpp"
 
-#define ERR_NOSUCHCHANNEL ":server_name 403 Topic <channel> :No such channel\r\n"
-#define ERR_NOTONCHANNEL ": server_name 442 Topic <channel> :You're not on that channel\r\n"
-#define ERR_NEEDMOREPARAMS  ": server_name 461 <client> <command> :Not enough parameters\r\n"
-#define ERR_CHANOPRIVSNEEDED  ": server_name 482 <client> <command> :You're not channel operator\r\n"
+// #define ERR_NOSUCHCHANNEL ":server_name 403 Topic <channel> :No such channel\r\n"
+// #define ERR_NOTONCHANNEL ": server_name 442 Topic <channel> :You're not on that channel\r\n"
+// #define ERR_NEEDMOREPARAMS  ": server_name 461 <client> <command> :Not enough parameters\r\n"
+// #define ERR_CHANOPRIVSNEEDED  ": server_name 482 <client> <command> :You're not channel operator\r\n"
 
 Topic::Topic() : ACommand("Topic") {}
 
@@ -23,7 +23,6 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 {
     std::string message, new_one;
     commandFormater(buffer);
-    params.erase(params.begin()); 
     ChannelSource *channel_manager = server.getChannelManager();
     if (params[0][0] == '#')
         params[0].erase(params[0].begin());
