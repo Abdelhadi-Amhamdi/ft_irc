@@ -34,15 +34,15 @@ class Mode : public ACommand {
         void    printModes();
         
         void    clear();
-        void    exec(char& sign, std::string::iterator& flag, ChannelMode& mode);
-        void    setModes();
+        void    exec(char& sign, std::string::iterator& flag, ChannelMode& mode, Connection& user);
+        void    setModes(Connection& user);
         void    pushToModes(char sign, char flag);
         
         void    setIMode(char sign, ChannelMode& mode, std::string::iterator& it);
         void    setLMode(char sign, ChannelMode& mode, std::string::iterator& it);
         void    setKMode(char sign, ChannelMode& mode, std::string::iterator& it);
         void    setTMode(char sign, ChannelMode& mode, std::string::iterator& it);
-        void    setOMode(char sign, ChannelMode& mode, std::string::iterator& flag);
+        void    setOMode(char sign, std::string::iterator& flag, Connection& user);
         // Connection& executer;
         // std::vector<std::pair<std::string, std::string>> flags;
 

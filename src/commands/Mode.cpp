@@ -1,10 +1,7 @@
 #include "Mode.hpp"
 #include "../Replies.hpp"
 #include "ACommand.hpp"
-#include "Bot.hpp"
-#include <cctype>
-#include <cmath>
-#include <codecvt>
+#include "User.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <exception>
@@ -52,7 +49,6 @@ void    Mode::formate(const std::string& buffer, Connection& user)
     if (buffer[0] == ':')// get prefix.
         ss >> current;
     ss >> current; // get command name.
-
 
     if (ss >> channelName)
     {
@@ -165,14 +161,30 @@ void    Mode::setKMode(char sign, ChannelMode& mode, std::string::iterator& it)
     }
 }
 
-// void Mode::setOMode(char sign, ChannelMode& mode, std::string::iterator& flag)
-// {
-    
-//     // Implementation of setOMode function
-//     // Add your code here
-// }
+void Mode::setOMode(char sign, std::string::iterator& flag, Connection& user)
+{
+    try {
+        if (args.empty())
+            return ;
+        std::string target = args.front();
+        args.pop_front();
+        Client* client = server.getClientManager()->getClientByNickname(target);
+        if (client == NULL)
+            throw std::logic_error(ERR_NOSUCHNICK(user.getNickname(), target));
+        if (channel->isMemberInChannel(user.getFd()) == false)
+            throw std::logic_error(ERR_USERNOTINCHANNEL(user.getNickname(), target, channelName));
+        if (sign == '+')
+            channel->addAdmin(client->getFd());
+        else
+            channel->delAdmin(client->getFd());
+        valideArgs += " " + target;
+        pushToModes(sign, *flag);
+    } catch (std::exception& e) {
+        sendResponse(e.what(), user.getFd());
+    }
+}
 
-void    Mode::exec(char& sign, std::string::iterator& flag, ChannelMode& mode)
+void    Mode::exec(char& sign, std::string::iterator& flag, ChannelMode& mode, Connection& user)
 {
     switch (*flag) {
         case 'i':
@@ -188,14 +200,14 @@ void    Mode::exec(char& sign, std::string::iterator& flag, ChannelMode& mode)
             setTMode(sign, mode, flag);
             break;
         case 'o':
-            // setOMode(sign, mode, flag);
+            setOMode(sign, flag, user);
             break;
         default:
-            std::cout << __LINE__ << " DEFAULT\n";
+            sendResponse(ERR_UNKNOWNMODE(user.getNickname(), *flag), user.getFd());
     }
 }
 
-void    Mode::setModes()
+void    Mode::setModes(Connection& user)
 {
     ChannelMode& mode = channel->getMode();
     if (!isSign(modeString[0]))
@@ -210,7 +222,7 @@ void    Mode::setModes()
             it++;
         }
         if (it  != modeString.end())
-            exec(sign, it, mode);
+            exec(sign, it, mode, user);
     }
 }
 
@@ -226,13 +238,21 @@ void Mode::Execute(std::string &buffer, Connection &user, Server &server)
 {
     (void) server;
     clear();
-    try {      
+    try {
+            
         formate(buffer, user);
+        if (channel->checkIfAdmin(user.getFd()) == false)
+        {
+            sendResponse(ERR_CHANOPRIVSNEEDED(user.getNickname(), channelName), user.getFd());
+            return;
+        }
         printModeCommand();
-        setModes();
+        setModes(user);
         printModeCommand();
         printModes();
         modeString.clear();
+        if (modes.empty())
+            return;
         char sign = modes[0].first;
         modeString += sign;
         for (size_t i = 0; i < modes.size(); i++)
