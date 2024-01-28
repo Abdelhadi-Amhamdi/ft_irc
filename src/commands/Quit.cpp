@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/25 20:47:05 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:45:15 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	std::string c;
 	std::string message = " QUIT ";
 	commandFormater(buffer);
-	userInfosChecker();
+	params.erase(params.begin());	
 	if (params.size() != 0)
 	{
 		if (params[0][0] == ':')

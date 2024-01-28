@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:44:01 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 17:43:31 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:45:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool PrivMsg::commandArgsChecker(const int &fd) {
 
 void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
     commandFormater(buffer);
-    userInfosChecker();
+    params.erase(params.begin());
     if (!commandArgsChecker(user.getFd()))
         return ;
     ChannelSource *channels_manager = server.getChannelManager();
@@ -65,7 +65,8 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
         {
             Client *client = clients_manager->getClientByNickname(target);
             if (client) {
-                sendResponse(":" + user.getNickname() + " PRIVMSG " + client->getNickname() + " :" + message + "\r\n", client->getFd());
+                Client *cl = clients_manager->getClientByNickname(user.getNickname());
+                sendResponse(":" + cl->getNickname() + "!~" + cl->getLogin() + "@localhost" + " PRIVMSG " + client->getNickname() + " :" + message + "\r\n", client->getFd());
             } else {
                 sendResponse(":server_name 401 nick :No such nick/channel\r\n", user.getFd());
             }

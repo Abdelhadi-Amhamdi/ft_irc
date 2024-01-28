@@ -39,7 +39,7 @@ void Mode::Execute(std::string &buffer, Connection &user, Server &server)
 {
     (void) user;
     commandFormater(buffer);
-    userInfosChecker();
+    params.erase(params.begin());
     if (params[0][0] == '#')
         params[0].erase(params[0].begin());
     channel = server.getChannelManager()->getChannelByName(params[0]);

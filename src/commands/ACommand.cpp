@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:40:03 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/23 22:50:17 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:30:14 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,6 @@ void ACommand::commandFormater(const std::string &data) {
     std::string item;
     while (dataStream >> item)
       params.push_back(item);
-}
-
-void ACommand::userInfosChecker() {
-    if (params[0][0] == ':')
-    {
-        // check data;
-        params.erase(params.begin());
-    }
-    params.erase(params.begin());
 }
 
 void ACommand::sendResponse(const std::string &message, int connection_fd) {

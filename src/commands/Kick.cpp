@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 16:55:01 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:44:07 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void Kick::getComment() {
 
 void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
     commandFormater(buffer);
-    userInfosChecker();
+    params.erase(params.begin());
     if (params.size() < 2 || params[1] == ":") {
         sendResponse(":server_name 461 nick Part :Not enough parameters\r\n", user.getFd());
         return;

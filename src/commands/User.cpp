@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 17:29:37 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:45:39 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void User::Execute(std::string &buffer, Connection &user, Server &server) {
     if (client && !client->isRegistred())
     {
         commandFormater(buffer);
-        userInfosChecker();
+        params.erase(params.begin());
         if (params.size() < 4) 
         {
             sendResponse(":server_name 461 " + user.getNickname() + " USER :Not enough parameters\r\n", user.getFd());
@@ -34,7 +34,12 @@ void User::Execute(std::string &buffer, Connection &user, Server &server) {
             user_name.erase(user_name.begin());
         client->setRealName(user_name);
         client->setIsRegistred();
-        sendResponse(":server_name 001 " + user.getNickname() + " :Welcome to the IRC network : " + user.getNickname() + " \r\n", user.getFd());
+        sendResponse(":server_name 001 " + user.getNickname() + " :Welcome to the IRC network : " + user.getNickname() + "!" + user.getNickname() + "@" + client->getHostname() + "\r\n", user.getFd());
+        // sendResponse(":server_name 001 " + user.getNickname() + "----- Devlopment team: ---------------\r\n", user.getFd());
+        // sendResponse(":server_name 001 " + user.getNickname() + ". aamhamdi\r\n", user.getFd());
+        // sendResponse(":server_name 001 " + user.getNickname() + ". nmaazouz\r\n", user.getFd());
+        // sendResponse(":server_name 001 " + user.getNickname() + ". kben-ham\r\n", user.getFd());
+        // sendResponse(":server_name 001 " + user.getNickname() + "--------------------------------------\r\n", user.getFd());
         user_name.clear();
     } else if (client) {
         sendResponse(":server_name 462 " + user.getNickname() + ": You may not register!\r\n", user.getFd());

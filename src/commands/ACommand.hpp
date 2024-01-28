@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:39:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/24 11:44:07 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:29:52 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,5 @@ class ACommand {
         void    sendResponse(const std::string &message, int connection_fd);
         virtual ~ACommand();
         virtual void Execute(std::string &buffer, Connection &user, Server &server) = 0;
-        void    userInfosChecker();
         void    commandFormater(const std::string& data);
 };

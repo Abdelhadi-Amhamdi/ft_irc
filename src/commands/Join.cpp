@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 19:53:33 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:44:12 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Join::channels_formater() {
 void Join::Execute(std::string &buffer, Connection &user, Server &server) {
     ChannelSource *channels_manager = server.getChannelManager();
     commandFormater(buffer);
-    userInfosChecker();
+    params.erase(params.begin());
     if (!params.size())
     {
         sendResponse(":server_name 461 nick JOIN :Not enough parameters\r\n", user.getFd());
@@ -57,7 +57,7 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
             {
                 channel->addAdmin(user.getFd());
                 channel->addUserToChannel(user.getFd(), user.getNickname());
-                channel->broadCastResponse(":" + user.getNickname() + " Join #" + channels[i].first + "\r\n");
+                channel->broadCastResponse(":" + user.getNickname() +"!~" + tmp->getLogin() + "@" + tmp->getHostname() + " Join #" + channels[i].first + "\r\n");
                 channel->broadCastResponse(channel->generateMemebrsList());
                 channel->broadCastResponse(":server_name 366 nick " + channels[i].first + " :End of /NAMES list.\r\n");
                 tmp->setgroupsin(channels[i].first);
@@ -68,7 +68,7 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
             const ChannelMode& mode = ch->getMode();
             if (!ch->isMemberInChannel(user.getFd()))
             { 
-                if ((size_t)mode.getLimit() == ch->getMembersCount()) {
+                if ((size_t)mode.getLimit() <= ch->getMembersCount()) {
                     sendResponse(":server_name 471 nick #" + channels[i].first + " :Cannot join channel (+l)\r\n", user.getFd());
                 }
                 else if (mode.getInvitOnly() && !ch->checkIfInvited(user.getFd())) {
@@ -77,7 +77,7 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
                 else if (mode.getKey() == channels[i].second)
                 {
                     ch->addUserToChannel(user.getFd(), user.getNickname());
-                    ch->broadCastResponse(":" + user.getNickname() + " Join #" + channels[i].first + "\r\n");
+                    ch->broadCastResponse(":" + user.getNickname() + "!~" + tmp->getLogin() + "@" + tmp->getHostname() + " Join #" + channels[i].first + "\r\n");
                     ch->broadCastResponse(ch->generateMemebrsList());
                     ch->broadCastResponse(":server_name 366 nick " + channels[i].first + " :End of /NAMES list.\r\n");
                     sendResponse(":server_name 332 nick #" + channels[i].first + " :" + ch->getTopic() + "\r\n" , user.getFd());

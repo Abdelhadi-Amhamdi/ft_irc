@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:40:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/25 23:27:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:42:29 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool Nick::isValidNickname(const std::string &nickname) const {
 
 void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
     commandFormater(buffer);
-    userInfosChecker();
+    params.erase(params.begin());
     if (params.size() && params[0].size() == 1 && params[0].at(0) == ':') {
         sendResponse(":server_name 431 nick :No nickname given\r\n", user.getFd());
         return ;

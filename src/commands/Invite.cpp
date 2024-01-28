@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 08:47:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 06:09:05 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:44:19 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ Invite::Invite() : ACommand("Invite") {}
 
 void Invite::Execute(std::string &buffer, Connection &user, Server &server) {
     commandFormater(buffer);
-    userInfosChecker();
+    params.erase(params.begin());
     std::string nickname,channel_name;
     if (params.size() != 2) {
         sendResponse(":server_name 461 nick JOIN :Not enough parameters\r\n", user.getFd());

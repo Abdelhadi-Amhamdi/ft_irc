@@ -6,15 +6,24 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 04:04:51 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:29:33 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include <unistd.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 
 Client::Client(const int &fd, std::string nickname)
     : client_fd(fd), nick_name(nickname), is_registred(false) {
-    start = std::time(NULL);     
+    start = std::time(NULL);
+    struct sockaddr_in cl;
+    socklen_t size = sizeof(cl);
+    if(getsockname(fd, (struct sockaddr*)&cl, &size) == -1)
+        exit (1);
+    this->hostname = inet_ntoa(cl.sin_addr);
 }
 
 int Client::getFd() const {
@@ -25,7 +34,7 @@ const std::string & Client::getNickname() const {
     return (nick_name);
 }
 
-const std::string & Client::getHostname() const {
+const std::string Client::getHostname() const {
     return (hostname);
 }
 
@@ -60,9 +69,7 @@ void Client::setRealName(const std::string &arg) {
     this->real_name = arg;
 }
 
-void Client::setHostname(const std::string &arg) {
-    this->hostname = arg;
-}
+
 void Client::setgroupsin(const std::string &arg) {
     this->groups_in.push_back(arg);
 }

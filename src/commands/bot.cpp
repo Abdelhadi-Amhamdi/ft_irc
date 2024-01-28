@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 01:19:16 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 05:41:32 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:30:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void Bot::ServerInfos(Server &server, const int &fd) {
 }
 
 void Bot::Execute(std::string &buffer, Connection &user, Server &server) {
-	(void)server;
+
 	params.clear();
 	commandFormater(buffer);
 	params.erase(params.begin());

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/25 17:49:49 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/28 09:45:30 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 {
     std::string message, new_one;
     commandFormater(buffer);
-    userInfosChecker();
+    params.erase(params.begin()); 
     ChannelSource *channel_manager = server.getChannelManager();
     if (params[0][0] == '#')
         params[0].erase(params[0].begin());
