@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:44:01 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 21:11:50 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 14:30:01 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
     message.clear();
     targets.clear();
     target.clear();
-    ChannelSource *channels_manager = server.getChannelManager();
-    ClientSource *clients_manager = server.getClientManager();
-    executer = clients_manager->getClientByNickname(user.getNickname());
+    ChannelSource &channels_manager = server.getChannelManager();
+    ClientSource &clients_manager = server.getClientManager();
+    executer = clients_manager.getClientByNickname(user.getNickname());
     commandFormater(buffer);
     commandArgsChecker(user.getFd());
     std::stringstream targetsStream(targets);
@@ -48,7 +48,7 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
         if (!target.empty() && target[0] == '#')
         {
             target.erase(target.begin());
-            Channel *channel = channels_manager->getChannelByName(target);
+            Channel *channel = channels_manager.getChannelByName(target);
             if (channel) {
                 if (channel->isMemberInChannel(user.getFd())) {
                    channel->brodCastMessage(message, user.getNickname());    
@@ -61,9 +61,9 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
         } 
         else
         {
-            Client *client = clients_manager->getClientByNickname(target);
+            Client *client = clients_manager.getClientByNickname(target);
             if (client) {
-                Client *cl = clients_manager->getClientByNickname(user.getNickname());
+                Client *cl = clients_manager.getClientByNickname(user.getNickname());
                 sendResponse(":" + cl->getNickname() + "!~" + cl->getLogin() + "@localhost" + " PRIVMSG " + client->getNickname() + " :" + message + "\r\n", client->getFd());
             } else {
                 sendResponse(ERR_NOSUCHNICK(executer->getNickname(), target), user.getFd());

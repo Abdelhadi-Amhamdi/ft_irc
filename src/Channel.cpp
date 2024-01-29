@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/27 04:02:44 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/01/29 16:56:24 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,4 @@ bool Channel::checkIfInvited(const int &user_fd) {
     return (false);
 }
 
-Channel::~Channel(){
-    std::cout << "Channel destroyed" << std::endl;
-}
+Channel::~Channel(){}

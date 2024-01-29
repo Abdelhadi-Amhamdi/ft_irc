@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 17:18:00 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 16:39:14 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <sys/types.h>
 #include <netdb.h>
 #include <fcntl.h>
+#include <signal.h>
 
 // sockets manipulation
 #include <sys/socket.h>
@@ -46,6 +47,7 @@
 #include "commands/Invite.hpp"
 #include "commands/Bot.hpp"
 
+
 // STL 
 #include <algorithm>
 #include <unordered_map>
@@ -54,15 +56,17 @@
 
 #define OUT(x) std::cout << x << std::endl;
 
+
 class Connection;
 
 class Server {
 	private:
+		int		index;
 		int		server_fd;
 		const	int port;
 		const	std::string password;
-		ClientSource	*clients_manager;
-		ChannelSource	*channels_manager;
+		ClientSource	clients_manager;
+		ChannelSource	channels_manager;
 		std::vector<struct pollfd>					connection_fds;
 		std::unordered_map<int, Connection*>		connections;
 		std::unordered_map<std::string, ACommand*>	commands;
@@ -70,9 +74,12 @@ class Server {
 		Server(const std::string &password, const int &port);
 		~Server();
 		// server geters
+		int &getIndex() {return index;}
+		void setIndex(int i) {index = i;}
 		const std::string&	getPassword() const;
-		ClientSource		*getClientManager() const;
-		ChannelSource		*getChannelManager() const;
+		ClientSource		&getClientManager();
+		ChannelSource		&getChannelManager();
+		std::vector<struct pollfd> &getconnections() {return connection_fds;}
 		int getFd() const {return server_fd;}
 		const std::unordered_map<std::string, ACommand*> & getCommands() const ;
 		

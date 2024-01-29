@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 08:47:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 21:12:17 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 14:26:32 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 Invite::Invite() : ACommand("Invite") {}
 
 void Invite::Execute(std::string &buffer, Connection &user, Server &server) {
-    ClientSource *clients_manager = server.getClientManager();
-    ChannelSource *channels_manager = server.getChannelManager();
-    executer = clients_manager->getClientByNickname(user.getNickname());
+    ClientSource &clients_manager = server.getClientManager();
+    ChannelSource &channels_manager = server.getChannelManager();
+    executer = clients_manager.getClientByNickname(user.getNickname());
     
     commandFormater(buffer);
     if (params.size() != 2) {
@@ -34,14 +34,14 @@ void Invite::Execute(std::string &buffer, Connection &user, Server &server) {
         throw (sendResponse(ERR_NOSUCHCHANNEL(user.getNickname(), this->name), user.getFd()));
     }
     
-    Channel *channel = channels_manager->getChannelByName(channel_name);
+    Channel *channel = channels_manager.getChannelByName(channel_name);
     if (channel && !channel->isMemberInChannel(user.getFd())) {
         throw (sendResponse(ERR_NOTONCHANNELL(user.getNickname(), channel_name), user.getFd()));
     }
     if (channel && !channel->checkIfAdmin(user.getFd())) {
         throw (sendResponse(ERR_CHANOPRIVSNEEDED(user.getNickname(), this->name), user.getFd()));
     }
-    Client *client = clients_manager->getClientByNickname(nickname);
+    Client *client = clients_manager.getClientByNickname(nickname);
     if (client)
     {
         if (channel)

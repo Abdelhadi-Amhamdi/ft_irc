@@ -1,3 +1,14 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/01/29 14:39:40 by aamhamdi          #+#    #+#              #
+#    Updated: 2024/01/29 16:54:27 by aamhamdi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 SERVER = ircserv
 
@@ -5,23 +16,29 @@ SRC_DIR = src/
 CMD_DIR = src/commands/
 BUILD_DIR = build/
 
-CP = c++ -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
+CP = c++ -Wall -Wextra -Werror -std=c++98 #-fsanitize=address -g
+
+SRC_INC = Server.hpp Client.hpp Channel.hpp Connection.hpp ClientSource.hpp ChannelSource.hpp ChannelMode.hpp
+CMD_INC = ACommand.hpp Pass.hpp Nick.hpp User.hpp Join.hpp PrivMsg.hpp Part.hpp Kick.hpp Invite.hpp Mode.hpp Quit.hpp Topic.hpp Bot.hpp
 
 SRC =  main.cpp Server.cpp Client.cpp Channel.cpp Connection.cpp ClientSource.cpp ChannelSource.cpp ChannelMode.cpp
 CMD =  ACommand.cpp Pass.cpp Nick.cpp User.cpp Join.cpp PrivMsg.cpp Part.cpp Kick.cpp Invite.cpp Mode.cpp Quit.cpp Topic.cpp Bot.cpp
 
-SRCS = $(addprefix $(SRC_DIR), $(SRC)) 
+SRCS = $(addprefix $(SRC_DIR), $(SRC))
 CMDS = $(addprefix $(CMD_DIR), $(CMD))
+
+SRC_INCS = $(addprefix $(SRC_DIR), $(SRC_INC))
+CMD_INCS = $(addprefix $(CMD_DIR), $(CMD_INC))
 
 OBJ = $(SRC:.cpp=.o) $(CMD:.cpp=.o)
 OBJS = $(addprefix $(BUILD_DIR), $(OBJ))
 
 all : $(SERVER)
 
-$(BUILD_DIR)%.o : $(SRC_DIR)%.cpp
+$(BUILD_DIR)%.o : $(SRC_DIR)%.cpp $(SRC_INCS)
 	$(CP) -c $< -o $@
 
-$(BUILD_DIR)%.o : $(CMD_DIR)%.cpp
+$(BUILD_DIR)%.o : $(CMD_DIR)%.cpp $(CMD_INCS)
 	$(CP) -c $< -o $@
 
 $(SERVER) : $(BUILD_DIR) $(OBJS)
@@ -31,11 +48,13 @@ $(BUILD_DIR):
 	@mkdir $(BUILD_DIR)
 
 clean :
-	@echo cleaning... 
-	@rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)
+
+c : 
+	rm -f leaks fds leaks1
 
 fclean: clean
-	@rm -f $(SERVER)
+	rm -f $(SERVER)
 
 re : fclean all
 

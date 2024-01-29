@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 16:19:29 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 14:29:26 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void Part::getReason() {
 }
 
 void Part::Execute(std::string &buffer, Connection &user, Server &server) {
-    ChannelSource *channel_manager = server.getChannelManager();
-    ClientSource *clients_manager = server.getClientManager();
-    executer = clients_manager->getClientByNickname(user.getNickname());
+    ChannelSource &channel_manager = server.getChannelManager();
+    ClientSource &clients_manager = server.getClientManager();
+    executer = clients_manager.getClientByNickname(user.getNickname());
     commandFormater(buffer);
     if (!params.size()) {
         throw sendResponse(ERR_NEEDMOREPARAMSS(executer->getNickname(), this->name), user.getFd());
@@ -44,7 +44,7 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
             sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
             continue; 
         }
-        Channel *channel = channel_manager->getChannelByName(channel_name);
+        Channel *channel = channel_manager.getChannelByName(channel_name);
         if (channel) {
             if (!channel->isMemberInChannel(user.getFd())) {
                 sendResponse(ERR_NOTONCHANNELL(executer->getNickname(), channel_name), user.getFd());
@@ -59,7 +59,7 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
             continue;
         }
         if (!channel->getMembersCount()) {
-            channel_manager->deleteChannel(channel_name);
+            channel_manager.deleteChannel(channel_name);
         }
     }
     params.clear();

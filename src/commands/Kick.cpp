@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 16:18:29 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 14:27:45 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void Kick::getComment() {
 }
 
 void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
-    ChannelSource *channels_manager = server.getChannelManager();
-    ClientSource *clients_mananger = server.getClientManager();
-    executer = clients_mananger->getClientByNickname(user.getNickname());
+    ChannelSource &channels_manager = server.getChannelManager();
+    ClientSource &clients_mananger = server.getClientManager();
+    executer = clients_mananger.getClientByNickname(user.getNickname());
     commandFormater(buffer);
     if (params.size() < 2) {
         throw sendResponse(ERR_NEEDMOREPARAMSS(user.getNickname(), this->name), user.getFd());
@@ -42,7 +42,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
     else {
         throw sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
     }
-    Channel *channel = channels_manager->getChannelByName(channel_name);
+    Channel *channel = channels_manager.getChannelByName(channel_name);
     if (channel) 
     {
         if (!channel->isMemberInChannel(user.getFd())) {
@@ -55,7 +55,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
         std::string username;
         while (std::getline(ss, username, ','))
         {
-            Client *client = clients_mananger->getClientByNickname(username);
+            Client *client = clients_mananger.getClientByNickname(username);
             if (client) 
             {
                 channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Kick #" + channel_name + " " + username + " " + comment + "\r\n");

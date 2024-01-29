@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 16:21:00 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 14:31:17 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 User::User() : ACommand("User") {}
 
 void User::Execute(std::string &buffer, Connection &user, Server &server) {
-    ClientSource *clients_manager = server.getClientManager();
-    Client *client = clients_manager->getClientByNickname(user.getNickname());
+    ClientSource &clients_manager = server.getClientManager();
+    Client *client = clients_manager.getClientByNickname(user.getNickname());
     if (client && !client->isRegistred())
     {
         commandFormater(buffer);

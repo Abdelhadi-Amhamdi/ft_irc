@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/28 21:13:02 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 14:31:02 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 {
     std::string message, new_one;
     commandFormater(buffer);
-    ChannelSource *channel_manager = server.getChannelManager();
+    ChannelSource &channel_manager = server.getChannelManager();
     if (params[0][0] == '#')
         params[0].erase(params[0].begin());
-    Channel *tmp = channel_manager->getChannelByName(params[0]);
+    Channel *tmp = channel_manager.getChannelByName(params[0]);
     if (tmp == NULL)
     {
         message = ":" +  user.getNickname()+" 442 " + user.getNickname() + " #" + params[0] + " :You're not on that channel " + "\r\n";

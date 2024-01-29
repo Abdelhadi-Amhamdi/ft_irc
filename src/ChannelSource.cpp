@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/26 01:31:00 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 16:34:15 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,9 @@ Channel* ChannelSource::getChannelByName(const std::string &channel_name) {
 	return (NULL);
 }
 
-ChannelSource::~ChannelSource(){}
+ChannelSource::~ChannelSource(){
+	std::map<std::string, Channel*>::iterator it = channels.begin();
+	for (; it != channels.end(); it++)
+		delete it->second;
+	channels.clear();
+}

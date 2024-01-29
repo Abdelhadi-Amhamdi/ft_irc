@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/27 18:44:49 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/01/29 16:53:52 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "commands/Mode.hpp"
+
 
 const std::string& Server::getPassword() const {
 	return (this->password);
@@ -21,11 +22,11 @@ const std::unordered_map<std::string, ACommand*> & Server::getCommands() const {
 	return (commands);
 }
 
-ClientSource *Server::getClientManager() const {
+ClientSource &Server::getClientManager() {
 	return (clients_manager);
 }
 
-ChannelSource *Server::getChannelManager() const {
+ChannelSource &Server::getChannelManager() {
 	return (channels_manager);
 }
 
@@ -68,9 +69,7 @@ void Server::eventsHandler() {
 }
 
 Server::Server(const std::string &password, const int &port) 
-	: port(port), password(password) {
-	clients_manager = new ClientSource();
-    channels_manager = new ChannelSource();
+	: index(1), port(port), password(password) {
 	inializeServer();
 	addConnectionFd(this->server_fd);
 	commands["PASS"] = new Pass();
@@ -90,7 +89,7 @@ Server::Server(const std::string &password, const int &port)
 void Server::start_server() {
 	try
 	{
-		while (true) {
+		while (index != 0) {
 			if (poll(&this->connection_fds[0], this->connection_fds.size(), -1) == -1)
 			{
 				std::cerr << "Error on poll.\n";
@@ -141,5 +140,18 @@ void    Server::inializeServer() {
 
 Server::~Server()
 {
-	// delete commands["MODE"];
+	for (size_t i = 0; i < connection_fds.size(); i++) {
+		close(connection_fds[i].fd);
+	}
+	connection_fds.clear();
+	std::unordered_map<std::string, ACommand*>::iterator it = commands.begin();
+	for (; it != commands.end(); it++) {
+		delete it->second;
+	}
+	commands.clear();
+	std::unordered_map<int, Connection*>::iterator itc = connections.begin();
+	for (; itc != connections.end(); itc++) {
+		delete itc->second;
+	}
+	connections.end();
 }

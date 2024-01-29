@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 01:19:16 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 09:30:37 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 14:25:56 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void Bot::Weather(const int &fd) {
 				sendResponse(prefix + "Description : " + weatherHelper(data, "description\"", "\"") + "\r\n", fd);
 				sendResponse(prefix + "tempuratue  : " + weatherHelper(data, "temp", ",") + "\r\n", fd);
 				sendResponse(prefix + "pressure    : " + weatherHelper(data, "pressure", ",") + "\r\n", fd);
-				sendResponse(prefix + "humidity    : " + weatherHelper(data, "humidity", ",") + "\r\n", fd);
 				sendResponse(prefix + "visibility  : " + weatherHelper(data, "visibility", ",") + "\r\n", fd);	
 			}
 			catch (std::exception &e) {
@@ -101,25 +100,11 @@ void Bot::Weather(const int &fd) {
 	}
 }
 
-void Bot::LogTime(Connection &user, Server &server) {
-	ClientSource *client_manager = server.getClientManager();
-	Client *cl = client_manager->getClientByNickname(user.getNickname());
-	if (cl) {
-		
-		time_t start_time = cl->getstart();
-		time_t end_time = std::time(NULL);
-		sendResponse(prefix + "----- LogTime: -----------\r\n", user.getFd());
-		sendResponse(prefix + "Logtime for " + user.getNickname() + " :" + std::to_string(end_time - start_time) + "s\r\n", user.getFd());
-		sendResponse(prefix + "--------------------------\r\n", user.getFd());
-	}
-}
-
-
 void Bot::ServerInfos(Server &server, const int &fd) {
-	ClientSource *client_manager = server.getClientManager();
-	ChannelSource *channel_mnager = server.getChannelManager();
-	size_t clients = client_manager->getClientsCount();
-	size_t channels = channel_mnager->getChannelsCount();
+	ClientSource &client_manager = server.getClientManager();
+	ChannelSource &channel_mnager = server.getChannelManager();
+	size_t clients = client_manager.getClientsCount();
+	size_t channels = channel_mnager.getChannelsCount();
 	sendResponse(prefix + "----- Network Infos: -----------\r\n", fd);
 	sendResponse(prefix + "+ clients  : " + std::to_string(clients) + "\r\n", fd);
 	sendResponse(prefix + "+ channels : " + std::to_string(channels) + "\r\n", fd);
@@ -136,9 +121,6 @@ void Bot::Execute(std::string &buffer, Connection &user, Server &server) {
 	}
 	else if (params.size() && (params[0] == "weather" || params[0] == "WEATHER")) {
 		Weather(user.getFd());
-	}
-	else if (params.size() && (params[0] == "logtime" || params[0] == "LOGTIME")) {
-		LogTime(user, server);
 	}
 	else if (params.size() && (params[0] == "server-infos" || params[0] == "SERVER-INFOS")) {
 		ServerInfos(server, user.getFd());

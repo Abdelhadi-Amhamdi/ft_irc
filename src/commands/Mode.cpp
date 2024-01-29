@@ -55,7 +55,7 @@ void    Mode::formate(const std::string& buffer, Connection& user)
         if (channelName[0] != '#')
             throw std::logic_error(ERR_NOSUCHCHANNEL(user.getNickname() ,channelName));
         channelName.erase(0, 1);
-        channel = server.getChannelManager()->getChannelByName(channelName);
+        channel = server.getChannelManager().getChannelByName(channelName);
         if (channel == NULL)
             throw std::logic_error(ERR_NOSUCHCHANNEL(user.getNickname() ,channelName));
     }
@@ -168,7 +168,7 @@ void Mode::setOMode(char sign, std::string::iterator& flag, Connection& user)
             return ;
         std::string target = args.front();
         args.pop_front();
-        Client* client = server.getClientManager()->getClientByNickname(target);
+        Client* client = server.getClientManager().getClientByNickname(target);
         if (client == NULL)
             throw std::logic_error(ERR_NOSUCHNICK(user.getNickname(), target));
         if (channel->isMemberInChannel(user.getFd()) == false)

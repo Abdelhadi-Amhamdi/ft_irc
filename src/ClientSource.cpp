@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:09:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 18:42:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 16:40:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ size_t ClientSource::getClientsCount() const {
     return (clients.size());
 }
 
-void ClientSource::print() {
-    for (std::unordered_map<std::string, Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
-        std::cout << it->second->getNickname() << std::endl;
-    } 
-}
 
-ClientSource::~ClientSource(){}
+ClientSource::~ClientSource(){
+    std::unordered_map<std::string, Client*>::iterator it = clients.begin();
+    for (; it != clients.end(); it++)
+        delete it->second;
+    clients.clear();
+}

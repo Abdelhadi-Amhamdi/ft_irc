@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 17:29:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:07:31 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,31 @@ void Join::channels_formater() {
     {
         std::string key;
         std::getline(keysStream, key, ',');
-        if (!item.empty() && item[0] == '#') {
-            item.erase(item.begin());
-        }
         std::pair<std::string, std::string> elm = std::make_pair(item, key);
         channels.push_back(elm);
     }
 }
 
 void Join::Execute(std::string &buffer, Connection &user, Server &server) {
-    ChannelSource *channels_manager = server.getChannelManager();
-    ClientSource *client_manager = server.getClientManager();
-    executer = client_manager->getClientByNickname(user.getNickname());
+    ChannelSource &channels_manager = server.getChannelManager();
+    ClientSource &client_manager = server.getClientManager();
+    executer = client_manager.getClientByNickname(user.getNickname());
     commandFormater(buffer);
     if (!params.size())
         throw sendResponse(ERR_NEEDMOREPARAMSS(user.getNickname(), this->name), user.getFd());
     channels_formater();
     for (size_t i = 0; i < channels.size(); i++) {
-        Channel *ch = channels_manager->getChannelByName(channels[i].first);
+        if (channels[i].first[0] == '#') {
+           channels[i].first.erase(channels[i].first.begin()); 
+        } else {
+            sendResponse(ERR_NOSUCHCHANNEL(user.getNickname(), channels[i].first) ,user.getFd());
+            continue;
+        }
+        Channel *ch = channels_manager.getChannelByName(channels[i].first);
         if (!ch)
         {
-            channels_manager->createChannel(channels[i].first, channels[i].second);
-            Channel *channel = channels_manager->getChannelByName(channels[i].first);
+            channels_manager.createChannel(channels[i].first, channels[i].second);
+            Channel *channel = channels_manager.getChannelByName(channels[i].first);
             if (channel) 
             {
                 channel->addAdmin(user.getFd());

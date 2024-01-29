@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 18:40:21 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 14:44:36 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 class Client {
 	public:
 		Client(const int &fd, std::string nickname, std::string arg_hostname);
-		// geters
 		int getFd() const ;
 		const std::string & getLogin() const ;
 		const std::string & getNickname() const ;
@@ -26,8 +25,6 @@ class Client {
 		const std::string getHostname() const ;
 		const std::vector<std::string>  & getgroupsin() const ;
 		bool isRegistred() const ;
-		time_t getstart() const {return start;}
-		// seters
 		void setFd(const int &fd);
 		void setLogin(const std::string &arg);
 		void setNickname(const std::string &arg);
@@ -35,7 +32,6 @@ class Client {
 		void setgroupsin(const std::string &arg);
 		void setIsRegistred();
 	private:
-		time_t start;
 		int client_fd;
 		std::string nick_name;
 		std::string login;
