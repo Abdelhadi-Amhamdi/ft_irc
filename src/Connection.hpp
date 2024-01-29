@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Connection.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:31 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 18:41:41 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:40:21 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ class Connection {
 		void    receiveDataFromConnection();
 
 		// connection geters and seters
-		int     getFd() const { return connection_fd; }
-		bool    getIsConnected() const { return isConnected; }
-		std::string getHostname() const {return hostname;}
-		const std::string getNickname() const { return nickname; }
+		int     getFd() const;
+		bool    getIsConnected() const;
+		std::string getHostname() const;
+		const std::string getNickname() const;
 		
-		void    setNickname(const std::string &nickname_) { nickname = nickname_; }
-		void    setIsConnected(bool isConnected_) { isConnected = isConnected_; }
+		void    setNickname(const std::string &nickname_);
+		void    setIsConnected(bool isConnected_);
 		
 
 

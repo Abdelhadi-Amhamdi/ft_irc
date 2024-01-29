@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 16:53:52 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:54:20 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ ClientSource &Server::getClientManager() {
 
 ChannelSource &Server::getChannelManager() {
 	return (channels_manager);
+}
+
+int Server::getFd() const {
+	return server_fd;
 }
 
 void Server::addConnectionFd(const int &connection_fd) {

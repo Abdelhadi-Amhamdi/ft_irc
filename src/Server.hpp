@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 16:39:14 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:55:45 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ class Server {
 		ClientSource		&getClientManager();
 		ChannelSource		&getChannelManager();
 		std::vector<struct pollfd> &getconnections() {return connection_fds;}
-		int getFd() const {return server_fd;}
+		int getFd() const ;
 		const std::unordered_map<std::string, ACommand*> & getCommands() const ;
 		
 		// server main functions
