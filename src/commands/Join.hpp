@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:22:21 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 19:07:19 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/30 17:33:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ class Join : public ACommand {
         std::vector<std::pair<std::string, std::string> > channels;
     public:
         Join();
-        void channels_formater();
-        void Execute(std::string &buffer, Connection &user, Server &server);
+        void    channels_formater();
+        int     isValidChannelName(const std::string &channel_name);
+        void    Execute(std::string &buffer, Connection &user, Server &server);
         ~Join();
 };

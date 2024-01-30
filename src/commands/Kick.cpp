@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 14:27:45 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/30 22:54:40 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,19 @@ void Kick::getComment() {
         comment += " ";
         comment += params[i];
     }
+    if (!comment.empty() && comment[0] == ':')
+        comment.insert(comment.begin(), ':');
 }
 
 void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
     ChannelSource &channels_manager = server.getChannelManager();
     ClientSource &clients_mananger = server.getClientManager();
     executer = clients_mananger.getClientByNickname(user.getNickname());
+    if (!executer)
+    {
+        OUT("no exec");
+        return;
+    }
     commandFormater(buffer);
     if (params.size() < 2) {
         throw sendResponse(ERR_NEEDMOREPARAMSS(user.getNickname(), this->name), user.getFd());

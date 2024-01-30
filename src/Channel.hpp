@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 16:56:44 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/30 21:08:18 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class Channel {
         
         void    setMode(const std::string &mode);
         
-        Channel(const std::string &channel_name, const std::string &channel_key);
+        Channel(const std::string &channel_name);
         std::string generateMemebrsList();
         bool    isMemberInChannel(const int &fd);
         bool    checkIfAdmin(const int &user_fd);

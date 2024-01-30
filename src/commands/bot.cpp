@@ -5,41 +5,42 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/26 01:19:16 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 14:25:56 by aamhamdi         ###   ########.fr       */
+/*   Created: 2024/01/30 16:09:46 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/30 16:10:53 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
-#include <curl/curl.h>
-#include <stdio.h>
 
 Bot::Bot() 
 	: ACommand("Bot") , prefix(":server_name 001 bot :")
 {
-	manual["PASS"]    = "- PASS : <password>\r\n";
-	manual["NICK"]    = "- NICK : <nickname>\r\n";
-	manual["USER"]    = "- USER : <login> <hostname> <servername> <realname>\r\n";
-	manual["INVITE"]  = "- INVITE : <channel> <target>\r\n";
-	manual["JOIN"]    = "- JOIN : <channel_list> <keys_list>\r\n";
-	manual["KICK"]    = "- KICK : <channel> <target>\r\n";
-	manual["MODE"]    = "- MODE : <channel> <modes> <parameters>\r\n";
-	manual["PART"]    = "- PART : <channel> <reason>\r\n";
-	manual["PRIVMSG"] = "- PRIVMSG : <target> <message>\r\n";
+	manual["PASS"]    = std::make_pair("- PASS  <password>\r\n", "The PASS command is used to set a 'connection password'\r\n");
+	manual["NICK"]    = std::make_pair("- NICK  <nickname>\r\n", "NICK message is used to give user a nickname or change the previous one\r\n");
+	manual["USER"]    = std::make_pair("- USER  <login> <hostname> <servername> <realname>\r\n", "The USER message is used to specify the username, hostname, servername and realname of s new user\r\n");
+	manual["INVITE"]  = std::make_pair("- INVITE <target> <channel>\r\n", "The INVITE message is used to invite users to a channel\r\n");
+	manual["JOIN"]    = std::make_pair("- JOIN  <channel>{,<channel>} [<key>{,<key>}]\r\n", "The JOIN command is used by client to start listening a specific channel\r\n");
+	manual["KICK"]    = std::make_pair("- KICK  <channel> <user> [<comment>]\r\n", "The KICK command can be  used  to  forcibly  remove  a  user  from  a channel.\r\n");
+	manual["MODE"]    = std::make_pair("- MODE  <channel> <modes> <parameters>\r\n", "The MODE command allows channels to have their mode changed\r\n");
+	manual["PART"]    = std::make_pair("- PART  <channel>{,<channel>} <reason>\r\n", "The PART message causes the client to be removed from the given channels\r\n");
+	manual["PRIVMSG"] = std::make_pair("- PRIVMSG  <receiver>{,<receiver>} <text to be sent>\r\n", "PRIVMSG is used to send private messages between users\r\n");
+	manual["QUIT"]    = std::make_pair("- QUIT [<Quit message>]\r\n", "A client session is ended with a QUIT message\r\n");
+	manual["TOPIC"]   = std::make_pair("- TOPIC <channel> [<topic>]\r\n", "The TOPIC message is used to change or view the topic of a channel\r\n");
 }
 
 void Bot::Manual(const int &fd) {
 	if (params.size() == 1) {
-		std::map<std::string,std::string>::iterator it = manual.begin();
+		std::map<std::string,std::pair<std::string, std::string> >::iterator it = manual.begin();
 		sendResponse(prefix + "-----manual: -----------\r\n", fd);
 		for (; it != manual.end(); it++)
-			sendResponse(prefix + it->second, fd);
+			sendResponse(prefix + it->second.first, fd);
 		sendResponse(prefix + "-------------------------\r\n", fd);
-	} else {
-		std::map<std::string, std::string>::iterator it = manual.find(params[1]);
+	} else if (params.size() == 2) {
+		std::map<std::string, std::pair<std::string, std::string> >::iterator it = manual.find(params[1]);
 		if (it != manual.end()) {
-			sendResponse(prefix + "-----" + it->first + ": -----------\r\n", fd);
-			sendResponse(prefix + it->second, fd);
+			sendResponse(prefix + "=> " + it->first + ": -----------\r\n", fd);
+			sendResponse(prefix + it->second.first, fd);
+			sendResponse(prefix + it->second.second, fd);
 			sendResponse(prefix + "----------------------------\r\n", fd);
 		}
 	}
@@ -100,22 +101,27 @@ void Bot::Weather(const int &fd) {
 	}
 }
 
+std::string to_string(size_t nb) {
+	std::stringstream ss("");
+	std::string res;
+	ss << nb;
+	ss >> res;
+	return (res);
+}
+
 void Bot::ServerInfos(Server &server, const int &fd) {
 	ClientSource &client_manager = server.getClientManager();
 	ChannelSource &channel_mnager = server.getChannelManager();
 	size_t clients = client_manager.getClientsCount();
 	size_t channels = channel_mnager.getChannelsCount();
 	sendResponse(prefix + "----- Network Infos: -----------\r\n", fd);
-	sendResponse(prefix + "+ clients  : " + std::to_string(clients) + "\r\n", fd);
-	sendResponse(prefix + "+ channels : " + std::to_string(channels) + "\r\n", fd);
+	sendResponse(prefix + "+ clients  : " + to_string(clients) + "\r\n", fd);
+	sendResponse(prefix + "+ channels : " + to_string(channels) + "\r\n", fd);
 	sendResponse(prefix + "--------------------------------\r\n", fd);
 }
 
 void Bot::Execute(std::string &buffer, Connection &user, Server &server) {
-
-	params.clear();
 	commandFormater(buffer);
-	params.erase(params.begin());
 	if (params.size() && (params[0] == "help" || params[0] == "HELP")) {
 		Manual(user.getFd());
 	}
@@ -128,14 +134,12 @@ void Bot::Execute(std::string &buffer, Connection &user, Server &server) {
 	else {
 		sendResponse(prefix + "Hey I'm Bot, How i can help you... 😊\r\n", user.getFd());
 		sendResponse(prefix + "-----usage: -----------\r\n", user.getFd());
-		sendResponse(prefix + ". bot help\r\n", user.getFd());
-		sendResponse(prefix + ". bot help <command>\r\n", user.getFd());
-		sendResponse(prefix + ". bot server-infos\r\n", user.getFd());
-		sendResponse(prefix + ". bot weather <city>\r\n", user.getFd());
-		sendResponse(prefix + ". bot logtime\r\n", user.getFd());
+		sendResponse(prefix + ". BOT help\r\n", user.getFd());
+		sendResponse(prefix + ". BOT help <command>\r\n", user.getFd());
+		sendResponse(prefix + ". BOT server-infos\r\n", user.getFd());
+		sendResponse(prefix + ". BOT weather <city>\r\n", user.getFd());
 		sendResponse(prefix + "----------------------\r\n", user.getFd());
 	}
-
 }
 
 Bot::~Bot(){}

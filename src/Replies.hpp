@@ -62,7 +62,7 @@
 
 // pass command
 
-#define ERR_BADPASS ":server_name 464 nick :No nickname given\r\n"
+#define ERR_BADPASS ":server_name 464 nick :incorrect password\r\n"
 
 #define ERR_ALREADYREGISTRED\
 (nick) (":server_name 462 " + nick + " :You may not reregister\r\n")
@@ -84,7 +84,7 @@
 
 
 #define ERR_NEEDMOREPARAMS\
-(client, command) ":server_name " + (std::string("461 ") + client + " :" + command + ": Not enough parameters\r\n")
+(client, command) ":server_name " + (std::string("461 ") + client + " " + command + " : Not enough parameters\r\n")
 
 #define ERR_CHANOPRIVSNEEDED\
 (client, channel) ":server_name " + (std::string("482 ") + client + " :" + channel + " :You're not channel operator\r\n")

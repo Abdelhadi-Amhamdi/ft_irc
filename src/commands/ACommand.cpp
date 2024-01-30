@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:40:03 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 11:52:59 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/30 16:11:25 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void ACommand::commandFormater(const std::string &data) {
     params.clear();
     std::stringstream dataStream(data);
     std::string item;
+    dataStream >> item;
     while (dataStream >> item)
       params.push_back(item);
-    params.erase(params.begin());
 }
 
 int ACommand::sendResponse(const std::string &message, int connection_fd) {

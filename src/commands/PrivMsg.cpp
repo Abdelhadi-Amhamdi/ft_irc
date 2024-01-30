@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:44:01 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 14:30:01 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/30 23:16:36 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
     ChannelSource &channels_manager = server.getChannelManager();
     ClientSource &clients_manager = server.getClientManager();
     executer = clients_manager.getClientByNickname(user.getNickname());
+    if (!executer) {
+        OUT("no exec");
+        return;
+    }
     commandFormater(buffer);
     commandArgsChecker(user.getFd());
     std::stringstream targetsStream(targets);
@@ -49,25 +53,25 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
         {
             target.erase(target.begin());
             Channel *channel = channels_manager.getChannelByName(target);
-            if (channel) {
-                if (channel->isMemberInChannel(user.getFd())) {
+            if (channel)
+            {
+                if (channel->isMemberInChannel(user.getFd()))
                    channel->brodCastMessage(message, user.getNickname());    
-                } else {
+                else
                     sendResponse(ERR_CANNOTSENDTOCHAN(executer->getNickname(), target), user.getFd());
-                }
-            } else {
+            } else
                 sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), target), user.getFd());
-            }
         } 
         else
         {
             Client *client = clients_manager.getClientByNickname(target);
-            if (client) {
+            if (client)
+            {
                 Client *cl = clients_manager.getClientByNickname(user.getNickname());
-                sendResponse(":" + cl->getNickname() + "!~" + cl->getLogin() + "@localhost" + " PRIVMSG " + client->getNickname() + " :" + message + "\r\n", client->getFd());
-            } else {
+                if (cl)
+                    sendResponse(":" + cl->getNickname() + "!~" + cl->getLogin() + "@localhost" + " PRIVMSG " + client->getNickname() + " :" + message + "\r\n", client->getFd());
+            } else
                 sendResponse(ERR_NOSUCHNICK(executer->getNickname(), target), user.getFd());
-            }
         }    
     }
 }

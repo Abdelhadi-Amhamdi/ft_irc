@@ -6,12 +6,11 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 08:47:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 14:26:32 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/30 21:49:51 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Invite.hpp"
-#include "../Replies.hpp"
 
 Invite::Invite() : ACommand("Invite") {}
 
@@ -19,27 +18,26 @@ void Invite::Execute(std::string &buffer, Connection &user, Server &server) {
     ClientSource &clients_manager = server.getClientManager();
     ChannelSource &channels_manager = server.getChannelManager();
     executer = clients_manager.getClientByNickname(user.getNickname());
-    
+    if (!executer)
+        return;
     commandFormater(buffer);
-    if (params.size() != 2) {
-        throw (sendResponse(ERR_NEEDMOREPARAMS(user.getNickname(), this->name) , user.getFd()));
+    if (params.size() < 2) {
+        throw (sendResponse(ERR_NEEDMOREPARAMS(user.getNickname(), "INVITE") , user.getFd()));
     }
-    
     std::string nickname,channel_name;
     nickname = params[0];
     channel_name = params[1];
     if (channel_name[0] == '#')
         channel_name.erase(channel_name.begin());
-    else {
-        throw (sendResponse(ERR_NOSUCHCHANNEL(user.getNickname(), this->name), user.getFd()));
-    }
+    else
+        throw (sendResponse(ERR_NOSUCHCHANNEL(user.getNickname(), "INVITE"), user.getFd()));
     
     Channel *channel = channels_manager.getChannelByName(channel_name);
     if (channel && !channel->isMemberInChannel(user.getFd())) {
         throw (sendResponse(ERR_NOTONCHANNELL(user.getNickname(), channel_name), user.getFd()));
     }
     if (channel && !channel->checkIfAdmin(user.getFd())) {
-        throw (sendResponse(ERR_CHANOPRIVSNEEDED(user.getNickname(), this->name), user.getFd()));
+        throw (sendResponse(ERR_CHANOPRIVSNEEDED(user.getNickname(), "INVITE"), user.getFd()));
     }
     Client *client = clients_manager.getClientByNickname(nickname);
     if (client)
@@ -54,11 +52,11 @@ void Invite::Execute(std::string &buffer, Connection &user, Server &server) {
             sendResponse(RPL_INVITING(user.getNickname(), client->getNickname(), channel->getName()), user.getFd());
         }
         else {
-            throw (sendResponse(ERR_NOSUCHCHANNEL(user.getNickname(), this->name), user.getFd()));
+            throw (sendResponse(ERR_NOSUCHCHANNEL(user.getNickname(), "INVITE"), user.getFd()));
         }
     } 
     else {
-        throw (sendResponse(ERR_NOSUCHNICKK(user.getNickname(), this->name), user.getFd()));
+        throw (sendResponse(ERR_NOSUCHNICKK(user.getNickname(), "INVITE"), user.getFd()));
     }
 }
 

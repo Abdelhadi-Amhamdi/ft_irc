@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:50:47 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/30 21:08:35 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 #include "color.hpp"
 
-Channel::Channel(const std::string &channel_name, const std::string &channel_key) 
-    :  name(channel_name), mode(channel_key){}
+Channel::Channel(const std::string &channel_name) 
+    :  name(channel_name){}
 
 void Channel::addAdmin(const int &user_fd) {
     admins.push_back(user_fd);
