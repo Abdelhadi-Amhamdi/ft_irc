@@ -1,15 +1,9 @@
 #include "Mode.hpp"
 #include "../Replies.hpp"
 #include "ACommand.hpp"
-#include "User.hpp"
-#include <cstddef>
-#include <cstdlib>
 #include <exception>
 #include <sstream>
-#include <stdexcept>
 #include <string>
-#include <sys/_types/_size_t.h>
-#include <utility>
 
 Mode::Mode(Server& server)
     : ACommand("MODE"), server(server)
@@ -43,7 +37,6 @@ void    Mode::formate(const std::string& buffer, Connection& user)
 {
     std::stringstream ss(buffer);
 
-    OUT(buffer);
     std::string current;
 
     if (buffer[0] == ':')// get prefix.
@@ -76,20 +69,6 @@ void    Mode::clear()
     this->channel = NULL;
 }
 
-void    Mode::printModeCommand()
-{
-    // std::cout << "channel: `" << channelName << "`" << std::endl;
-    // std::cout << "mode string: `" << modeString << "`"<< std::endl;
-    // for(size_t i = 0; i < args.size(); i++)
-    //     std::cout << "arg " << i << " : `" << args[i] << "`" << std::endl;
-
-    // if (!args.empty())
-    // {
-    //     std::cout << "front: " << args.front()  << std::endl;
-    //     std::cout << "back: " << args.back()  << std::endl;
-    // }
-    
-}
 
 void    Mode::setIMode(char sign, ChannelMode& mode, std::string::iterator& it)
 {
@@ -133,7 +112,7 @@ void    Mode::setLMode(char sign, ChannelMode& mode, std::string::iterator& it)
         std::string arg = args.front();
         args.pop_front();
         int limit = std::atoi(arg.c_str());
-        if (limit)
+        if (limit > 0)
         {
             valideArgs += " " + arg;
             mode.setLimit(true, limit);
@@ -226,14 +205,6 @@ void    Mode::setModes(Connection& user)
     }
 }
 
-void    Mode::printModes()
-{
-    // for (size_t i = 0; i < modes.size(); i++) {
-    //     std::cout << modes[i].first << modes[i].second << std::endl;
-    // }
-    // OUT(valideArgs);
-}
-
 void Mode::Execute(std::string &buffer, Connection &user, Server &server)
 {
     (void) server;
@@ -246,10 +217,7 @@ void Mode::Execute(std::string &buffer, Connection &user, Server &server)
             sendResponse(ERR_CHANOPRIVSNEEDED(user.getNickname(), channelName), user.getFd());
             return;
         }
-        // printModeCommand();
         setModes(user);
-        // printModeCommand();
-        // printModes();
         modeString.clear();
         if (modes.empty())
             return;
