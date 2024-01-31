@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 09:47:41 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 09:51:08 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 User::User() : ACommand("User") {}
 
-void User::Execute(std::string &buffer, Connection &user, Server &server) {
+void User::Execute(std::string &buffer, Connection &user, Server &server){
     ClientSource &clients_manager = server.getClientManager();
     Client *client = clients_manager.getClientByNickname(user.getNickname());
     if (client && !client->isRegistred())
@@ -36,6 +36,7 @@ void User::Execute(std::string &buffer, Connection &user, Server &server) {
         user_name.clear();
     } else if (client)
         sendResponse(ERR_ALREADYREGISTRED(client->getNickname()), user.getFd());
+    }
 }
 
 User::~User(){}
