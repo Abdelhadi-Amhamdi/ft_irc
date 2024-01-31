@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 09:51:08 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 10:18:33 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 User::User() : ACommand("User") {}
 
-void User::Execute(std::string &buffer, Connection &user, Server &server){
+void User::Execute(std::string &buffer, Connection &user, Server &server) {
     ClientSource &clients_manager = server.getClientManager();
     Client *client = clients_manager.getClientByNickname(user.getNickname());
     if (client && !client->isRegistred())
@@ -22,9 +22,11 @@ void User::Execute(std::string &buffer, Connection &user, Server &server){
         commandFormater(buffer);
         if (params[2] != "*")
             return;
-        if (params.size() < 4) {
+        if (params.size() < 4)
             throw sendResponse(ERR_NEEDMOREPARAMSS(client->getNickname(), this->name), user.getFd());
         client->setLogin(params[0]);
+        if (params[1] != "0" || params[2] != "*")
+            throw sendResponse(ERR_NEEDMOREPARAMS(user.getNickname(), "USER"), user.getFd());
         user_name = params[3];
         for (size_t i = 4; i < params.size(); i++)
             user_name += " " + params[i];
@@ -36,7 +38,6 @@ void User::Execute(std::string &buffer, Connection &user, Server &server){
         user_name.clear();
     } else if (client)
         sendResponse(ERR_ALREADYREGISTRED(client->getNickname()), user.getFd());
-    }
 }
 
 User::~User(){}
