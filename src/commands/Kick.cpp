@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/30 22:54:40 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/31 14:22:02 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,13 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
             Client *client = clients_mananger.getClientByNickname(username);
             if (client) 
             {
+                if (!channel->isMemberInChannel(client->getFd())) {
+                    sendResponse(ERR_USERNOTONCHANNEL(executer->getNickname(), channel_name), user.getFd());
+                    continue;
+                }
                 channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Kick #" + channel_name + " " + username + " " + comment + "\r\n");
                 channel->delUserFromChannel(client->getFd());
+                executer->deletefromgroupsin(channel_name);
                 channel->broadCastResponse(channel->generateMemebrsList());
                 channel->broadCastResponse(RPL_NAMESEND(executer->getNickname(), channel_name));
             } 

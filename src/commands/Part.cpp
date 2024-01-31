@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/30 23:03:16 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/31 12:35:11 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
             }
             channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Part #" + channel_name + " " + reason + "\r\n");
             channel->delUserFromChannel(user.getFd());
-            channel->broadCastResponse(channel->generateMemebrsList());
-            channel->broadCastResponse(RPL_NAMESEND(executer->getNickname(), channel_name));
+            executer->deletefromgroupsin(channel_name);
         } else {
             sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
             continue;
