@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:39:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 14:43:55 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 21:54:41 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ class Client;
 
 
 class ACommand {
-    protected:
-        std::string res_prefix;
-        std::string name;
-        std::string Messge;
-        std::vector<std::string> params;
-        Client *executer;
-    public:
-        ACommand(const std::string& name);
-        int    sendResponse(const std::string &message, int connection_fd);
-        virtual ~ACommand();
-        virtual void Execute(std::string &buffer, Connection &user, Server &server) = 0;
-        void    commandFormater(const std::string& data);
+	protected:
+		Client						*executer;
+		std::string					res_prefix;
+		std::string					name;
+		std::string                 Messge;
+		std::vector<std::string>	params;
+	public:
+		ACommand(const std::string& name);
+		void	commandFormater(const std::string& data);
+		int		sendResponse(const std::string &message, int connection_fd);
+		virtual	void Execute(std::string &buffer, Connection &user, Server &server) = 0;
+		virtual	~ACommand();
 };

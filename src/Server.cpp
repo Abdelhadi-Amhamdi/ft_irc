@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:54:20 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/30 15:29:00 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,11 @@ Server::Server(const std::string &password, const int &port)
 void Server::start_server() {
 	try
 	{
-		while (index != 0) {
+		while (index) {
 			if (poll(&this->connection_fds[0], this->connection_fds.size(), -1) == -1)
 			{
+				if (!index)
+					return ;
 				std::cerr << "Error on poll.\n";
 				continue; 
 			}

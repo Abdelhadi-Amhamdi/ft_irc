@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 16:34:15 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/30 21:08:04 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 ChannelSource::ChannelSource(){}
 
-void ChannelSource::createChannel(const std::string &channel_name, const std::string &channel_key) {
-	Channel* channel = new Channel(channel_name, channel_key);
+void ChannelSource::createChannel(const std::string &channel_name) {
+	Channel* channel = new Channel(channel_name);
 
 	this->channels[channel_name] = channel;
 }
