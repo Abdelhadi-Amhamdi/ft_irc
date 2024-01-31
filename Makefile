@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+         #
+#    By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 14:39:40 by aamhamdi          #+#    #+#              #
-#    Updated: 2024/01/30 16:03:22 by aamhamdi         ###   ########.fr        #
+#    Updated: 2024/01/31 14:30:58 by nmaazouz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC_DIR = src/
 CMD_DIR = src/commands/
 BUILD_DIR = build/
 
-CP = c++ -g -Wall -Wextra -Werror -std=c++98 -fsanitize=address,undefined -g
+CP = c++ -Wall -Wextra -Werror -std=c++98 -g #-fsanitize=address 
 
 SRC_INC = Server.hpp Client.hpp Channel.hpp Connection.hpp ClientSource.hpp ChannelSource.hpp ChannelMode.hpp
 CMD_INC = ACommand.hpp Pass.hpp Nick.hpp User.hpp Join.hpp PrivMsg.hpp Part.hpp Kick.hpp Invite.hpp Mode.hpp Quit.hpp Topic.hpp Bot.hpp

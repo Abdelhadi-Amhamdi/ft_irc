@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Connection.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 09:44:40 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 14:30:16 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void Connection::receiveDataFromConnection()
 	ssize_t bytes = recv(connection_fd, buff, sizeof(buff), 0);
 	if (bytes < 0)
 		throw std::runtime_error("Error: in receving of message");
-	buffer += buff;
+	if (bytes == 0)
+		buffer = "QUIT\n";
+	else
+		buffer += buff;
 }
 
 const std::string wichCommand(const std::string& str)
