@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/29 17:56:34 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/29 22:05:26 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 	ClientSource &client_manager = server.getClientManager();
 	Client *tmp_client = client_manager.getClientByNickname(user.getNickname());
 	int a  = params.size();
-	if (params[0] == ":")
+	if (a == 0 || params[0] == ":")
 		throw sendResponse(ERR_NEEDMOREPARAMS(user.getNickname(), "TOPIC"), user.getFd());
 	if (params[0][0] == '#')
 		params[0].erase(params[0].begin());

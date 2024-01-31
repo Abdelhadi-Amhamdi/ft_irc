@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:07:31 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/30 19:09:33 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ Join::Join() : ACommand("Join") {}
 
 void Join::channels_formater() {
     channels.clear();
-    std::string channels_list,keys_list;
+    std::string channels_list = "",keys_list = "";
     channels_list = params[0];
     if (params.size() == 2)
         keys_list = params[1];
@@ -26,7 +26,7 @@ void Join::channels_formater() {
     std::string item;
     while (std::getline(channelsStream, item, ','))
     {
-        std::string key;
+        std::string key = "";
         std::getline(keysStream, key, ',');
         std::pair<std::string, std::string> elm = std::make_pair(item, key);
         channels.push_back(elm);
@@ -37,6 +37,8 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
     ChannelSource &channels_manager = server.getChannelManager();
     ClientSource &client_manager = server.getClientManager();
     executer = client_manager.getClientByNickname(user.getNickname());
+    if (!executer)
+        return;
     commandFormater(buffer);
     if (!params.size())
         throw sendResponse(ERR_NEEDMOREPARAMSS(user.getNickname(), this->name), user.getFd());

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 17:19:59 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:30:21 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/29 18:05:29 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 int *g_index = NULL;
 
 void test() {
-    int pid = getpid();
-    std::string a = std::string("lsof -p ") + std::to_string(pid) + " > fds";
-    system(a.c_str());
-    system("leaks ircserv > leaks"); 
+    //int pid = getpid();
+    //std::string a = std::string("lsof -p ") + std::to_string(pid) + " > fds";
+   // system(a.c_str());
+    //system("leaks ircserv > leaks"); 
 }
 
 void signalHandler(int sig_type) {

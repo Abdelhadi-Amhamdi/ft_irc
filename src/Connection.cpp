@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:54:13 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 09:39:18 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,17 @@ void    Connection::handleDAta(Server& server)
 		std::unordered_map<std::string, ACommand*>::iterator command = commands.find(cmd);
 		if (command != commands.end()) 
 		{
-			if (nickname.empty())
-			{
-				if (cmd == "PASS")
-					command->second->Execute(buffer, *this, server);
-				else if (cmd == "NICK")
-					command->second->Execute(buffer, *this, server);
-			} else {
-				try {
-					command->second->Execute(buffer, *this, server);
-				} catch (...) {}
-			}
+			try {
+				if (nickname.empty())
+				{
+					if (cmd == "PASS")
+						command->second->Execute(buffer, *this, server);
+					else if (cmd == "NICK")
+						command->second->Execute(buffer, *this, server);
+				} else {
+						command->second->Execute(buffer, *this, server);
+				}
+			} catch (...) {}
 		} else {
 			if (cmd != "PONG") {
 				std::string response = ":server_name 421 nick :" + cmd + " Unknown command\r\n";

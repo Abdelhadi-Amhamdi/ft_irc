@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:40:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 14:28:59 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/31 09:40:05 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,12 @@ void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
     else
     {
         Client *exe = client_manager.getClientByNickname(user.getNickname());
+        if (!exe)
+            return;   
         if (!client || client->getFd() == exe->getFd())
         {
-            client_manager.createClient(user.getFd(), params[0], user.getHostname());
             client_manager.deleteClient(user.getNickname());
+            client_manager.createClient(user.getFd(), params[0], user.getHostname());
             user.setNickname(params[0]);
         } else {
             throw sendResponse(ERR_ALREADYINUSE(std::string("nick")), user.getFd());
