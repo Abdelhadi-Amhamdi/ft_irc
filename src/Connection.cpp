@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 22:15:29 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:08:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ const std::string wichCommand(const std::string& str)
 
 void    Connection::handleDAta(Server& server) 
 {
-	if (buffer.find("\n") != std::string::npos)
+	if (!buffer.empty() && buffer.find("\n") != std::string::npos)
 	{
-		std::cout << buffer;
 		std::string cmd = wichCommand(buffer);
 		std::unordered_map<std::string, ACommand*> commands = server.getCommands();
 		std::unordered_map<std::string, ACommand*>::iterator command = commands.find(cmd);

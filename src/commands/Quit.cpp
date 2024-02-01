@@ -6,10 +6,9 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/29 14:30:31 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/31 09:26:39 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "Quit.hpp"
 
@@ -43,11 +42,11 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	   tmp->broadCastResponse(c);
 	   tmp->delUserFromChannel(user.getFd());
 	}
-	server.deleteConnection(user.getFd());
-	server.deleteConnectionFd(user.getFd());
+	std::cout << "im here\n";
 	close(user.getFd());
 	client_manager.deleteClient(user.getNickname());
-	params.clear();
+	server.deleteConnectionFd(user.getFd());
+	server.deleteConnection(user.getFd());
 }
 
 Quit::~Quit(){}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:55:45 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 15:44:41 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@
 #include "commands/Part.hpp"
 #include "commands/Kick.hpp"
 #include "commands/Invite.hpp"
-#include "commands/Bot.hpp"
 
 
 // STL 

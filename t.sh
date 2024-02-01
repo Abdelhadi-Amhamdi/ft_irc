@@ -15,6 +15,9 @@ do
     echo "USER ${i} 0 * ab"
     sleep 0.5
     echo "JOIN $CHANNEL"
+	sleep 0.5
+	echo "PART $CHANNEL"
+	sleep 0.5
     echo "QUIT"
     sleep 40
     ) | nc $SERVER $PORT &
