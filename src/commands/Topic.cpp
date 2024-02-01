@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/31 11:44:08 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:17:18 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,9 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 		}
 		else 
 		{
+			params[1] = get_message(buffer,params[1]);
 			if (params[1][0] == ':')
 				params[1].erase(params[1].begin());
-			if (len > 1)
-			{
-				for (size_t i = 2; i < params.size(); i++)
-					params[1] +=  " " + params[i];
-			}
 			ChannelMode channel_mode = tmp->getMode();
 			if (channel_mode.getTopic() == true)
 			{

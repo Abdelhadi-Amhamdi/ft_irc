@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivMsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:44:01 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/30 23:16:36 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:19:19 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 PrivMsg::PrivMsg() : ACommand("PrivMsg") {}
 
-void PrivMsg::commandArgsChecker(const int &fd) {
+void PrivMsg::commandArgsChecker(std::string &buffer, const int &fd) {
     if (!params.size()) {
         throw sendResponse(ERR_NORECIP(executer->getNickname()), fd);
     }
@@ -22,12 +22,7 @@ void PrivMsg::commandArgsChecker(const int &fd) {
     if (params.size() == 1) {
         throw sendResponse(ERR_NOTEXTTOSEND(executer->getNickname()), fd);
     }
-    message += params[1];
-    for (size_t i = 2; i < params.size(); i++)
-    {
-        message += " ";
-        message += params[i];
-    }
+    message = get_message(buffer, params[1]);
     if (!message.empty() && message[0] == ':') {
         message.erase(message.begin());
     }
@@ -45,7 +40,7 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
         return;
     }
     commandFormater(buffer);
-    commandArgsChecker(user.getFd());
+    commandArgsChecker(buffer, user.getFd());
     std::stringstream targetsStream(targets);
     while (std::getline(targetsStream, target, ','))
     {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Part.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:42 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 19:08:41 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:44:34 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Part : public ACommand {
         std::string reason;
     public:
         Part();
-        void getReason();
+        void getReason(std::string &buffer);
         void Execute(std::string &buffer, Connection &user, Server &server);
         ~Part();
 };

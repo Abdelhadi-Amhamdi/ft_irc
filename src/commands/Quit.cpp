@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/02/01 16:20:07 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 18:42:30 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,12 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	commandFormater(buffer);
 	if (params.size() != 0)
 	{
+		params[0] = get_message(buffer, params[0]);
 		if (params[0][0] == ':')
 		{
 			params[0].erase(params[0].begin());
 			message += params[0];
 		}
-		for (size_t i = 1; i < params.size(); i++)
-			message +=  " " + params[i];
 	}
 	ChannelSource &channel_manager = server.getChannelManager();
 	Channel *tmp;

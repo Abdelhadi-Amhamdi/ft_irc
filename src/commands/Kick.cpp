@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 14:22:02 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:36:08 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,13 @@
 
 Kick::Kick() : ACommand("Kick") {}
 
-void Kick::getComment() {
+void Kick::getComment(std::string &buffer) {
     comment.clear();
-    if (params.size() > 2)
-        comment = params[2];
-    for (size_t i = 3; i < params.size(); i++)
-    {
-        comment += " ";
-        comment += params[i];
-    }
+    comment = get_message(buffer, params[2]);
     if (!comment.empty() && comment[0] == ':')
         comment.insert(comment.begin(), ':');
+    if (comment[0] == ':')
+		comment.erase(comment.begin());
 }
 
 void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
@@ -43,7 +39,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
     std::string channel_name,users;
     channel_name = params[0];
     users = params[1];
-    getComment();
+    getComment(buffer);
     if (channel_name[0] == '#')
         channel_name.erase(channel_name.begin());
     else {

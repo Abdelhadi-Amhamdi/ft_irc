@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:33:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/28 19:07:36 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:29:11 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Kick : public ACommand {
         std::string comment;
     public:
         Kick();
-        void getComment();
+        void getComment(std::string &buffer);
         void Execute(std::string &buffer, Connection &user, Server &server);
         ~Kick();
 };

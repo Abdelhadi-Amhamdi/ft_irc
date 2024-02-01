@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 12:35:11 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:17:58 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,9 @@
 
 Part::Part() : ACommand("Part") {}
 
-void Part::getReason() {
+void Part::getReason(std::string &buffer) {
     reason.clear();
-    if (params.size() > 1)
-        reason = params[1];
-    for (size_t i = 2; i < params.size(); i++)
-    {
-        reason += " ";
-        reason += params[i];
-    }
+    reason = get_message(buffer, params[1]);
     if (!reason.empty() && reason[0] != ':')
         reason.insert(reason.begin(), ':');
 }
@@ -41,7 +35,7 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
     }
     std::string channel_name;
     std::stringstream channelsStream(params[0]);
-    getReason();
+    getReason(buffer);
     while (std::getline(channelsStream, channel_name, ','))
     {
         if (!channel_name.empty() && channel_name[0] == '#')
