@@ -47,7 +47,7 @@
 (client) (":server_name 431 " + client + " :No nickname given\r\n")
 
 #define ERR_ERRONNICK\
-(client) (":server_name 432 " + client + " :Erroneus nickname\r\n")
+(client, nick) ("432 " + client + " " + nick + " :Erroneus nickname\r\n")
 
 #define ERR_ALREADYINUSE\
 (client) (":server_name 433 " + client + " :Nickname is already in use\r\n")
@@ -114,3 +114,6 @@
 
 #define RPL_WELCOME\
 (client, networkname, user, host) "001 " + client + " :Welcome to the " + networkname + " Network, " + client + "[!" + user + "@" + host + "]\r\n"
+
+#define RPL_NICK\
+(user, oldNick, nick)  user + ":" + oldNick + " NICK " + nick + "\r\n"

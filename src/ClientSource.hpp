@@ -6,7 +6,7 @@
 /*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:08:25 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 17:49:15 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:12:49 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class ClientSource {
         
     public:
         ClientSource();
+        void            createClient(Connection* connection, const std::string& key);
         void            createClient(Connection* connection);
         void            createClient(const int &fd, const std::string &nickname, std::string hostname);
         void            deleteClient(const std::string &nickname);

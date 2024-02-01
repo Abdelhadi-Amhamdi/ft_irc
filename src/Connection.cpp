@@ -6,7 +6,7 @@
 /*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 17:51:13 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/01 17:59:44 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include <string>
 
 Connection::Connection(const int &serverSocket)
-	: isConnected(false), buffer("") {
+	: isConnected(false), nickname(""), user(""), buffer(""){
 	sockaddr    clienAdrr;
 	socklen_t   clienAdrrLen = sizeof(clienAdrr);
 	connection_fd = accept(serverSocket, (struct sockaddr*)&clienAdrr, &clienAdrrLen);
@@ -78,31 +78,36 @@ void	Connection::authentificate(t_mapConnectionIterator& command, std::string& c
 
 void    Connection::handleDAta(Server& server) 
 {
-	if (!buffer.empty() && buffer.find("\n") != std::string::npos)
+	if (buffer.find("\n") != std::string::npos)
 	{
-		std::string cmd = wichCommand(buffer);
-		std::unordered_map<std::string, ACommand*> commands = server.getCommands();
-		std::unordered_map<std::string, ACommand*>::iterator command = commands.find(cmd);
-		if (command != commands.end()) 
-		{
-			try {
-				if (nickname.empty())
-				{
-					if (cmd == "PASS")
-						command->second->Execute(buffer, *this, server);
-					else if (cmd == "NICK")
-						command->second->Execute(buffer, *this, server);
-				} else {
-						command->second->Execute(buffer, *this, server);
+		try {
+			std::cout << connection_fd << ": "<< buffer;
+			std::string cmd = wichCommand(buffer);
+			std::unordered_map<std::string, ACommand*> commands = server.getCommands();
+			t_mapConnectionIterator	command = commands.find(cmd);
+			if (command != commands.end()) 
+			{
+				if (isAuthentificated == false)
+					authentificate(command, cmd, server);
+				else
+					command->second->Execute(buffer, *this, server);
+			} else {
+				if (cmd != "PONG") {
+					std::string response = ":server_name 421 nick :" + cmd + " Unknown command\r\n";
+					send(this->connection_fd, response.c_str(), response.size(), 0);    
 				}
-			} catch (...) {}
-		} else {
-			if (cmd != "PONG") {
-				std::string response = ":server_name 421 nick :" + cmd + " Unknown command\r\n";
-				send(this->connection_fd, response.c_str(), response.size(), 0);    
 			}
+			buffer.clear();
+		} catch (std::exception& e) {
+			buffer.clear();
+			ACommand::sendResponse(e.what(), this->getFd());
 		}
-		buffer.clear();
+		catch(...)
+		{
+			buffer.clear();
+			ACommand::sendResponse("unknown exception\r\n", this->getFd());
+			
+		}
 	}
 
 }
@@ -113,14 +118,20 @@ int     Connection::getFd() const {
 bool    Connection::getIsConnected() const {
 	return isConnected; 
 }
-std::string Connection::getHostname() const {
+const std::string& Connection::getHostname() const {
 return hostname;
 }
-const std::string Connection::getNickname() const {
+const std::string& Connection::getNickname() const {
 	return nickname; 
 }
-void    Connection::setNickname(const std::string &nickname_) {
-	nickname = nickname_; 
+void    Connection::setNickname(const std::string &nickname_, ClientSource& clientSource) {
+	Client*	client = clientSource.getClientByNickname(nickname_);
+	if (client)
+		throw std::logic_error(ERR_ALREADYINUSE(nickname_));
+	if (!this->nickname.empty())
+		clientSource.deleteClient(this->nickname);
+	clientSource.createClient(this, nickname_);
+	nickname = nickname_;
 }
 void    Connection::setIsConnected(bool isConnected_) {
 	isConnected = isConnected_; 
