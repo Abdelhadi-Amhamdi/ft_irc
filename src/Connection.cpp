@@ -6,7 +6,7 @@
 /*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 17:59:44 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/01 18:23:42 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include <string>
 
 Connection::Connection(const int &serverSocket)
-	: isConnected(false), nickname(""), user(""), buffer(""){
+	: nickname(""), user(""), buffer(""){
 	sockaddr    clienAdrr;
 	socklen_t   clienAdrrLen = sizeof(clienAdrr);
 	connection_fd = accept(serverSocket, (struct sockaddr*)&clienAdrr, &clienAdrrLen);
@@ -115,9 +115,9 @@ void    Connection::handleDAta(Server& server)
 int     Connection::getFd() const {
 	return connection_fd; 
 }
-bool    Connection::getIsConnected() const {
-	return isConnected; 
-}
+
+const std::string& Connection::getBuffer() const { return buffer; }
+
 const std::string& Connection::getHostname() const {
 return hostname;
 }
@@ -133,6 +133,11 @@ void    Connection::setNickname(const std::string &nickname_, ClientSource& clie
 	clientSource.createClient(this, nickname_);
 	nickname = nickname_;
 }
-void    Connection::setIsConnected(bool isConnected_) {
-	isConnected = isConnected_; 
-}
+const std::string& Connection::getPass() const { return pass; }
+void Connection::setPass(const std::string &pass_) { pass = pass_; }
+const std::string& Connection::getUser() const { return user; }
+void Connection::setUser(const std::string &user_) { user = user_; }
+// void    Connection::setIsConnected(bool isConnected_) {
+// 	isConnected = isConnected_; 
+// }
+bool Connection::getIsAuthentificated() const { return isAuthentificated; }

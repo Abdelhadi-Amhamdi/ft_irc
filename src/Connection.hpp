@@ -6,7 +6,7 @@
 /*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:31 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 17:47:28 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/01 18:24:02 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ class Connection {
 	private:
 		int         connection_fd;
 		bool		isAuthentificated;
-		bool        isConnected;
 		std::string	pass;
 		std::string nickname;
 		std::string	user;
@@ -50,27 +49,23 @@ class Connection {
 		void    receiveDataFromConnection();
 
 		// connection geters and seters
-		// connection geters and seters
 		int     getFd() const;
-		const std::string& getBuffer() const { return buffer; }
+		const std::string& getBuffer() const;
 		bool    getIsConnected() const;
 		const std::string& getHostname() const;
 		
 		const std::string& getNickname() const;
 		void    setNickname(const std::string &nickname_, ClientSource& clientSource);
 		
-		const std::string& getPass() const { return pass; }
-		void setPass(const std::string &pass_) { pass = pass_; }
+		const std::string& getPass() const;
+		void setPass(const std::string &pass_);
 		
-		const std::string& getUser() const { return user; }
-		void setUser(const std::string &user_) { user = user_; }
+		const std::string& getUser() const;
+		void setUser(const std::string &user_);
 		
-		void    setIsConnected(bool isConnected_);
+		// void    setIsConnected(bool isConnected_);
 		void    handleDAta(Server& server);
 
-		void    connecte(Server& sever, std::string& pass);
-		bool getIsAuthentificated() const { return isAuthentificated; }
-
-
+        bool	getIsAuthentificated() const;
 };
 
