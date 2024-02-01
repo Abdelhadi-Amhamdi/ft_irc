@@ -6,7 +6,7 @@
 /*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 18:23:42 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/01 18:36:03 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ void	Connection::authentificate(t_mapConnectionIterator& command, std::string& c
 	if (!pass.empty() && !nickname.empty() && !user.empty())
 	{
 		isAuthentificated = true;
-		ClientSource& clientSource = server.getClientManager();
-		clientSource.createClient(this);
 		ACommand::sendResponse(RPL_WELCOME(this->nickname, "<networkname>", user, hostname), connection_fd);
 	}
 }
