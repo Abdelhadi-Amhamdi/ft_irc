@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 16:08:06 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:16:07 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void Connection::receiveDataFromConnection()
 	ssize_t bytes = recv(connection_fd, buff, sizeof(buff), 0);
 	if (bytes < 0)
 		throw std::runtime_error("Error: in receving of message");
-	buffer += buff;
+	if (bytes == 0)
+		buffer = "QUIT\n";
+	else
+		buffer += buff;
 }
 
 const std::string wichCommand(const std::string& str)

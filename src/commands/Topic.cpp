@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/01/29 20:29:57 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/31 11:44:08 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 	ChannelSource &channel_manager = server.getChannelManager();
 	ClientSource &client_manager = server.getClientManager();
 	Client *tmp_client = client_manager.getClientByNickname(user.getNickname());
-	int a  = params.size();
-	if (a == 0 || params[0] == ":")
+	int len  = params.size();
+	if (len == 0 || params[0] == ":")
 		throw sendResponse(ERR_NEEDMOREPARAMS(user.getNickname(), "TOPIC"), user.getFd());
 	if (params[0][0] == '#')
 		params[0].erase(params[0].begin());
@@ -35,8 +35,8 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 		std::vector<std::string>::iterator it = std::find(k.begin(), k.end(), params[0]);
     	if (it == k.end())
 			throw sendResponse(ERR_NOTONCHANNELL(user.getNickname() ,params[0]), user.getFd());
-		a  = params.size();
-		if (a == 1)
+		len  = params.size();
+		if (len == 1)
 		{
 			topic = tmp->getTopic();
 			if (topic.empty())
@@ -49,7 +49,7 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 		{
 			if (params[1][0] == ':')
 				params[1].erase(params[1].begin());
-			if (a > 1)
+			if (len > 1)
 			{
 				for (size_t i = 2; i < params.size(); i++)
 					params[1] +=  " " + params[i];

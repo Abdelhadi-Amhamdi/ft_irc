@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 12:45:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 08:19:18 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:16:03 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void User::Execute(std::string &buffer, Connection &user, Server &server) {
     if (client && !client->isRegistred())
     {
         commandFormater(buffer);
+        if (params[2] != "*")
+            return;
         if (params.size() < 4)
             throw sendResponse(ERR_NEEDMOREPARAMSS(client->getNickname(), this->name), user.getFd());
         client->setLogin(params[0]);

@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:56:03 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 11:38:34 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,14 @@ void Client::setRealName(const std::string &arg) {
 void Client::setgroupsin(const std::string &arg) {
     this->groups_in.push_back(arg);
 }
+
+void Client::deletefromgroupsin(const std::string &arg) {
+    const std::vector<std::string>::iterator it = std::find(groups_in.begin(), groups_in.end(), arg);
+    if (it != groups_in.end()) {
+        groups_in.erase(it);
+    }
+}
+
 
 void Client::setIsRegistred() {
     this->is_registred = true;

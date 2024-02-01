@@ -6,7 +6,7 @@
 /*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:59:18 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 11:36:47 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Client {
 		void setRealName(const std::string &arg);
 		void setgroupsin(const std::string &arg);
 		void setIsRegistred();
+		void deletefromgroupsin(const std::string &arg);
 	private:
 		int client_fd;
 		std::string nick_name;
