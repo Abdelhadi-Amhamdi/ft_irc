@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 11:36:47 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:39:05 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 #include <iostream>
 #include <vector>
 #include "color.hpp"
+class Connection;
 
 class Client {
 	public:
+		Client(Connection& connection);
 		Client(const int &fd, std::string nickname, std::string arg_hostname);
 		int getFd() const ;
 		const std::string & getLogin() const ;

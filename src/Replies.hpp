@@ -81,7 +81,7 @@
 
 
 
-
+#define ERR_NOTREGISTERED "451  :You have not registered\r\n"
 
 #define ERR_NEEDMOREPARAMS\
 (client, command) ":server_name " + (std::string("461 ") + client + " " + command + " : Not enough parameters\r\n")
@@ -112,4 +112,5 @@
 #define RPL_CHANNELMODEIS\
 (client, channel, modestring, arguments) (std::string("324 ") + client + " " + channel + " " + modestring + arguments + "\r\n")
 
-
+#define RPL_WELCOME\
+(client, networkname, user, host) "001 " + client + " :Welcome to the " + networkname + " Network, " + client + "[!" + user + "@" + host + "]\r\n"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ACommand.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:39:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 21:54:41 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:42:15 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class ACommand {
 	public:
 		ACommand(const std::string& name);
 		void	commandFormater(const std::string& data);
-		int		sendResponse(const std::string &message, int connection_fd);
+		static int	sendResponse(const std::string &message, int connection_fd);
 		virtual	void Execute(std::string &buffer, Connection &user, Server &server) = 0;
 		virtual	~ACommand();
 };

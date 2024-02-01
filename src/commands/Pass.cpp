@@ -3,31 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   Pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:52:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/30 23:09:33 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:52:58 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Pass.hpp"
+#include <stdexcept>
+#include <string>
 
 Pass::Pass() : ACommand("PASS") {}
 
 void Pass::Execute(std::string &buffer, Connection &user, Server &server) {
     commandFormater(buffer);
     if (!params.size())
-        throw sendResponse(ERR_NEEDMOREPARAMS(std::string("nick"), this->name), user.getFd());
-    if (user.getIsConnected() && !user.getNickname().empty()) {
-       throw sendResponse(ERR_ALREADYREGISTRED(user.getNickname()) , user.getFd());
+        throw std::logic_error(ERR_NEEDMOREPARAMS(std::string(""), this->name));
+    if (user.getIsAuthentificated() == true || !user.getNickname().empty())
+        throw std::logic_error(ERR_ALREADYREGISTRED(user.getNickname()));
+    
+    std::string& pass = params[0];
+    if (server.getPassword() != pass)
+    {
+        user.setPass("");
+        throw std::logic_error(ERR_BADPASS);
     }
-    else if (params.size() && server.getPassword() != params[0]) {
-        sendResponse(ERR_BADPASS, user.getFd());
-        close(user.getFd());
-    }
-    else {
-       user.setIsConnected(true);
-    }
+    user.setPass(pass);
 }
 
 Pass::~Pass() {}

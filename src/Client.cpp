@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 11:38:34 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:39:43 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include "Connection.hpp"
+
+Client::Client(Connection& connection)
+	: client_fd(connection.getFd()),
+	  nick_name(connection.getNickname()),
+	  login(connection.getUser()),
+	  hostname(connection.getHostname())
+{
+}
 
 Client::Client(const int &fd, std::string nickname, std::string arg_hostname)
     : client_fd(fd), nick_name(nickname), is_registred(false) {

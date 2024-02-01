@@ -3,22 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ClientSource.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:09:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 16:40:37 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:58:56 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ClientSource.hpp"
+#include "Connection.hpp"
+#include <cassert>
 
 ClientSource::ClientSource(){}
 
 ClientSource& ClientSource::operator=(const ClientSource &c) {
+    assert(false);
     if (this != &c) {
         this->clients = c.clients;
     }
     return (*this);
+}
+
+void            ClientSource::createClient(Connection* connection) {
+    Client  *newClient = new Client(*connection);
+    
+    clients[connection->getNickname()] = newClient;
 }
 
 void ClientSource::createClient(const int &fd, const std::string &nickname, std::string sfd) {

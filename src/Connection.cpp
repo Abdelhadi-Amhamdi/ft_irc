@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   Connection.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 16:16:07 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 17:51:13 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Connection.hpp"
+#include "Client.hpp"
+#include "ClientSource.hpp"
+#include "Replies.hpp"
+#include "Server.hpp"
+#include "commands/ACommand.hpp"
+#include "commands/Pass.hpp"
+#include <exception>
+#include <stdexcept>
+#include <string>
 
 Connection::Connection(const int &serverSocket)
 	: isConnected(false), buffer("") {
@@ -46,6 +55,25 @@ const std::string wichCommand(const std::string& str)
 	if (!res.empty() && res[0] == ':')
 		strStream >> res;
 	return (res);
+}
+
+void	Connection::authentificate(t_mapConnectionIterator& command, std::string& cmd, Server& server)
+{
+	if (pass.empty() && cmd != "PASS")
+		throw std::logic_error(ERR_NOTREGISTERED);
+
+	if (cmd != "PASS" && cmd != "NICK" && cmd != "USER")
+		throw std::logic_error(ERR_NOTREGISTERED);
+	
+	command->second->Execute(buffer, *this, server);
+
+	if (!pass.empty() && !nickname.empty() && !user.empty())
+	{
+		isAuthentificated = true;
+		ClientSource& clientSource = server.getClientManager();
+		clientSource.createClient(this);
+		ACommand::sendResponse(RPL_WELCOME(this->nickname, "<networkname>", user, hostname), connection_fd);
+	}
 }
 
 void    Connection::handleDAta(Server& server) 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Connection.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:31 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/29 17:40:21 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:41:16 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 #include <iostream>
 
 // socket manipulation
+#include <string>
 #include <sys/socket.h>
 #include <type_traits>
+#include <unordered_map>
 
 // user defined classes
 #include "Server.hpp"
@@ -24,14 +26,21 @@
 #include "commands/Pass.hpp"
 
 class Server;
+class	ACommand;
+
+typedef std::unordered_map<std::string, ACommand*>::iterator t_mapConnectionIterator;
 
 class Connection {
 	private:
 		int         connection_fd;
+		bool		isAuthentificated;
 		bool        isConnected;
+		std::string	pass;
 		std::string nickname;
+		std::string	user;
 		std::string buffer;
 		std::string hostname;
+		void	authentificate(t_mapConnectionIterator& command, std::string& cmd, Server& server);
 	public:
 		Connection(const int &serverSocket);
 		~Connection();
@@ -57,6 +66,14 @@ class Connection {
 		void    connecte(Server& sever, std::string& pass);
 
 		const std::string& getBuffer() const { return buffer; }
+
+		std::string getPass() const { return pass; }
+		void setPass(const std::string &pass_) { pass = pass_; }
+
+		bool getIsAuthentificated() const { return isAuthentificated; }
+
+		std::string getUser() const { return user; }
+		void setUser(const std::string &user_) { user = user_; }
 
 
 };
