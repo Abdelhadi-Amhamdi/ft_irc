@@ -113,7 +113,7 @@
 (client, channel, modestring, arguments) (std::string("324 ") + client + " " + channel + " " + modestring + arguments + "\r\n")
 
 #define RPL_WELCOME\
-(client, networkname, user, host) "001 " + client + " :Welcome to the " + networkname + " Network, " + client + "[!" + user + "@" + host + "]\r\n"
+(client, networkname, user, host) "001 " + client + " :Welcome to the " + networkname + " Network, " + client + "!" + user + "@" + host + "\r\n"
 
 #define RPL_NICK\
 (user, oldNick, nick)  user + ":" + oldNick + " NICK " + nick + "\r\n"

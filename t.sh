@@ -1,7 +1,7 @@
 SERVER="localhost"  
 PORT=4242    
 CHANNEL="#RedRoom"
-CLIENT_COUNT=300
+CLIENT_COUNT=400
 PASS="root"
 
 for ((i=1; i<=CLIENT_COUNT; i++))
@@ -15,13 +15,13 @@ do
     echo "USER ${i} 0 * ab"
     #sleep 2
    	#echo "PRIVMSG bot help"
-	#sleep 0.7
+	# sleep 0.2
     echo "JOIN $CHANNEL"
 	#sleep 0.7
 	#echo "PART $CHANNEL"
 	#sleep 0.7
     echo "QUIT"
-	sleep 4
+	sleep 10
     ) | nc $SERVER $PORT &
 done
 wait 

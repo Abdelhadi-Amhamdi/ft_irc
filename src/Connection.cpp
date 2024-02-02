@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/02 16:00:08 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:30:41 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,17 @@ void	Connection::authentificate(t_mapConnectionIterator& command, std::string& c
 	if (!pass.empty() && !nickname.empty() && !user.empty())
 	{
 		isAuthentificated = true;
-		ACommand::sendResponse(RPL_WELCOME(this->nickname, "<networkname>", user, hostname), connection_fd);
+		ACommand::sendResponse(RPL_WELCOME(this->nickname, "IRC", user, hostname), connection_fd);
 	}
 }
 
 bool    Connection::handleDAta(Server& server)
 {
+	std::cout << "buff=> $" << buffer << "$\n";
 	while (!buffer.empty() && buffer.find("\n") != std::string::npos)
 	{
 		std::string part = buffer.substr(0, buffer.find("\n") + 1);
+		std::cout << "#" << part << "#\n";
 		try {
 			std::string strCmd = wichCommand(part);
 			std::unordered_map<std::string, ACommand*> commands = server.getCommands();
@@ -89,13 +91,14 @@ bool    Connection::handleDAta(Server& server)
 			{
 				if (strCmd == "QUIT")
 				{
+					command->second->Execute(part, *this, server);
 					return (false);
 				}
 				if (isAuthentificated == false)
 				{
 					authentificate(command, strCmd, server, part);
 				} else 
-					command->second->Execute(buffer, *this, server);
+					command->second->Execute(part, *this, server);
 				
 			} else {
 				if (strCmd != "PONG") {
@@ -104,26 +107,17 @@ bool    Connection::handleDAta(Server& server)
 				}
 			}
 			buffer.erase(0, part.size());
-			// buffer.clear();
 		} catch (std::exception& e) {
-			// OUT("x");
-			// buffer.clear();
 			buffer.erase(0, part.size());
 			ACommand::sendResponse(e.what(), this->getFd());
 		}
 		catch(...)
 		{
-			OUT("y");
-			// buffer.clear();
 			buffer.erase(0, part.size());
 			ACommand::sendResponse("unknown exception\r\n", this->getFd());
 			throw;
 		}
 	}
-	// }
-	// catch(...)
-	// {
-	// }
 	return true;
 }
 

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/02/01 21:24:20 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/02 16:29:30 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 {
 	ClientSource &client_manager = server.getClientManager();
 	Client *tmp_client = client_manager.getClientByNickname(user.getNickname());
+	if (!tmp_client)
+		return ;
 	std::vector<std::string> joined_channels = tmp_client->getgroupsin();
 	int len = joined_channels.size();
 	std::string message_to_send;

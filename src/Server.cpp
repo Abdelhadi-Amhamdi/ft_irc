@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/02 15:41:03 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/02 16:31:17 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ void Server::eventsHandler() {
 			Connection *currenConnection = connections[connection_fds[index].fd];
 			currenConnection->receiveDataFromConnection();
 			if (!currenConnection->handleDAta(*this)) {
-				if (!currenConnection->getNickname().empty())
-					clients_manager.deleteClient(currenConnection->getNickname());
+				// if (!currenConnection->getNickname().empty())
+				// 	clients_manager.deleteClient(currenConnection->getNickname());
 				deleteConnection(currenConnection->getFd());
 				break ;
 			}
