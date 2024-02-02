@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ACommand.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:40:03 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 15:17:00 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/01 20:15:42 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void ACommand::commandFormater(const std::string &data) {
 
 std::string  ACommand::get_message(std::string &buffer, std::string &params)
 {
+    if (params.empty())
+        return "";
 	size_t position = buffer.find(params);
     std::string message = buffer.substr(position);
 	return (message);

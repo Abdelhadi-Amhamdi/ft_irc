@@ -9,17 +9,19 @@ do
     (
     NICKNAME="U${i}"
     echo "PASS $PASS"
-    sleep 0.7
+    #sleep 0.7
     echo "NICK $NICKNAME"
-    sleep 0.7
+    #sleep 0.7
     echo "USER ${i} 0 * ab"
-    sleep 0.7
+    #sleep 2
+   	#echo "PRIVMSG bot help"
+	#sleep 0.7
     echo "JOIN $CHANNEL"
 	#sleep 0.7
 	#echo "PART $CHANNEL"
-	sleep 0.7
+	#sleep 0.7
     echo "QUIT"
-    sleep 40
+	sleep 4
     ) | nc $SERVER $PORT &
 done
 wait 

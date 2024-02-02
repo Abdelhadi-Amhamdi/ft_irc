@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 09:46:09 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/02 15:54:36 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
     ClientSource &client_manager = server.getClientManager();
     executer = client_manager.getClientByNickname(user.getNickname());
     if (!executer) {
-        std::cerr << "no exec\n";   
+        std::cerr << "nick => |" << user.getNickname() << "| no exec join\n";   
         return ;
     }
     commandFormater(buffer);

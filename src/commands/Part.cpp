@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 16:17:58 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/01 20:50:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ Part::Part() : ACommand("Part") {}
 
 void Part::getReason(std::string &buffer) {
     reason.clear();
-    reason = get_message(buffer, params[1]);
-    if (!reason.empty() && reason[0] != ':')
-        reason.insert(reason.begin(), ':');
+    if (params.size() > 1){
+        reason = get_message(buffer, params[1]);
+        if (!reason.empty() && reason[0] != ':')
+            reason.insert(reason.begin(), ':');    
+    }
 }
 
 void Part::Execute(std::string &buffer, Connection &user, Server &server) {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/02/01 18:42:30 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/01 21:24:20 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,12 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	   tmp->broadCastResponse(message_to_send);
 	   tmp->delUserFromChannel(user.getFd());
 	}
-	close(user.getFd());
+	
+	// close(user.getFd());
 	client_manager.deleteClient(user.getNickname());
-	server.deleteConnectionFd(user.getFd());
-	server.deleteConnection(user.getFd());
+	// server.deleteConnection(user.getFd());
+	// server.deleteConnectionFd(user.getFd())
+	// throw 1;
 }
 
 Quit::~Quit(){}

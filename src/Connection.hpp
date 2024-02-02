@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Connection.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:31 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 18:24:02 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/01 19:56:38 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class Connection {
 		std::string	user;
 		std::string buffer;
 		std::string hostname;
-		void	authentificate(t_mapConnectionIterator& command, std::string& cmd, Server& server);
+		void	authentificate(t_mapConnectionIterator& command, std::string& cmd, Server& server, std::string& buffer);
 	public:
 		Connection(const int &serverSocket);
 		~Connection();
@@ -64,7 +64,7 @@ class Connection {
 		void setUser(const std::string &user_);
 		
 		// void    setIsConnected(bool isConnected_);
-		void    handleDAta(Server& server);
+		bool    handleDAta(Server& server);
 
         bool	getIsAuthentificated() const;
 };

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:11:52 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 15:51:45 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/02 15:46:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,32 +44,36 @@ in_addr_t getIpAdress(const std::string &hostname, const std::string &port) {
 void Bot::authentification(const std::string &password) {
     std::string message = "PASS " + password + "\n";
     send(bot_fd, message.c_str(), message.size(), 0);
-    usleep(500);
     send(bot_fd, "NICK bot\n", 9, 0);
-    usleep(500);
     send(bot_fd, "USER bot 0 * bot\n", 17, 0);
-    usleep(500);
+    ssize_t bytes = recv(bot_fd, buff, sizeof(buff)-1, 0);
+    if (bytes)
+        std::cout << buff;
 }
 
 void Bot::dataHandler(std::string data) {
     params.clear();
-    size_t pos = data.find("bot");
-    if (pos != std::string::npos)
+    while (!data.empty() && data.find("\n") != std::string::npos)
     {
-        std::string nickname = data.substr(1, data.find("!") - 1);
-        std::string message = data.substr(pos + 4, data.size() - pos - 4);
-        if (!message.empty() && message[0] == ':')
-            message.erase(message.begin());
-        std::string item;
-        std::stringstream ss(message);
-        while(ss >> item)
-            params.push_back(item);
-        if (params.size() > 1 && params[0] == "weather")
-            Weather(nickname, params[1]);
-        else if (params.size() && params[0] == "help")
-            manualHelper(nickname);
-        else
-            sendResponse("PRIVMSG " + nickname + " :Hey I'm Bot ,How Can I Help You ?\r\n");
+        std::string part = data.substr(0, data.find("\n") + 1);
+        size_t pos = part.find("bot");
+        if (pos != std::string::npos) {
+            std::string nickname = part.substr(1, part.find("!") - 1);
+            std::string message = part.substr(pos + 4, part.size() - pos - 4);
+            if (!message.empty() && message[0] == ':')
+                message.erase(message.begin());
+            std::string item;
+            std::stringstream ss(message);
+            while(ss >> item)
+                params.push_back(item);
+            if (params.size() > 1 && params[0] == "weather")
+                Weather(nickname, params[1]);
+            else if (params.size() && params[0] == "help")
+                manualHelper(nickname);
+            else
+                sendResponse("PRIVMSG " + nickname + " :Hey I'm Bot ,How Can I Help You ?\r\n");
+        }
+        data.erase(0, part.size());
     }
 }
 
@@ -106,7 +110,7 @@ void Bot::startBot() {
             return;
         }
         if (fds[0].revents & POLLIN) { 
-            ssize_t bytes = recv(bot_fd, buff, sizeof(buff), 0);
+            ssize_t bytes = recv(bot_fd, buff, sizeof(buff) - 1 , 0);
             if (bytes)
             {
                 buff[bytes] = '\0';

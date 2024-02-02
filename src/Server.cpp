@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 14:22:57 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/02 15:41:03 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void Server::deleteConnectionFd(const int &connection_fd) {
 	{
 		if (t->fd == connection_fd)
 		{
+			close(t->fd);
 			connection_fds.erase(t);
 			break;
 		}
@@ -58,8 +59,11 @@ void Server::deleteConnectionFd(const int &connection_fd) {
 
 void Server::deleteConnection(const int &connection_fd) {
 	std::unordered_map<int, Connection*>::iterator it = connections.find(connection_fd);
-	if (it != connections.end())
+	if (it != connections.end()){
+		delete it->second;
+		deleteConnectionFd(it->first);
         connections.erase(it);
+	}
 }
 
 void Server::eventsHandler() {
@@ -67,7 +71,12 @@ void Server::eventsHandler() {
 		if ((connection_fds[index].revents & POLLIN) == POLLIN) {
 			Connection *currenConnection = connections[connection_fds[index].fd];
 			currenConnection->receiveDataFromConnection();
-			currenConnection->handleDAta(*this);
+			if (!currenConnection->handleDAta(*this)) {
+				if (!currenConnection->getNickname().empty())
+					clients_manager.deleteClient(currenConnection->getNickname());
+				deleteConnection(currenConnection->getFd());
+				break ;
+			}
 		}
 	}
 }

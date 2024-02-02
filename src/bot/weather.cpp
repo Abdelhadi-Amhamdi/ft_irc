@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 15:40:16 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 15:53:36 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/01 17:48:07 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,14 @@ void Bot::Weather(const std::string &nickname, const  std::string &query) {
             std::cout << "Error\n";
         }
         sendResponse("PRIVMSG " + nickname + " :----- Weather⛅\n");
-        usleep(500);
         try 
         {
             sendResponse("PRIVMSG " + nickname + " :City         " + weatherHelper(w_data, "name\"", "\"") + "\r\n");
-            usleep(500);
             sendResponse("PRIVMSG " + nickname + " :Country      " + weatherHelper(w_data, "country\"", "\"") + "\r\n");
-            usleep(500);
             sendResponse("PRIVMSG " + nickname + " :Description  " + weatherHelper(w_data, "description\"", "\"") + "\r\n");
-            usleep(500);
             sendResponse("PRIVMSG " + nickname + " :tempuratue   " + weatherHelper(w_data, "temp", ",") + "\r\n");
-            usleep(500);
             sendResponse("PRIVMSG " + nickname + " :pressure    : " + weatherHelper(w_data, "pressure", ",") + "\r\n");
-            usleep(500);
             sendResponse("PRIVMSG " + nickname + " :visibility  : " + weatherHelper(w_data, "visibility", ",") + "\r\n");	
-            usleep(500);
         }
         catch (std::exception &e) {
             sendResponse("PRIVMSG " + nickname + " :" + e.what() + "\r\n");

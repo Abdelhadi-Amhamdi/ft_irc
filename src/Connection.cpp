@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Connection.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 18:36:03 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/02 16:00:08 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ Connection::~Connection(){}
 void Connection::receiveDataFromConnection()
 {
 	char buff[1024] = {0};
-	ssize_t bytes = recv(connection_fd, buff, sizeof(buff), 0);
+	ssize_t bytes = recv(connection_fd, buff, sizeof(buff)-1, 0);
 	if (bytes < 0)
 		throw std::runtime_error("Error: in receving of message");
-	if (bytes == 0)
+	if (bytes == 0) {
+		buffer.clear();
 		buffer = "QUIT\n";
+	}
 	else
 		buffer += buff;
 }
@@ -57,7 +59,7 @@ const std::string wichCommand(const std::string& str)
 	return (res);
 }
 
-void	Connection::authentificate(t_mapConnectionIterator& command, std::string& cmd, Server& server)
+void	Connection::authentificate(t_mapConnectionIterator& command, std::string& cmd, Server& server, std::string& buffer)
 {
 	if (pass.empty() && cmd != "PASS")
 		throw std::logic_error(ERR_NOTREGISTERED);
@@ -74,40 +76,55 @@ void	Connection::authentificate(t_mapConnectionIterator& command, std::string& c
 	}
 }
 
-void    Connection::handleDAta(Server& server) 
+bool    Connection::handleDAta(Server& server)
 {
-	if (buffer.find("\n") != std::string::npos)
+	while (!buffer.empty() && buffer.find("\n") != std::string::npos)
 	{
+		std::string part = buffer.substr(0, buffer.find("\n") + 1);
 		try {
-			std::cout << connection_fd << ": "<< buffer;
-			std::string cmd = wichCommand(buffer);
+			std::string strCmd = wichCommand(part);
 			std::unordered_map<std::string, ACommand*> commands = server.getCommands();
-			t_mapConnectionIterator	command = commands.find(cmd);
+			t_mapConnectionIterator	command = commands.find(strCmd);
 			if (command != commands.end()) 
 			{
+				if (strCmd == "QUIT")
+				{
+					return (false);
+				}
 				if (isAuthentificated == false)
-					authentificate(command, cmd, server);
-				else
+				{
+					authentificate(command, strCmd, server, part);
+				} else 
 					command->second->Execute(buffer, *this, server);
+				
 			} else {
-				if (cmd != "PONG") {
-					std::string response = ":server_name 421 nick :" + cmd + " Unknown command\r\n";
+				if (strCmd != "PONG") {
+					std::string response = ":server_name 421 nick :" + strCmd + " Unknown command\r\n";
 					send(this->connection_fd, response.c_str(), response.size(), 0);    
 				}
 			}
-			buffer.clear();
+			buffer.erase(0, part.size());
+			// buffer.clear();
 		} catch (std::exception& e) {
-			buffer.clear();
+			// OUT("x");
+			// buffer.clear();
+			buffer.erase(0, part.size());
 			ACommand::sendResponse(e.what(), this->getFd());
 		}
 		catch(...)
 		{
-			buffer.clear();
+			OUT("y");
+			// buffer.clear();
+			buffer.erase(0, part.size());
 			ACommand::sendResponse("unknown exception\r\n", this->getFd());
-			
+			throw;
 		}
 	}
-
+	// }
+	// catch(...)
+	// {
+	// }
+	return true;
 }
 
 int     Connection::getFd() const {
