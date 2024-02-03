@@ -1,0 +1,7 @@
+COMMAND   PID     USER   FD   TYPE DEVICE SIZE/OFF                NODE NAME
+ircserv 42509 aamhamdi  cwd    DIR   1,12      612              917640 /Users/aamhamdi/irc
+ircserv 42509 aamhamdi  txt    REG   1,12  1519648             1697987 /Users/aamhamdi/irc/ircserv
+ircserv 42509 aamhamdi  txt    REG    1,7  1572480 1152921500312402812 /usr/lib/dyld
+ircserv 42509 aamhamdi    0u   CHR   16,2 0t126115                 695 /dev/ttys002
+ircserv 42509 aamhamdi    1u   CHR   16,2 0t126115                 695 /dev/ttys002
+ircserv 42509 aamhamdi    2u   CHR   16,2 0t126115                 695 /dev/ttys002
