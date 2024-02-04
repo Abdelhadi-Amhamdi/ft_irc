@@ -1,7 +1,7 @@
 #include "ChannelMode.hpp"
 #include <cassert>
 #include <string>
-#include <sys/_types/_size_t.h>
+// #include <sys/_types/_size_t.h>
 
 ChannelMode::ChannelMode() :  inviteOnly(false), hasTopic(false), hasLimit(false), hasKey(false)
 {}

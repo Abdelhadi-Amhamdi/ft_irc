@@ -12,6 +12,7 @@
 
 #include "Channel.hpp"
 #include "color.hpp"
+#include <algorithm>
 
 Channel::Channel(const std::string &channel_name) 
     :  name(channel_name){}

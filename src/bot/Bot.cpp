@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Bot.hpp"
+#include <cstring>
 
 void Bot::sendResponse(const std::string &message) {
     send(bot_fd, message.c_str(), message.size(), 0);

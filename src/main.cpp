@@ -11,14 +11,16 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <cmath>
+
 int *g_index = NULL;
 
-void test() {
-    int pid = getpid();
-    std::string a = std::string("lsof -p ") + std::to_string(pid) + " > fds";
-    system(a.c_str());
-    system("leaks ircserv > leaks"); 
-}
+// void test() {
+//     // int pid = getpid();
+//     // std::string a = std::string("lsof -p ") + std::to_string(pid) + " > fds";
+//     // system(a.c_str());
+//     system("leaks ircserv > leaks"); 
+// }
 
 void signalHandler(int sig_type) {
     (void)sig_type;
@@ -56,7 +58,7 @@ int parse(std::string port_input, std::string pass_input, int &port, std::string
 }
 
 int main(int argc, char *argv[]) {
-    atexit(test);
+    // atexit(test);
     signal(SIGINT, signalHandler);
     signal(SIGQUIT, signalHandler);
     int port;

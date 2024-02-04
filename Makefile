@@ -18,7 +18,7 @@ CMD_DIR = src/commands/
 BUILD_DIR = build/
 BOT_DIR = src/bot/
 
-CP = c++ -Wall -Wextra -Werror -std=c++98 -g #-fsanitize=address 
+CP = c++ -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address 
 
 SRC_INC = Server.hpp Client.hpp Channel.hpp Connection.hpp ClientSource.hpp ChannelSource.hpp ChannelMode.hpp 
 CMD_INC = ACommand.hpp Pass.hpp Nick.hpp User.hpp Join.hpp PrivMsg.hpp Part.hpp Kick.hpp Invite.hpp Mode.hpp Quit.hpp Topic.hpp 

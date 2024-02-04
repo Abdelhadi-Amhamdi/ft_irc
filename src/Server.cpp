@@ -18,7 +18,7 @@ const std::string& Server::getPassword() const {
 	return (this->password);
 }
 
-const std::unordered_map<std::string, ACommand*> & Server::getCommands() const {
+const std::map<std::string, ACommand*> & Server::getCommands() const {
 	return (commands);
 }
 
@@ -58,7 +58,7 @@ void Server::deleteConnectionFd(const int &connection_fd) {
 }
 
 void Server::deleteConnection(const int &connection_fd) {
-	std::unordered_map<int, Connection*>::iterator it = connections.find(connection_fd);
+	std::map<int, Connection*>::iterator it = connections.find(connection_fd);
 	if (it != connections.end()){
 		delete it->second;
 		deleteConnectionFd(it->first);
@@ -158,12 +158,12 @@ Server::~Server()
 		close(connection_fds[i].fd);
 	}
 	connection_fds.clear();
-	std::unordered_map<std::string, ACommand*>::iterator it = commands.begin();
+	std::map<std::string, ACommand*>::iterator it = commands.begin();
 	for (; it != commands.end(); it++) {
 		delete it->second;
 	}
 	commands.clear();
-	std::unordered_map<int, Connection*>::iterator itc = connections.begin();
+	std::map<int, Connection*>::iterator itc = connections.begin();
 	for (; itc != connections.end(); itc++) {
 		delete itc->second;
 	}

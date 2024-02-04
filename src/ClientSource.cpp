@@ -43,19 +43,19 @@ void            ClientSource::createClient(Connection* connection) {
 // }
 
 void ClientSource::deleteClient(const std::string &nickname) {
-    std::unordered_map<std::string, Client*>::iterator client = clients.find(nickname);
+    std::map<std::string, Client*>::iterator client = clients.find(nickname);
     if (client != clients.end()) {
         delete client->second;
         clients.erase(client);
     }
 }
 
-const std::unordered_map<std::string,Client*>& ClientSource::getClients() const {
+const std::map<std::string,Client*>& ClientSource::getClients() const {
     return (clients);
 }
 
 Client* ClientSource::getClientByNickname(const std::string &nickname) {
-    std::unordered_map<std::string, Client*>::iterator user = clients.find(nickname);
+    std::map<std::string, Client*>::iterator user = clients.find(nickname);
     if (user != clients.end())
         return (user->second);
     return (NULL);
@@ -67,7 +67,7 @@ size_t ClientSource::getClientsCount() const {
 
 
 ClientSource::~ClientSource(){
-    std::unordered_map<std::string, Client*>::iterator it = clients.begin();
+    std::map<std::string, Client*>::iterator it = clients.begin();
     for (; it != clients.end(); it++)
         delete it->second;
     clients.clear();

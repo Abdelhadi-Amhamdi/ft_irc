@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Bot.hpp"
+#include <cmath>
 
 int parsePort(std::string port, std::string password) {
     if (password.empty()) {
@@ -30,7 +31,7 @@ int parsePort(std::string port, std::string password) {
             return (-1);
         }
     }
-    size_t ret_port;
+    int ret_port;
     std::stringstream portStream(port);
     portStream >> ret_port;
     if (ret_port < 0 || ret_port > (pow(2, 16) - 1)) {

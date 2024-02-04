@@ -17,8 +17,7 @@
 // socket manipulation
 #include <string>
 #include <sys/socket.h>
-#include <type_traits>
-#include <unordered_map>
+#include <map>
 
 // user defined classes
 #include "Server.hpp"
@@ -29,7 +28,7 @@ class Server;
 class	ACommand;
 class	ClientSource;
 
-typedef std::unordered_map<std::string, ACommand*>::iterator t_mapConnectionIterator;
+typedef std::map<std::string, ACommand*>::iterator t_mapConnectionIterator;
 
 class Connection {
 	private:

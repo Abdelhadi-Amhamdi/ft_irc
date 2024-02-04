@@ -108,7 +108,7 @@ bool    Connection::handleDAta(Server& server)
         // std::cout << "#" << part << "#\n";
         try {
             std::string strCmd = wichCommand(part);
-            std::unordered_map<std::string, ACommand*> commands = server.getCommands();
+            std::map<std::string, ACommand*> commands = server.getCommands();
             t_mapConnectionIterator	command = commands.find(strCmd);
             if (command != commands.end()) 
             {

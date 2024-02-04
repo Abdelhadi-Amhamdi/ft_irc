@@ -25,12 +25,14 @@ void ACommand::commandFormater(const std::string &data) {
       params.push_back(item);
 }
 
-std::string  ACommand::get_message(std::string &buffer, std::string &params)
+std::string  ACommand::get_message(std::string &buffer, std::string &param)
 {
-    if (params.empty())
-        return "";
-	size_t position = buffer.find(params);
-    std::string message = buffer.substr(position);
+    std::string message;
+    if (!params.empty()) {
+        size_t position = buffer.find(param);
+        if (position != std::string::npos)
+            message = buffer.substr(position);
+    }
 	return (message);
 }
 

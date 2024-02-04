@@ -13,12 +13,12 @@
 #pragma once
 #include "Client.hpp"
 #include <iostream>
-#include <unordered_map>
+#include <map>
 
 
 class ClientSource {
     private:
-        std::unordered_map<std::string, Client*>    clients;
+        std::map<std::string, Client*>    clients;
         ClientSource&   operator=(const ClientSource &c);
         ClientSource(const ClientSource &c);
         
@@ -28,7 +28,7 @@ class ClientSource {
         void            createClient(Connection* connection);
         void            createClient(const int &fd, const std::string &nickname, std::string hostname);
         void            deleteClient(const std::string &nickname);
-        const           std::unordered_map<std::string, Client*>& getClients() const;
+        const           std::map<std::string, Client*>& getClients() const;
         Client*         getClientByNickname(const std::string &nickname);
         size_t          getClientsCount() const;
         ~ClientSource();

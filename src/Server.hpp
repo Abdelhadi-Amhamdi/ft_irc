@@ -49,7 +49,7 @@
 
 // STL 
 #include <algorithm>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <map>
 
@@ -67,8 +67,8 @@ class Server {
 		ClientSource	clients_manager;
 		ChannelSource	channels_manager;
 		std::vector<struct pollfd>					connection_fds;
-		std::unordered_map<int, Connection*>		connections;
-		std::unordered_map<std::string, ACommand*>	commands;
+		std::map<int, Connection*>		connections;
+		std::map<std::string, ACommand*>	commands;
 	public:
 		Server(const std::string &password, const int &port);
 		~Server();
@@ -80,7 +80,7 @@ class Server {
 		ChannelSource		&getChannelManager();
 		std::vector<struct pollfd> &getconnections() {return connection_fds;}
 		int getFd() const ;
-		const std::unordered_map<std::string, ACommand*> & getCommands() const ;
+		const std::map<std::string, ACommand*> & getCommands() const ;
 		
 		// server main functions
 		void    inializeServer();
