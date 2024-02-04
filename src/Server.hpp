@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 15:44:41 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:29:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,36 +60,29 @@ class Connection;
 
 class Server {
 	private:
-		int		index;
-		int		server_fd;
-		const	int port;
-		const	std::string password;
-		ClientSource	clients_manager;
-		ChannelSource	channels_manager;
-		std::vector<struct pollfd>					connection_fds;
-		std::map<int, Connection*>		connections;
+		int									index;
+		int									server_fd;
+		const int							port;
+		const std::string 					password;
+		ClientSource						clients_manager;
+		ChannelSource						channels_manager;
+		std::vector<struct pollfd>			connection_fds;
+		std::map<int, Connection*>			connections;
 		std::map<std::string, ACommand*>	commands;
 	public:
 		Server(const std::string &password, const int &port);
 		~Server();
-		// server geters
-		int &getIndex() {return index;}
-		void setIndex(int i) {index = i;}
-		const std::string&	getPassword() const;
-		ClientSource		&getClientManager();
-		ChannelSource		&getChannelManager();
-		std::vector<struct pollfd> &getconnections() {return connection_fds;}
-		int getFd() const ;
-		const std::map<std::string, ACommand*> & getCommands() const ;
-		
-		// server main functions
+		int&	getIndex();
+		int		getFd() const ;
 		void    inializeServer();
 		void    eventsHandler();
 		void    start_server();
 		void    addConnectionFd(const int &connection_fd);
 		void    deleteConnectionFd(const int &connection_fd);
 		void    deleteConnection(const int &connection_fd);
-
-		// clients manager methods
-		
+		ClientSource							&getClientManager();
+		ChannelSource							&getChannelManager();
+		std::vector<struct pollfd>&				getconnections();
+		const std::string&						getPassword() const;
+		const std::map<std::string, ACommand*>&	getCommands() const ;
 };

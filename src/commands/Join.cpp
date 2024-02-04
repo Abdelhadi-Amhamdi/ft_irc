@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/02 15:54:36 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:07:42 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,8 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
     ChannelSource &channels_manager = server.getChannelManager();
     ClientSource &client_manager = server.getClientManager();
     executer = client_manager.getClientByNickname(user.getNickname());
-    if (!executer) {
-        std::cerr << "nick => |" << user.getNickname() << "| no exec join\n";   
+    if (!executer)
         return ;
-    }
     commandFormater(buffer);
     if (!params.size())
         throw sendResponse(ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN"), user.getFd());

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/02/01 15:17:18 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:30:17 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 	ChannelSource &channel_manager = server.getChannelManager();
 	ClientSource &client_manager = server.getClientManager();
 	Client *tmp_client = client_manager.getClientByNickname(user.getNickname());
+	if (!tmp_client)
+		return;
 	int len  = params.size();
 	if (len == 0 || params[0] == ":")
 		throw sendResponse(ERR_NEEDMOREPARAMS(user.getNickname(), "TOPIC"), user.getFd());

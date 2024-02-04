@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Mode.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/04 13:08:07 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/02/04 13:15:27 by aamhamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef Mode_HPP
 #define Mode_HPP
 
@@ -30,9 +42,6 @@ class Mode : public ACommand {
         const   std::string   getArgs();
         void    formate(const std::string& buffer, Connection& user);
         
-        void    printModeCommand();
-        void    printModes();
-        
         void    clear();
         void    exec(char& sign, std::string::iterator& flag, ChannelMode& mode, Connection& user);
         void    setModes(Connection& user);
@@ -43,8 +52,6 @@ class Mode : public ACommand {
         void    setKMode(char sign, ChannelMode& mode, std::string::iterator& it);
         void    setTMode(char sign, ChannelMode& mode, std::string::iterator& it);
         void    setOMode(char sign, std::string::iterator& flag, Connection& user);
-        // Connection& executer;
-        // std::vector<std::pair<std::string, std::string>> flags;
 
     public:
         Mode(Server& server);

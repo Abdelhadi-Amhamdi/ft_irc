@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:31 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 19:56:38 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:23:08 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,28 +43,18 @@ class Connection {
 	public:
 		Connection(const int &serverSocket);
 		~Connection();
-
-		// connection main methods
-		void    receiveDataFromConnection();
-
-		// connection geters and seters
-		int     getFd() const;
-		const std::string& getBuffer() const;
-		bool    getIsConnected() const;
-		const std::string& getHostname() const;
-		
-		const std::string& getNickname() const;
+		int		getFd() const;
+		void	receiveDataFromConnection();
 		void    setNickname(const std::string &nickname_, ClientSource& clientSource);
-		
-		const std::string& getPass() const;
-		void setPass(const std::string &pass_);
-		
-		const std::string& getUser() const;
-		void setUser(const std::string &user_);
-		
-		// void    setIsConnected(bool isConnected_);
-		bool    handleDAta(Server& server);
-
+		void	setPass(const std::string &pass_);
+		void	setUser(const std::string &user_);
+		bool	getIsConnected() const;
+		bool	handleDAta(Server& server);
         bool	getIsAuthentificated() const;
+		const std::string&	getBuffer() const;
+		const std::string&	getHostname() const;
+		const std::string&	getNickname() const;
+		const std::string&	getPass() const;
+		const std::string&	getUser() const;
 };
 

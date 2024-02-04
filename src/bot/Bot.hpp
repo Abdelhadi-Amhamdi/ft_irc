@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:11:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 15:43:36 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:05:00 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <poll.h>
 
 #include <iostream>
+#include <cstring>
 #include <sstream>
 #include <vector>
 #include <map>

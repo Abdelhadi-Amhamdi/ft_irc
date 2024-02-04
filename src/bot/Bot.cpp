@@ -6,12 +6,11 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:11:52 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/02 15:46:54 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:04:08 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
-#include <cstring>
 
 void Bot::sendResponse(const std::string &message) {
     send(bot_fd, message.c_str(), message.size(), 0);

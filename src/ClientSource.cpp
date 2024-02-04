@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientSource.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:09:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 16:12:51 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:12:03 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,6 @@ void            ClientSource::createClient(Connection* connection) {
     clients[connection->getNickname()] = newClient;
 }
 
-// void ClientSource::createClient(const int &fd, const std::string &nickname, std::string sfd) {
-//     Client *new_client = new Client(fd, nickname, sfd);
-
-//     clients[nickname] = new_client; 
-// }
 
 void ClientSource::deleteClient(const std::string &nickname) {
     std::map<std::string, Client*>::iterator client = clients.find(nickname);

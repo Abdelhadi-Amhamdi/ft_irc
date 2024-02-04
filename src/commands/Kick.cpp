@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 15:36:08 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:07:50 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
     ClientSource &clients_mananger = server.getClientManager();
     executer = clients_mananger.getClientByNickname(user.getNickname());
     if (!executer)
-    {
-        OUT("no exec");
         return;
-    }
     commandFormater(buffer);
     if (params.size() < 2) {
         throw sendResponse(ERR_NEEDMOREPARAMSS(user.getNickname(), this->name), user.getFd());

@@ -6,13 +6,20 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/02 16:31:17 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:29:43 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "commands/Mode.hpp"
 
+int &Server::getIndex() {
+	return index;
+}
+
+std::vector<struct pollfd> &Server::getconnections() {
+	return connection_fds;
+}
 
 const std::string& Server::getPassword() const {
 	return (this->password);
@@ -72,8 +79,6 @@ void Server::eventsHandler() {
 			Connection *currenConnection = connections[connection_fds[index].fd];
 			currenConnection->receiveDataFromConnection();
 			if (!currenConnection->handleDAta(*this)) {
-				// if (!currenConnection->getNickname().empty())
-				// 	clients_manager.deleteClient(currenConnection->getNickname());
 				deleteConnection(currenConnection->getFd());
 				break ;
 			}

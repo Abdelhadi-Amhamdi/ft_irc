@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/02/02 16:29:30 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:09:30 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,7 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	   tmp->broadCastResponse(message_to_send);
 	   tmp->delUserFromChannel(user.getFd());
 	}
-	
-	// close(user.getFd());
 	client_manager.deleteClient(user.getNickname());
-	// server.deleteConnection(user.getFd());
-	// server.deleteConnectionFd(user.getFd())
-	// throw 1;
 }
 
 Quit::~Quit(){}

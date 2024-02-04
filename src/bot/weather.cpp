@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 15:40:16 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 17:48:07 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:05:47 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void Bot::Weather(const std::string &nickname, const  std::string &query) {
         if (res != CURLE_OK) {
             std::cout << "Error\n";
         }
-        sendResponse("PRIVMSG " + nickname + " :----- Weather⛅\n");
+        sendResponse("PRIVMSG " + nickname + " :----- Weather⛅\r\n");
         try 
         {
             sendResponse("PRIVMSG " + nickname + " :City         " + weatherHelper(w_data, "name\"", "\"") + "\r\n");

@@ -46,3 +46,8 @@ void ChannelMode::setLimit(bool hasLimit, size_t limit) {
 }
 
 bool ChannelMode::getHasLimit() const { return hasLimit; }
+
+
+bool ChannelMode::getHasKey() const {
+    return hasKey;
+}

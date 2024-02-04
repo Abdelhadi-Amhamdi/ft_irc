@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/02 19:03:09 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:13:31 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,39 +73,37 @@ void	Connection::authentificate(t_mapConnectionIterator& command, std::string& c
     {
         isAuthentificated = true;
         ACommand::sendResponse(RPL_WELCOME(this->nickname, "IRC", user, hostname), connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.          ___ ______   _______      _______ _______ ______   __   __ _______ ______  \n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         |   |    _ | |       |    |       |       |    _ | |  | |  |       |    _ |  \n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         |   |   | || |       |____|  _____|    ___|   | || |  |_|  |    ___|   | ||  \n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         |   |   |_||_|       |____| |_____|   |___|   |_||_|       |   |___|   |_||_\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         |   |    __  |      _|    |_____  |    ___|    __  |       |    ___|    __  |\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         |   |   |  | |     |_      _____| |   |___|   |  | ||     ||   |___|   |  | |\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         |___|___|  |_|_______|    |_______|_______|___|  |_| |___| |_______|___|  |_|\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         IRC-SERVER\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         An IRC server acts as a central hub where users connect to exchange messages\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         in real-time. It operates on a client-server model, where clients (users) connect\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         to the server to join chat rooms (channels) or engage in private conversations with\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         other users. The server manages user connections, relays messages, and enforces\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         rules and permissions within the network\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         -------- Devlopment Team ----------------------------------------------\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.                o aamhamdi       </> https://github.com/Abdelhadi-Amhamdi\n",connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.                o nmaazouz       </> https://github.com/noreddine1\n",connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.                o kben-ham       </> https://github.com/Khawla-ben\n",connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.\n", connection_fd);
-        ACommand::sendResponse(":server_name 001 nick :.         -----------------------------------------------------------------------\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.          ___ ______   _______      _______ _______ ______   __   __ _______ ______  \r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         |   |    _ | |       |    |       |       |    _ | |  | |  |       |    _ |  \r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         |   |   | || |       |____|  _____|    ___|   | || |  |_|  |    ___|   | ||  \r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         |   |   |_||_|       |____| |_____|   |___|   |_||_|       |   |___|   |_||_\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         |   |    __  |      _|    |_____  |    ___|    __  |       |    ___|    __  |\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         |   |   |  | |     |_      _____| |   |___|   |  | ||     ||   |___|   |  | |\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         |___|___|  |_|_______|    |_______|_______|___|  |_| |___| |_______|___|  |_|\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         IRC-SERVER\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         An IRC server acts as a central hub where users connect to exchange messages\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         in real-time. It operates on a client-server model, where clients (users) connect\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         to the server to join chat rooms (channels) or engage in private conversations with\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         other users. The server manages user connections, relays messages, and enforces\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         rules and permissions within the network\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         -------- Devlopment Team ----------------------------------------------\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.                o aamhamdi       </> https://github.com/Abdelhadi-Amhamdi\r\n",connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.                o nmaazouz       </> https://github.com/noreddine1\r\n",connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.                o kben-ham       </> https://github.com/Khawla-ben\r\n",connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.\r\n", connection_fd);
+        ACommand::sendResponse(":server_name 001 nick :.         -----------------------------------------------------------------------\r\n", connection_fd);
     }
 }
 
 
 bool    Connection::handleDAta(Server& server)
 {
-    // std::cout << "buff=> $" << buffer << "$\n";
     while (!buffer.empty() && buffer.find("\n") != std::string::npos)
     {
         std::string part = buffer.substr(0, buffer.find("\n") + 1);
-        // std::cout << "#" << part << "#\n";
         try {
             std::string strCmd = wichCommand(part);
             std::map<std::string, ACommand*> commands = server.getCommands();
@@ -169,7 +167,4 @@ const std::string& Connection::getPass() const { return pass; }
 void Connection::setPass(const std::string &pass_) { pass = pass_; }
 const std::string& Connection::getUser() const { return user; }
 void Connection::setUser(const std::string &user_) { user = user_; }
-// void    Connection::setIsConnected(bool isConnected_) {
-// 	isConnected = isConnected_; 
-// }
 bool Connection::getIsAuthentificated() const { return isAuthentificated; }

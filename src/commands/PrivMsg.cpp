@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivMsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:44:01 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 15:19:19 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:09:16 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
     ChannelSource &channels_manager = server.getChannelManager();
     ClientSource &clients_manager = server.getClientManager();
     executer = clients_manager.getClientByNickname(user.getNickname());
-    if (!executer) {
-        OUT("no exec");
+    if (!executer)
         return;
-    }
     commandFormater(buffer);
     commandArgsChecker(buffer, user.getFd());
     std::stringstream targetsStream(targets);

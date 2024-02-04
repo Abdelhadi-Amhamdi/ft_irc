@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 20:50:37 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:08:42 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,8 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
     ChannelSource &channel_manager = server.getChannelManager();
     ClientSource &clients_manager = server.getClientManager();
     executer = clients_manager.getClientByNickname(user.getNickname());
-    if (!executer) {
-        OUT("no exec");
+    if (!executer)
         return ;
-    }
     commandFormater(buffer);
     if (!params.size()) {
         throw sendResponse(ERR_NEEDMOREPARAMSS(executer->getNickname(), this->name), user.getFd());
