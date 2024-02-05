@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 13:13:31 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 21:44:33 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void Connection::receiveDataFromConnection()
 {
     char buff[1024] = {0};
     ssize_t bytes = recv(connection_fd, buff, sizeof(buff)-1, 0);
-    if (bytes < 0)
-        throw std::runtime_error("Error: in receving of message");
+    // if (bytes < 0)
+    //     throw std::runtime_error("Error: in receving of message");
     if (bytes == 0) {
         buffer.clear();
         buffer = "QUIT\n";
@@ -103,7 +103,9 @@ bool    Connection::handleDAta(Server& server)
 {
     while (!buffer.empty() && buffer.find("\n") != std::string::npos)
     {
+        
         std::string part = buffer.substr(0, buffer.find("\n") + 1);
+        std::cout << part;
         try {
             std::string strCmd = wichCommand(part);
             std::map<std::string, ACommand*> commands = server.getCommands();
