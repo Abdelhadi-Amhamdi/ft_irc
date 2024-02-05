@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Nick.hpp                                           :+:      :+:    :+:   */
+/*   Pass.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 12:56:24 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 21:36:22 by aamhamdi         ###   ########.fr       */
+/*   Created: 2024/01/20 11:48:38 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/28 19:09:00 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
-#include <iostream>
 #include "ACommand.hpp"
-#include <map>
-#include "../Client.hpp"
+#include "../Connection.hpp"
 
 
 
-class Nick : public ACommand {
+class Pass : public ACommand{
     public:
-        Nick();
-        void exec(std::string &user_infos, std::string &cmd_params, Client &clients, Server &server) const;
-        ~Nick();
-    private:
+        Pass();
+        ~Pass();
+        void Execute(std::string &buffer, Connection &user, Server &server);
 };
+
+

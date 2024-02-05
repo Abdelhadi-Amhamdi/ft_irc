@@ -6,38 +6,36 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 02:28:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 21:10:06 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:21:05 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <iostream>
+#include <vector>
 #include "color.hpp"
+class Connection;
 
 class Client {
-
-	public :
-		Client() : logedin(false) {}
-		Client(int fd, std::string hostname) : fd(fd), hostname(hostname), logedin(false) {}
-		int getFd() const ;
-		const std::string & getLogin() const ;
-		const std::string & getNickname() const ;
-		const std::string & getPassword() const ;
-		const std::string & getRealName() const ;
-		bool islogedin() const ;
-
-		void setFd(int arg);
-		void setLogin(const std::string &arg);
-		void setNickname(const std::string &arg);
-		void setPassword(const std::string &arg);
-		void setRealName(const std::string &arg);
-		void setlogedin();
 	private:
-		int fd;
-		std::string nickname;
-		std::string password;
-		std::string login;
-		std::string real_name;
-		std::string hostname;
-		bool logedin;
+		int							client_fd;
+		bool						is_registred;
+		std::string					real_name;
+		const std::string&			nick_name;
+		const std::string&			login;
+		const std::string&			hostname;
+		std::vector<std::string>	groups_in;
+	public:
+		Client(Connection& connection);
+		int		getFd() const ;
+		const	std::string& getLogin() const ;
+		const	std::string& getNickname() const ;
+		const	std::string& getRealName() const ;
+		const	std::string& getHostname() const ;
+		const	std::vector<std::string>  & getgroupsin() const ;
+		void	setIsRegistred();
+		bool	isRegistred() const ;
+		void	setFd(const int &fd);
+		void	setgroupsin(const std::string &arg);
+		void	deletefromgroupsin(const std::string &arg);
 };

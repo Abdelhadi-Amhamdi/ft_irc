@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/19 18:22:45 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:48:50 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
-
-// 
 #include <sys/types.h>
 #include <netdb.h>
+#include <fcntl.h>
+#include <signal.h>
 
 // sockets manipulation
 #include <sys/socket.h>
@@ -26,61 +26,63 @@
 #include <poll.h>
 
 // user defined classes
+#include "color.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
-#include "color.hpp"
+#include "Connection.hpp"
 #include "ClientSource.hpp"
 #include "ChannelSource.hpp"
-#include "cmd/Join.hpp"
-#include "cmd/PrivMsg.hpp"
-#include "cmd/User.hpp"
+
+// commands
+#include "commands/ACommand.hpp"
+#include "commands/Nick.hpp"
+#include "commands/Topic.hpp"
+#include "commands/Pass.hpp"
+#include "commands/User.hpp"
+#include "commands/Join.hpp"
+#include "commands/Quit.hpp"
+#include "commands/PrivMsg.hpp"
+#include "commands/Part.hpp"
+#include "commands/Kick.hpp"
+#include "commands/Invite.hpp"
 
 
-// containers
+// STL 
+#include <algorithm>
+#include <map>
 #include <vector>
 #include <map>
 
-// algorithms
-#include <algorithm>
-class Pass;
-#include "cmd/Pass.hpp"
-#include "cmd/Nick.hpp"
-#include "cmd/Mode.hpp"
+#define OUT(x) std::cout << x << std::endl;
 
-class Match {
-	int value;
-	public:
-		Match(int fd) : value(fd) {} 
-		bool operator()(const Client &c) const {
-			return (c.getFd() == value);
-		} 
-};
+
+class Connection;
 
 class Server {
+	private:
+		int									index;
+		int									server_fd;
+		const int							port;
+		const std::string 					password;
+		ClientSource						clients_manager;
+		ChannelSource						channels_manager;
+		std::vector<struct pollfd>			connection_fds;
+		std::map<int, Connection*>			connections;
+		std::map<std::string, ACommand*>	commands;
 	public:
 		Server(const std::string &password, const int &port);
-		void    start_server();
-		void    add_fd(int fd);
-		void    recive_data(int fd);
-		void    _event(sockaddr *a, socklen_t len);
-		void    new_client(sockaddr *a, socklen_t len, int fd);
-		void	executer(const std::string &data, Client &client);
-		const std::string& getPassword() const;
-		void	broadcastMessage(const std::string &channel_name, const std::string &message, std::string user);
-
-		// channels managment methods
-		void	addUserToChannel(const std::string &channel, const std::string &password, int user_fd, std::string user);
-		void	editChannelMode();
-		// clients managment methods
-		bool	nickNameused(const std::string &name);
-		
 		~Server();
-	private:
-		int     port;
-		int     server_fd;
-		const   std::string password;
-		std::vector<struct pollfd>  c_fds;
-		ClientSource cl_manager;
-		ChannelSource ch_manager;
-		std::map<std::string, ACommand*> commands;
+		int&	getIndex();
+		int		getFd() const ;
+		void    inializeServer();
+		void    eventsHandler();
+		void    start_server();
+		void    addConnectionFd(const int &connection_fd);
+		void    deleteConnectionFd(const int &connection_fd);
+		void    deleteConnection(const int &connection_fd);
+		ClientSource							&getClientManager();
+		ChannelSource							&getChannelManager();
+		std::vector<struct pollfd>&				getconnections();
+		const std::string&						getPassword() const;
+		const std::map<std::string, ACommand*>&	getCommands() const ;
 };

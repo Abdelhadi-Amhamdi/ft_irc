@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   User.hpp                                           :+:      :+:    :+:   */
+/*   Kick.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 21:01:54 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/18 21:06:49 by aamhamdi         ###   ########.fr       */
+/*   Created: 2024/01/22 13:33:17 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/02/01 15:29:11 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #pragma once
+#include <iostream>
 #include "ACommand.hpp"
+#include "../Server.hpp"
 
-class User : public ACommand {
-    public:
-        User();
-        void exec(std::string &user_infos,std::string &cmd_params, Client &client, Server &server) const;
-        ~User();
+
+
+
+
+class Kick : public ACommand {
     private:
+        std::string comment;
+    public:
+        Kick();
+        void getComment(std::string &buffer);
+        void Execute(std::string &buffer, Connection &user, Server &server);
+        ~Kick();
 };

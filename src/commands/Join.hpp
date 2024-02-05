@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ACommand.hpp                                       :+:      :+:    :+:   */
+/*   Join.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 11:24:10 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/15 19:02:01 by aamhamdi         ###   ########.fr       */
+/*   Created: 2024/01/21 15:22:21 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/30 17:33:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #pragma once
 #include <iostream>
-#include <unistd.h>
-#include <sys/socket.h>
-#include "../Client.hpp"
-#include <sstream>
+#include <vector>
+#include "ACommand.hpp"
+#include "../Server.hpp"
 
-class Server;
 
-class ACommand {
-    public:
-        ACommand();
-        virtual void exec(std::string &user_infos,std::string &cmd_params, Client &client, Server &server) const = 0;
-        virtual ~ACommand();
+
+class Join : public ACommand {
     private:
+        std::vector<std::pair<std::string, std::string> > channels;
+    public:
+        Join();
+        void    channels_formater();
+        int     isValidChannelName(const std::string &channel_name);
+        void    Execute(std::string &buffer, Connection &user, Server &server);
+        ~Join();
 };

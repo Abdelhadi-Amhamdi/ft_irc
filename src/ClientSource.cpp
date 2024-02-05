@@ -6,40 +6,64 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:09:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 21:18:57 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/04 13:12:03 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ClientSource.hpp"
+#include "Connection.hpp"
+#include <cassert>
 
 ClientSource::ClientSource(){}
 
-void ClientSource::createClient(int fd, std::string &hostname) {
-    Client *new_client = new Client(fd, hostname);
-
-    clients[fd] = new_client;
+void            ClientSource::createClient(Connection* connection, const std::string& key) {
+    Client  *newClient = new Client(*connection);
+    
+    clients[key] = newClient;
 }
 
-void ClientSource::deleteClient(int fd) {
-    std::map<int, Client*>::iterator client = clients.find(fd);
+ClientSource& ClientSource::operator=(const ClientSource &c) {
+    assert(false);
+    if (this != &c) {
+        this->clients = c.clients;
+    }
+    return (*this);
+}
+
+void            ClientSource::createClient(Connection* connection) {
+    Client  *newClient = new Client(*connection);
+    
+    clients[connection->getNickname()] = newClient;
+}
+
+
+void ClientSource::deleteClient(const std::string &nickname) {
+    std::map<std::string, Client*>::iterator client = clients.find(nickname);
     if (client != clients.end()) {
         delete client->second;
         clients.erase(client);
     }
 }
 
-Client* ClientSource::getClient(int fd) {
-    std::map<int, Client*>::iterator client = clients.find(fd);
-    if (client == clients.end())
-        return (NULL);
-    return (client->second);
+const std::map<std::string,Client*>& ClientSource::getClients() const {
+    return (clients);
 }
 
-bool ClientSource::checkNickName(const std::string &name) {
-    std::map<int, Client*>::iterator user = std::find_if(clients.begin(), clients.end(), Match_nickname(name));
+Client* ClientSource::getClientByNickname(const std::string &nickname) {
+    std::map<std::string, Client*>::iterator user = clients.find(nickname);
     if (user != clients.end())
-        return (false);
-    return (true);
+        return (user->second);
+    return (NULL);
 }
 
-ClientSource::~ClientSource(){}
+size_t ClientSource::getClientsCount() const {
+    return (clients.size());
+}
+
+
+ClientSource::~ClientSource(){
+    std::map<std::string, Client*>::iterator it = clients.begin();
+    for (; it != clients.end(); it++)
+        delete it->second;
+    clients.clear();
+}

@@ -6,90 +6,120 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/19 18:36:31 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:50:39 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
-#include <sys/socket.h>
 #include "color.hpp"
+#include <algorithm>
 
+Channel::Channel(const std::string &channel_name) 
+    :  name(channel_name){}
 
-void Channel::setMode(const std::string &mode) {
-    modes.push_back(mode);
-}
-
-void Channel::removeMode(const std::string &mode) {
-    modes.erase(mode);
-}
-
-Channel::Channel(const std::string &channel_name, const std::string &channel_key) 
-    : users_limit(2), name(channel_name), key(channel_key) {
-        modes.push_back("+l");
-    }
-
-void Channel::setAdmin(int user_fd) {
+void Channel::addAdmin(const int &user_fd) {
     admins.push_back(user_fd);
 }
 
-void Channel::setMode(std::string &mode) {
-    modes.push_back(mode);
+void Channel::addInvite(const int &user_fd) {
+    std::vector<int>::iterator it = std::find(invites.begin(), invites.end(), user_fd);
+    if (it == invites.end())
+        invites.push_back(user_fd);
 }
 
-const std::string & Channel::getKey() const {
-    return (this->key);
+void Channel::delInvite(const int &fd) {
+  std::vector<int>::iterator it = std::find(invites.begin(), invites.end(), fd);
+  if (it != invites.end())
+    invites.erase(it);
 }
 
-
-int Channel::modeExist_invite_only(const std::string &mode, int user_fd) {
-    std::vector<std::string>::iterator m = std::find(modes.begin(), modes.end(), mode);
-    if (m != modes.end()) {
-        if (std::find(invites.begin(), invites.end(), user_fd) == invites.end())
-            return (1);
-    }
-    return (0);
-}
-int Channel::modeExist_users_limit(const std::string &mode) {
-    std::vector<std::string>::iterator m = std::find(modes.begin(), modes.end(), mode);
-    if (m != modes.end() && members.size() == users_limit)
-        return (1);
-    return (0);
+const std::string &Channel::getName() const {
+    return (name);
 }
 
-void Channel::ClientResponse(int client_fd, const std::string &username, const std::string &channel_name) {    
-    std::string usersList_message = ":localhost 353 " + username + " = #" + channel_name + " :";
-    for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++) {
+void Channel::setTopic(const std::string &topic) {
+    this->topic = topic;
+}
+
+const std::string &Channel::getTopic() const {
+    return (topic);
+}
+
+void Channel::delAdmin(const int &user_fd) {
+    std::vector<int>::iterator it = std::find(admins.begin(), admins.end(), user_fd);
+    if (it != admins.end())
+        admins.erase(it);
+}
+
+ChannelMode& Channel::getMode() {
+    return mode;
+}
+
+size_t Channel::getMembersCount() const {
+    return (members.size());
+}
+
+std::string Channel::generateMemebrsList() {
+    std::string members_list = ":server_name 353 nick = #" + name + "   :";
+    for (std::map<int, std::string>::iterator it = members.begin(); it != members.end(); it++) {
         if (std::find(admins.begin(), admins.end(), it->first) != admins.end())
-            usersList_message += "@";
-        usersList_message += it->second;
-        usersList_message += " ";
+            members_list += "@";
+        members_list += it->second;
+        members_list += " ";
     }
-    usersList_message += "\r\n";
-    send(client_fd, usersList_message.c_str(), usersList_message.size(), 0);
-
-    std::string RPL_ENDOFNAMES = username + ":localhost 366 " + username + " #" + channel_name + " :End of /NAMES list.\r\n";
-    send(client_fd, RPL_ENDOFNAMES.c_str(), RPL_ENDOFNAMES.size(), 0);
+    members_list += "\r\n";
+    return (members_list);
 }
 
-void Channel::add_user(int fd, const std::string &user, const std::string &channel) {
-    members.push_back(std::make_pair(fd, user));
-    std::string join_message = ":" + user + " JOIN #" + channel + "\r\n";
-    send(fd, join_message.c_str(), join_message.size(), 0);
-
-    for (std::vector<std::pair<int, std::string> >::iterator it = members.begin(); it != members.end(); it++)
-        ClientResponse(it->first, it->second, channel);
+void Channel::addUserToChannel(const int &fd, const std::string &user) {
+    members[fd] = user;
 }
 
-void Channel::brodcast_msg(std::string msg, std::string &user_name) {
-    for (size_t i = 0; i < members.size(); i++) {
-        if (members[i].second == user_name)
+bool Channel::isMemberInChannel(const int &fd) {
+    std::map<int, std::string>::iterator it = members.find(fd);
+    if (it != members.end())
+        return (true);
+    return (false);
+}
+
+void Channel::delUserFromChannel(const int &fd) {
+    std::map<int, std::string>::iterator it = members.find(fd);
+    if (it != members.end()) {
+        delAdmin(fd);
+        members.erase(it);
+    }
+}
+
+void Channel::broadCastResponse(const std::string &message) {
+    std::map<int, std::string>::iterator it = members.begin();
+    for (; it != members.end(); it++) {
+        send(it->first, message.c_str(), message.size(), 0);
+    }   
+}
+
+
+void Channel::brodCastMessage(const std::string &message, const std::string &user_name) {
+    std::map<int, std::string>::iterator it = members.begin(); 
+    for (; it != members.end(); it++) {
+        if (it->second == user_name)
             continue;
-        std::string a = ":" + user_name + " PRIVMSG #irc :" + msg + "\r\n";
-        send(members[i].first, a.c_str(), a.size(), 0);
+        std::string response = ":" + user_name + " PRIVMSG #" + name + " :" + message + "\r\n";
+        send(it->first, response.c_str(), response.size(), 0);
     }
 }
 
-
-Channel::~Channel(){
-    std::cout << "Channel destroyed" << std::endl;
+bool Channel::checkIfAdmin(const int &user_fd) {
+    std::vector<int>::iterator it = std::find(admins.begin(), admins.end(), user_fd);
+    if (it != admins.end())
+        return (true);
+    return (false);
 }
+
+bool Channel::checkIfInvited(const int &user_fd) {
+    std::vector<int>::iterator it = std::find(invites.begin(), invites.end(), user_fd);
+    if (it != invites.end())
+        return (true);
+    return (false);
+}
+
+Channel::~Channel(){}

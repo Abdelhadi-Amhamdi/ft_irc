@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 10:05:23 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/19 18:28:56 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:51:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 ChannelSource::ChannelSource(){}
 
-void ChannelSource::createChannel(const std::string &channel_name, const std::string &channel_key) {
-	Channel* channel = new Channel(channel_name, channel_key);
+void ChannelSource::createChannel(const std::string &channel_name) {
+	Channel* channel = new Channel(channel_name);
 
 	this->channels[channel_name] = channel;
 }
@@ -28,37 +28,20 @@ void ChannelSource::deleteChannel(const std::string &name) {
 	}
 }
 
-void ChannelSource::setChannelMode(Channel *channel, std::pair<std::string,std::string> >mode) {
-	if (channel) {
-		channel->setMode();
-	}	
+size_t ChannelSource::getChannelsCount() const {
+	return (channels.size());
 }
 
-void ChannelSource::addUserToChannel(const std::string &channel_name, const std::string &password, int user_fd, const std::string &user) {
+Channel* ChannelSource::getChannelByName(const std::string &channel_name) {
 	std::map<std::string, Channel*>::iterator channel = channels.find(channel_name);
-	if (channel != channels.end()) {
-		if (channel->second->getKey() != password)
-			throw std::logic_error("ERR_BADCHANNELKEY");
-		if (channel->second->modeExist_invite_only("+i", user_fd))
-			throw std::logic_error("ERR_INVITEONLYCHAN");
-		if (channel->second->modeExist_users_limit("+l"))
-			throw std::logic_error("ERR_CHANNELISFULL");
-		channel->second->add_user(user_fd, user, channel_name);
-	} else {
-		createChannel(channel_name, password);
-		// std::string a = ":" + user + " MODE #" + name + " +s \r\n";
-		channels[channel_name]->setAdmin(user_fd);
-		channels[channel_name]->add_user(user_fd, user, channel_name);
-		// send(user_fd, a.c_str(), a.size(), 0);
-		// std::cout << a ;
-	}
+	if (channel != channels.end())
+		return (channel->second);
+	return (NULL);
 }
 
-void ChannelSource::broadcastMeassges(const std::string &channel_name, const std::string &message, std::string user) {
-	std::map<std::string, Channel*>::iterator ch = channels.find(channel_name);
-	if (ch != channels.end())
-		ch->second->brodcast_msg(message, user);
+ChannelSource::~ChannelSource(){
+	std::map<std::string, Channel*>::iterator it = channels.begin();
+	for (; it != channels.end(); it++)
+		delete it->second;
+	channels.clear();
 }
-
-
-ChannelSource::~ChannelSource(){}

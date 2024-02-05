@@ -6,22 +6,73 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 17:19:59 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/08 18:49:05 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/02 16:33:24 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <cmath>
 
-void _error(std::string msg) {
-	std::cerr << msg << std::endl;
+int *g_index = NULL;
+
+// void test() {
+//     // int pid = getpid();
+//     // std::string a = std::string("lsof -p ") + std::to_string(pid) + " > fds";
+//     // system(a.c_str());
+//     system("leaks ircserv > leaks"); 
+// }
+
+void signalHandler(int sig_type) {
+    (void)sig_type;
+    if (g_index)
+        *g_index = 0;
+}
+
+int parse(std::string port_input, std::string pass_input, int &port, std::string &pass) {
+    if (pass_input.empty()) {
+        std::cerr << "Error: empty password!\n";    
+        return (1);
+    }
+    size_t index = 0;
+    for (; index < pass_input.size(); index++) {
+        if (std::isspace(pass_input[index])) {
+            std::cerr << "Error: invalid password!\n";
+            return (1);
+        }
+    }
+    
+    pass = pass_input;
+    for (size_t i = 0; i < port_input.size(); i++) {
+        if (!std::isdigit(port_input[i])) {
+            std::cerr << "Error: invalid character on port number!\n";    
+            return (1);
+        }
+    }
+    std::stringstream portStream(port_input);
+    portStream >> port;
+    if (port < 0 || port > (pow(2, 16) - 1)) {
+        std::cerr << "Error: port out of range!\n";
+        return (1);
+    }
+    return (0);
 }
 
 int main(int argc, char *argv[]) {
+    // atexit(test);
+    signal(SIGINT, signalHandler);
+    signal(SIGQUIT, signalHandler);
+    int port;
+    std::string password;
     if (argc != 3)
-		return (_error("Error: inalid args, usage: (./ircserv <port> <password>)!"), 1);
-    
-    Server serv(argv[2], std::stoi(argv[1]));
+    {
+        std::cerr << "Error: inalid args, usage: (./ircserv <port> <password>)!\n";
+        return (1);
+    }
+    if (parse(argv[1], argv[2], port, password))
+        return (1);
     try {
+        Server serv(password, port);
+        g_index = &serv.getIndex();
         serv.start_server();
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;

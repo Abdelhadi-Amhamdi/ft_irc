@@ -6,145 +6,171 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/19 18:23:12 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:51:44 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "commands/Mode.hpp"
 
-Server::Server(const std::string &password, const int &port) 
-    : port(port), password(password) {
-    commands["PASS"] = new Pass();  
-    commands["NICK"] = new Nick();      
-    commands["USER"] = new User();
-    commands["JOIN"] = new Join();      
-    commands["PRIVMSG"] = new PrivMsg();
-    commands["MODE"] = new Mode();
+int &Server::getIndex() {
+	return index;
 }
 
-void Server::add_fd(int fd) {
-    struct pollfd a;
-    a.fd = fd;
-    a.events = POLLIN;
-    c_fds.push_back(a);
-}
-
-bool Server::nickNameused(const std::string &name) {
-    return (cl_manager.checkNickName(name));
-}
-
-void	Server::addUserToChannel(const std::string &channel, const std::string &password, int user_fd, std::string user){
-    ch_manager.addUserToChannel(channel, password, user_fd, user);
+std::vector<struct pollfd> &Server::getconnections() {
+	return connection_fds;
 }
 
 const std::string& Server::getPassword() const {
-    return (this->password);
+	return (this->password);
 }
 
-void Server::new_client(sockaddr *a, socklen_t len, int fd) {
-    int client_fd = accept(fd, a, &len);
-    if (client_fd == -1)
-        throw std::exception();
-    std::string hostname = inet_ntoa(reinterpret_cast<struct sockaddr_in*>(a)->sin_addr);
-    std::cout << BLUE << "Accepted connection from " << hostname << RESET << std::endl;
-    add_fd(client_fd);
-    cl_manager.createClient(client_fd, hostname);
+const std::map<std::string, ACommand*> & Server::getCommands() const {
+	return (commands);
 }
 
-void Server::executer(const std::string &data, Client &client) {
-    std::string info,cmd,params,elm;
-    std::stringstream ss(data);
-    
-    if (data[0] == ':')
-        ss >> info;
-    ss >> cmd;
-    while (ss >> elm)
-        params += elm + " ";
-    if (params[params.size() - 1] == ' ')
-        params.erase(params.end() - 1);
-    std::map<std::string, ACommand*>::iterator it = commands.find(cmd);
-    if (it != commands.end()) {
-        try {
-            it->second->exec(info, params, client, *this);
-        } catch (...) {}
-    }
-    else
-        std::cout << data << std::endl;
+ClientSource &Server::getClientManager() {
+	return (clients_manager);
 }
 
-void Server::recive_data(int fd) {
-    char buff[500] = {0};
-    ssize_t bytes = recv(fd, buff, sizeof(buff), 0);
-    if (bytes <= 0) {
-        close(fd);
-        cl_manager.deleteClient(fd);
-        return ;
-    }
-    
-    Client* user = cl_manager.getClient(fd);
-    if (bytes > 0 && user ) {
-       // std::cout << bytes << std::endl;
-        executer(buff, *user);
-        if (!user->islogedin() && !user->getPassword().empty() && !user->getNickname().empty()) {
-            user->setlogedin();
-            std::string message = ":localhost 001 " + user->getNickname() + " : Welcome to the IRC server : " + user->getNickname() + "!\r\n";
-            send(user->getFd(), message.c_str(), message.size(), 0);
-            std::cout << YELLOW << user->getNickname() << " logedin successfuly!" << RESET << std::endl;
-        }
-    } 
+ChannelSource &Server::getChannelManager() {
+	return (channels_manager);
 }
 
-void Server::broadcastMessage(const std::string &channel_name, const std::string &message, std::string user) {
-    ch_manager.broadcastMeassges(channel_name, message, user);
+int Server::getFd() const {
+	return server_fd;
 }
 
-void Server::_event(sockaddr *a, socklen_t len) {
-    for (size_t index = 0; index < c_fds.size(); index++) {
-        if ((c_fds[index].revents & POLLIN) == POLLIN) {
-            if (c_fds[index].fd == this->server_fd)
-                new_client(a, len, c_fds[index].fd);
-            else
-                recive_data(c_fds[index].fd);
-        }
-    }
+void Server::addConnectionFd(const int &connection_fd) {
+	struct pollfd new_fd;
+	fcntl(connection_fd, F_SETFL, O_NONBLOCK);
+	new_fd.fd = connection_fd;
+	new_fd.events = POLLIN;
+	connection_fds.push_back(new_fd);
+}
+
+
+void Server::deleteConnectionFd(const int &connection_fd) {
+	std::vector<struct pollfd>::iterator it = connection_fds.begin();
+	std::vector<struct pollfd>::iterator ite = connection_fds.end();
+	for(std::vector<struct pollfd>::iterator t = it; t != ite; t++)
+	{
+		if (t->fd == connection_fd)
+		{
+			close(t->fd);
+			connection_fds.erase(t);
+			break;
+		}
+	}
+}
+
+void Server::deleteConnection(const int &connection_fd) {
+	std::map<int, Connection*>::iterator it = connections.find(connection_fd);
+	if (it != connections.end()){
+		delete it->second;
+		deleteConnectionFd(it->first);
+        connections.erase(it);
+	}
+}
+
+void Server::eventsHandler() {
+	for (size_t index = 1; index < connection_fds.size(); index++) {
+		if ((connection_fds[index].revents & POLLIN) == POLLIN) {
+			Connection *currenConnection = connections[connection_fds[index].fd];
+			currenConnection->receiveDataFromConnection();
+			if (!currenConnection->handleDAta(*this)) {
+				deleteConnection(currenConnection->getFd());
+				break ;
+			}
+		}
+	}
+}
+
+Server::Server(const std::string &password, const int &port) 
+	: index(1), port(port), password(password) {
+	inializeServer();
+	addConnectionFd(this->server_fd);
+	commands["PASS"] = new Pass();
+	commands["NICK"] = new Nick();
+	commands["TOPIC"] = new Topic();
+	commands["USER"] = new User();
+	commands["JOIN"] = new Join();
+	commands["QUIT"] = new Quit();
+	commands["MODE"] = new Mode(*this);
+	commands["PRIVMSG"] = new PrivMsg();
+	commands["PART"] = new Part();
+	commands["KICK"] = new Kick();
+	commands["INVITE"] = new Invite();
 }
 
 void Server::start_server() {
-    
-    this->server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (this->server_fd == -1)
-        throw std::logic_error("Error: cannot create a socket!");
+	try
+	{
+		while (index) {
+			if (poll(&this->connection_fds[0], this->connection_fds.size(), -1) == -1)
+			{
+				if (!index)
+					return ;
+				std::cerr << "Error on poll.\n";
+				continue; 
+			}
+			if (this->connection_fds[0].revents & POLLIN)
+			{
+				try {
+					Connection	*newConnection = new Connection(server_fd);
+					connections[newConnection->getFd()] = newConnection;
+					addConnectionFd(newConnection->getFd());
+				}
+				catch (std::exception& e) {
+					std::cerr << e.what() << std::endl;
+				}
+			}
+			eventsHandler();
+		}
+	} catch (std::exception& e) {
+		std::cerr << "Exception in startServer: " << e.what() << std::endl;
+	}
+}
 
-    struct sockaddr_in server_addr;
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(this->port);
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+void    Server::inializeServer() {
+	this->server_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (this->server_fd == -1)
+		throw std::runtime_error("Creation socket failed.");
 
-    int reuse = 1;
+	sockaddr_in serverAddr;
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_port = htons(port);
+	serverAddr.sin_addr.s_addr = INADDR_ANY;
+
+	int reuse = 1;
     setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
-
-    if (bind(this->server_fd, reinterpret_cast<struct sockaddr*>(&server_addr), sizeof(server_addr)) == -1)
-        throw std::logic_error("Error: cannot bind socket to the give port!");
-    
-    if (listen(this->server_fd, 1) == -1)
-        throw std::exception();
-
-    std::cout << GREEN << "Server listening on port " << port << "..." << RESET << std::endl;
-    
-    struct sockaddr_in client_addr;
-    socklen_t len = sizeof(client_addr);
-
-    add_fd(server_fd);
-    
-    while (true) {
-        if (poll(&c_fds[0], c_fds.size(), -1) > 0)
-            _event(reinterpret_cast<struct sockaddr*>(&client_addr), len);
-    }
-    close(server_fd);
+	if (bind(this->server_fd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == -1)
+	{
+		close(this->server_fd);
+		throw std::runtime_error("Error in binding.");
+	}
+	if (listen(this->server_fd, SOMAXCONN) == -1)
+	{
+		close(this->server_fd);
+		throw std::runtime_error("Error listening for connections.");
+	}
+	std::cout << GREEN << "Server started listening on port " << port << RESET << std::endl;
 }
 
-void Server::editChannelMode() {
-    
+Server::~Server()
+{
+	for (size_t i = 0; i < connection_fds.size(); i++) {
+		close(connection_fds[i].fd);
+	}
+	connection_fds.clear();
+	std::map<std::string, ACommand*>::iterator it = commands.begin();
+	for (; it != commands.end(); it++) {
+		delete it->second;
+	}
+	commands.clear();
+	std::map<int, Connection*>::iterator itc = connections.begin();
+	for (; itc != connections.end(); itc++) {
+		delete itc->second;
+	}
+	connections.end();
 }
-
-Server::~Server(){}

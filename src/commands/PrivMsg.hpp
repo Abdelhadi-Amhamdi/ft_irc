@@ -3,22 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   PrivMsg.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/15 18:42:40 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/15 19:07:12 by aamhamdi         ###   ########.fr       */
+/*   Created: 2024/01/22 09:43:56 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/02/01 15:14:00 by kben-ham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
 #include <iostream>
 #include "ACommand.hpp"
+#include "../Server.hpp"
 
-class PrivMsg : public ACommand {
+class PrivMsg: public ACommand {
+    private:
+        std::string message;
+        std::string targets;
+        std::string target;
     public:
         PrivMsg();
-        void exec(std::string &user_infos,std::string &cmd_params, Client &client, Server &server) const;
+        void commandArgsChecker(std::string &buffer, const int &fd);
+        void Execute(std::string &buffer, Connection &user, Server &server);
         ~PrivMsg();
-    private:
 };

@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Pass.hpp                                           :+:      :+:    :+:   */
+/*   Invite.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 11:26:56 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/14 21:36:50 by aamhamdi         ###   ########.fr       */
+/*   Created: 2024/01/24 08:45:01 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/01/29 14:44:13 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <iostream>
 #include "ACommand.hpp"
+#include "../Server.hpp"
 
-class Pass : public ACommand {
+class Invite : public ACommand {
     public:
-        class BADPASS : public std::exception {
-            const char *what() const throw () {
-                return ("Error: client auth failed, invalid password!");
-            }
-        };
-        Pass();
-        void exec(std::string &user_infos, std::string &cmd_params, Client &client, Server &server) const;
-        ~Pass();
+        Invite();
+        void Execute(std::string &buffer, Connection &user, Server &server);
+        ~Invite();
 };
