@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 21:44:33 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/05 20:13:35 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void Connection::receiveDataFromConnection()
 {
     char buff[1024] = {0};
     ssize_t bytes = recv(connection_fd, buff, sizeof(buff)-1, 0);
-    // if (bytes < 0)
-    //     throw std::runtime_error("Error: in receving of message");
+    if (bytes < 0)
+        return;
     if (bytes == 0) {
         buffer.clear();
         buffer = "QUIT\n";
@@ -138,7 +138,6 @@ bool    Connection::handleDAta(Server& server)
         {
             buffer.erase(0, part.size());
             ACommand::sendResponse("unknown exception\r\n", this->getFd());
-            throw;
         }
     }
     return true;

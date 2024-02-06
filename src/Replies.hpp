@@ -38,7 +38,7 @@
 
 
 #define ERR_USERNOTONCHANNEL\
-(client, channel) (":server_name 441 " + client + " #" + channel + " :They aren't on that channel\r\n")
+(client, channel) (":server_name 441 " + client + " " + channel + " :They aren't on that channel\r\n")
 
 
 // nick command

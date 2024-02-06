@@ -6,17 +6,12 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 15:40:16 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 13:05:47 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:28:52 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 
-size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
-    size_t totalSize = size * nmemb;
-    output->append(static_cast<char*>(contents), totalSize);
-    return totalSize;
-}
 
 std::string weatherHelper(const std::string &data, const std::string &elm, const std::string &del) {
 	std::string ret;
@@ -29,6 +24,12 @@ std::string weatherHelper(const std::string &data, const std::string &elm, const
 		throw std::logic_error("City Not Found... 🙃");
 	ret = data.substr(start, end - start);
 	return (ret);
+}
+
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
+    size_t totalSize = size * nmemb;
+    output->append(static_cast<char*>(contents), totalSize);
+    return totalSize;
 }
 
 void Bot::Weather(const std::string &nickname, const  std::string &query) {
@@ -44,6 +45,8 @@ void Bot::Weather(const std::string &nickname, const  std::string &query) {
 
         if (res != CURLE_OK) {
             std::cout << "Error\n";
+            sendResponse("PRIVMSG " + nickname + " :somthing went wrong!\r\n");
+            return ;
         }
         sendResponse("PRIVMSG " + nickname + " :----- Weather⛅\r\n");
         try 

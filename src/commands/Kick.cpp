@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 13:07:50 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/05 20:32:29 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ Kick::Kick() : ACommand("Kick") {}
 
 void Kick::getComment(std::string &buffer) {
     comment.clear();
-    comment = get_message(buffer, params[2]);
+    if (params.size() > 2)
+        comment = get_message(buffer, params[2]);
     if (!comment.empty() && comment[0] == ':')
         comment.insert(comment.begin(), ':');
     if (comment[0] == ':')
@@ -59,7 +60,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
             if (client) 
             {
                 if (!channel->isMemberInChannel(client->getFd())) {
-                    sendResponse(ERR_USERNOTONCHANNEL(executer->getNickname(), channel_name), user.getFd());
+                    sendResponse(ERR_USERNOTONCHANNEL(executer->getNickname(), username), user.getFd());
                     continue;
                 }
                 channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Kick #" + channel_name + " " + username + " " + comment + "\r\n");
@@ -70,7 +71,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
             } 
             else 
             {
-                sendResponse(ERR_USERNOTONCHANNEL(executer->getNickname(), channel_name), user.getFd());
+                sendResponse(ERR_NOSUCHNICK(executer->getNickname(), username), user.getFd());
                 continue;
             }
         }
