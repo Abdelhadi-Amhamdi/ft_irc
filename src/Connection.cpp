@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 22:05:15 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 22:26:27 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,10 +125,8 @@ bool    Connection::handleDAta(Server& server)
             buffer.erase(0, part.size());
             ACommand::sendResponse(e.what(), this->getFd());
         }
-        catch(...)
-        {
+        catch(...) {
             buffer.erase(0, part.size());
-            ACommand::sendResponse("unknown exception\r\n", this->getFd());
         }
     }
     return true;

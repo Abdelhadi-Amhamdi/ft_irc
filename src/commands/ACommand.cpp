@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:40:03 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 20:15:42 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 22:32:20 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ std::string  ACommand::get_message(std::string &buffer, std::string &param)
     if (!params.empty()) {
         size_t position = buffer.find(param);
         if (position != std::string::npos)
-            message = buffer.substr(position);
+            message = buffer.substr(position, buffer.size() - position - 1);
     }
 	return (message);
 }

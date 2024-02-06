@@ -6,7 +6,7 @@
 #    By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 14:39:40 by aamhamdi          #+#    #+#              #
-#    Updated: 2024/02/05 14:02:16 by aamhamdi         ###   ########.fr        #
+#    Updated: 2024/02/06 23:12:03 by aamhamdi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,9 @@ CMD_DIR = src/commands/
 BUILD_DIR = build/
 BOT_DIR = src/bot/
 
-CP = c++ -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address 
+CP = c++ -Wall -Wextra -Werror -std=c++98
 
-INC = Server.hpp Client.hpp Channel.hpp Connection.hpp ClientSource.hpp ChannelSource.hpp ChannelMode.hpp 
+SRC_INC = Server.hpp Client.hpp Channel.hpp Connection.hpp ClientSource.hpp ChannelSource.hpp ChannelMode.hpp 
 CMD_INC = ACommand.hpp Pass.hpp Nick.hpp User.hpp Join.hpp PrivMsg.hpp Part.hpp Kick.hpp Invite.hpp Mode.hpp Quit.hpp Topic.hpp 
 
 SRC =  main.cpp Server.cpp Client.cpp Channel.cpp Connection.cpp ClientSource.cpp ChannelSource.cpp ChannelMode.cpp 
@@ -33,9 +33,6 @@ CMDS = $(addprefix $(CMD_DIR), $(CMD))
 B_SRCS = $(addprefix $(BOT_DIR), $(B_SRC))
 
 INCS = $(addprefix $(SRC_DIR), $(SRC_INC)) $(addprefix $(CMD_DIR), $(CMD_INC))
-# CMD_INCS =   
-
-# INCS = SRC_INCS CMD_INCS
 
 OBJ = $(SRC:.cpp=.o) $(CMD:.cpp=.o) 
 OBJS = $(addprefix $(BUILD_DIR), $(OBJ))
@@ -51,7 +48,7 @@ $(BUILD_DIR)%.o : $(SRC_DIR)%.cpp $(INCS)
 $(BUILD_DIR)%.o : $(CMD_DIR)%.cpp $(INCS)
 	$(CP) -c $< -o $@
 	
-$(BUILD_DIR)%.o : $(BOT_DIR)%.cpp
+$(BUILD_DIR)%.o : $(BOT_DIR)%.cpp $(BOT_DIR)Bot.hpp
 	$(CP) -c $< -o $@
 
 $(SERVER) : $(BUILD_DIR) $(OBJS)
@@ -66,11 +63,8 @@ $(BUILD_DIR):
 clean :
 	rm -rf $(BUILD_DIR)
 
-c : 
-	rm -f leaks fds leaks1
-
 fclean: clean
 	rm -f $(SERVER)
 	rm -f $(BOT)
 
-re : fclean all bot
+re : fclean all

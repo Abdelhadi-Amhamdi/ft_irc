@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 21:57:07 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 22:05:45 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 22:22:55 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@
 #define ERR_NOSUCHCHANNEL\
 (client, channel) ":server_name " + (std::string("403 ") + client + " :" + channel + " :No such channel\r\n")
 
-#define ERR_UMODEUNKNOWNFLAG\
-(client)(std::string("501 ") + client + " :Unknown MODE flag\r\n")
 
 #define ERR_UNKNOWNMODE\
 (client, modechar) (std::string("472") + client + " " + modechar + " :is unknown mode char to me\r\n")
