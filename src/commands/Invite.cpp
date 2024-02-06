@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 08:47:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/30 21:49:51 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 14:43:18 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void Invite::Execute(std::string &buffer, Connection &user, Server &server) {
             if (channel->isMemberInChannel(client->getFd())) {
                 throw (sendResponse(ERR_ALREADYONCHANNEL(user.getNickname(), channel_name), user.getFd()));
             }
-            channel->addInvite(client->getFd());
+            if (channel->getMode().getHasLimit() == true)
+                channel->addInvite(client->getFd());
             sendResponse(":" + user.getNickname() + "!~" + client->getLogin() + "@" + client->getHostname() + " Invite " + client->getNickname() + " #" + channel->getName() + "\r\n", client->getFd());
             sendResponse(RPL_INVITING(user.getNickname(), client->getNickname(), channel->getName()), user.getFd());
         }
