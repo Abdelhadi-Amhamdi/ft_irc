@@ -6,13 +6,15 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:31 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 13:23:08 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 22:06:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <sstream>
 #include <iostream>
+#include <exception>
+#include <stdexcept>
 
 // socket manipulation
 #include <string>
@@ -21,8 +23,12 @@
 
 // user defined classes
 #include "Server.hpp"
+#include "Client.hpp"
+#include "ClientSource.hpp"
 #include "commands/ACommand.hpp"
 #include "commands/Pass.hpp"
+#include "Replies.hpp"
+
 
 class Server;
 class	ACommand;

@@ -6,12 +6,11 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/05 13:50:39 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 21:58:42 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
-#include "color.hpp"
 #include <algorithm>
 
 Channel::Channel(const std::string &channel_name) 

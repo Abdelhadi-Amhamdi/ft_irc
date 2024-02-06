@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:47:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/05 13:51:44 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 21:58:32 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void    Server::inializeServer() {
 		close(this->server_fd);
 		throw std::runtime_error("Error listening for connections.");
 	}
-	std::cout << GREEN << "Server started listening on port " << port << RESET << std::endl;
+	std::cout << "Server started listening on port " << port << std::endl;
 }
 
 Server::~Server()

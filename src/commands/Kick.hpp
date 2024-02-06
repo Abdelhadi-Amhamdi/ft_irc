@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kben-ham <kben-ham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:33:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 15:29:11 by kben-ham         ###   ########.fr       */
+/*   Updated: 2024/02/06 21:54:24 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 #include <iostream>
 #include "ACommand.hpp"
 #include "../Server.hpp"
-
-
-
-
 
 class Kick : public ACommand {
     private:

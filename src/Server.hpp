@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:46:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/05 13:56:59 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 22:06:29 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 #include <poll.h>
 
 // user defined classes
-#include "color.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "Connection.hpp"
@@ -53,7 +52,7 @@
 #include <vector>
 #include <map>
 
-#define OUT(x) std::cout << x << std::endl;
+// #define OUT(x) std::cout << x << std::endl;
 
 
 class Connection;

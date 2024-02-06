@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ChannelMode.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/06 21:55:37 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/02/06 21:55:41 by aamhamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ChannelMode.hpp"
 #include <cassert>
 #include <string>
-// #include <sys/_types/_size_t.h>
 
 ChannelMode::ChannelMode() :  inviteOnly(false), hasTopic(false), hasLimit(false), hasKey(false)
 {}

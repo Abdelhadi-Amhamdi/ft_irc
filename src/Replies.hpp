@@ -1,5 +1,16 @@
-#pragma once
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Replies.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/06 21:57:07 by aamhamdi          #+#    #+#             */
+/*   Updated: 2024/02/06 22:05:45 by aamhamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#pragma once
 
 // invite command
 #define ERR_NOSUCHNICKK(client, nickname)(":server_name 401 " + client + " " + nickname + " :No such nick/channel\r\n")

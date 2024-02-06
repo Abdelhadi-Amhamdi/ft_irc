@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:11:52 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 13:04:08 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 14:45:10 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ in_addr_t getIpAdress(const std::string &hostname, const std::string &port) {
         }
     }
     freeaddrinfo(res);
-    return (-1);    
+    return (0);
 }
 
 void Bot::authentification(const std::string &password) {

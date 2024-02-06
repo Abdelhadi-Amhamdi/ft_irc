@@ -6,20 +6,12 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/05 20:13:35 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/06 22:05:15 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Connection.hpp"
-#include "Client.hpp"
-#include "ClientSource.hpp"
-#include "Replies.hpp"
-#include "Server.hpp"
-#include "commands/ACommand.hpp"
-#include "commands/Pass.hpp"
-#include <exception>
-#include <stdexcept>
-#include <string>
+
 
 Connection::Connection(const int &serverSocket)
     : nickname(""), user(""), buffer(""){
@@ -28,9 +20,9 @@ Connection::Connection(const int &serverSocket)
     connection_fd = accept(serverSocket, (struct sockaddr*)&clienAdrr, &clienAdrrLen);
     if (connection_fd == -1)
         throw std::runtime_error("accept of connection failed.");
-    std::cout << BLUE << "Accepted connection from ";
+    std::cout << "Accepted connection from ";
     hostname = inet_ntoa(reinterpret_cast<struct sockaddr_in*>(&clienAdrr)->sin_addr);
-    std::cout << hostname << RESET << std::endl;
+    std::cout << hostname << std::endl;
 }
 
 Connection::~Connection(){}
@@ -105,7 +97,6 @@ bool    Connection::handleDAta(Server& server)
     {
         
         std::string part = buffer.substr(0, buffer.find("\n") + 1);
-        std::cout << part;
         try {
             std::string strCmd = wichCommand(part);
             std::map<std::string, ACommand*> commands = server.getCommands();
