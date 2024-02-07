@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 17:20:09 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 17:37:32 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/07 16:19:47 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ Client::Client(Connection& connection)
 	: client_fd(connection.getFd()),
 	  nick_name(connection.getNickname()),
 	  login(connection.getUser()),
-	  hostname(connection.getHostname())
-{
-}
+	  hostname(connection.getHostname()) {}
 
 int Client::getFd() const {
     return (client_fd);
@@ -66,7 +64,6 @@ void Client::deletefromgroupsin(const std::string &arg) {
         groups_in.erase(it);
     }
 }
-
 
 void Client::setIsRegistred() {
     this->is_registred = true;

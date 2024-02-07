@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:11:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 22:59:10 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:54:03 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 class Bot {
     private:
+        int         index;
         int         bot_fd;
         size_t      port;
         std::string password;
@@ -36,6 +37,7 @@ class Bot {
         std::map<std::string,std::pair<std::string, std::string> > manual;
     public:
         Bot(const int &port, const std::string password);
+        int     &getindex();
         void    startBot();
         void    manualInit();
         void    dataHandler(std::string data);

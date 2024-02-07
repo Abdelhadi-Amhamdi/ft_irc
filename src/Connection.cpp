@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 22:26:27 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/07 16:20:02 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ Connection::Connection(const int &serverSocket)
     std::cout << "Accepted connection from ";
     hostname = inet_ntoa(reinterpret_cast<struct sockaddr_in*>(&clienAdrr)->sin_addr);
     std::cout << hostname << std::endl;
+    if (hostname == "127.0.0.1") {
+        char buff[500] = {0};
+        gethostname(buff, sizeof(buff)); 
+        hostname = buff;
+    }
 }
 
 Connection::~Connection(){}

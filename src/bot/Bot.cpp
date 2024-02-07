@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:11:52 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 14:45:10 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:59:31 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ in_addr_t getIpAdress(const std::string &hostname, const std::string &port) {
     hints.ai_socktype = SOCK_STREAM;
     if ((getaddrinfo(hostname.c_str(), port.c_str(), &hints, &res)) != 0) {
         std::cerr << "Error: getaddrinfo failed" << std::endl;
-        return (-1);
+        return (0);
     }
     if (res != NULL) {
         if (res->ai_family == AF_INET) {
@@ -36,8 +36,8 @@ in_addr_t getIpAdress(const std::string &hostname, const std::string &port) {
                 return (ret);
             }
         }
+        freeaddrinfo(res);
     }
-    freeaddrinfo(res);
     return (0);
 }
 
@@ -46,9 +46,6 @@ void Bot::authentification(const std::string &password) {
     send(bot_fd, message.c_str(), message.size(), 0);
     send(bot_fd, "NICK bot\n", 9, 0);
     send(bot_fd, "USER bot 0 * bot\n", 17, 0);
-    ssize_t bytes = recv(bot_fd, buff, sizeof(buff)-1, 0);
-    if (bytes)
-        std::cout << buff;
 }
 
 void Bot::dataHandler(std::string data) {
@@ -96,6 +93,7 @@ void Bot::initBotSocket(const int &port) {
 Bot::Bot(const int &port, const std::string password)
     :password(password) 
 {
+    index = 1;
     initBotSocket(port);
     fds[0].fd = bot_fd;
     fds[0].events = POLLIN;
@@ -103,11 +101,16 @@ Bot::Bot(const int &port, const std::string password)
     manualInit();
 }
 
+int &Bot::getindex() {
+    return index;
+}
+
 void Bot::startBot() {
-    while (true) {
+    while (index) {
         if (poll(fds, 1, -1) == -1) {
-            std::cerr << "poll failed\n";
-            return;
+            if (index)
+                std::cerr << "poll failed\n";
+            break;
         }
         if (fds[0].revents & POLLIN) { 
             ssize_t bytes = recv(bot_fd, buff, sizeof(buff) - 1 , 0);
@@ -124,6 +127,7 @@ void Bot::startBot() {
             }  
         }
     }
+    close(bot_fd);
 }
 
 Bot::~Bot(){}

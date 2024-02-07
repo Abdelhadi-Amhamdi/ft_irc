@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   weather.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 15:40:16 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 14:41:52 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:06:53 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void Bot::Weather(const std::string &nickname, const  std::string &query) {
         sendResponse("PRIVMSG " + nickname + " :----- Weather⛅\r\n");
         try 
         {
-            sendResponse("PRIVMSG " + nickname + " :City         " + weatherHelper(w_data, "name\"", "\"") + "\r\n");
-            sendResponse("PRIVMSG " + nickname + " :Country      " + weatherHelper(w_data, "country\"", "\"") + "\r\n");
-            sendResponse("PRIVMSG " + nickname + " :Description  " + weatherHelper(w_data, "description\"", "\"") + "\r\n");
-            sendResponse("PRIVMSG " + nickname + " :tempuratue   " + weatherHelper(w_data, "temp", ",") + "\r\n");
+            sendResponse("PRIVMSG " + nickname + " :City        : " + weatherHelper(w_data, "name\"", "\"") + "\r\n");
+            sendResponse("PRIVMSG " + nickname + " :Country     : " + weatherHelper(w_data, "country\"", "\"") + "\r\n");
+            sendResponse("PRIVMSG " + nickname + " :Description : " + weatherHelper(w_data, "description\"", "\"") + "\r\n");
+            sendResponse("PRIVMSG " + nickname + " :tempuratue  : " + weatherHelper(w_data, "temp", ",") + "\r\n");
             sendResponse("PRIVMSG " + nickname + " :pressure    : " + weatherHelper(w_data, "pressure", ",") + "\r\n");
             sendResponse("PRIVMSG " + nickname + " :visibility  : " + weatherHelper(w_data, "visibility", ",") + "\r\n");	
         }

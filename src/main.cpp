@@ -6,21 +6,13 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 17:19:59 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/02 16:33:24 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/07 16:23:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include <cmath>
 
 int *g_index = NULL;
-
-// void test() {
-//     // int pid = getpid();
-//     // std::string a = std::string("lsof -p ") + std::to_string(pid) + " > fds";
-//     // system(a.c_str());
-//     system("leaks ircserv > leaks"); 
-// }
 
 void signalHandler(int sig_type) {
     (void)sig_type;
@@ -50,7 +42,7 @@ int parse(std::string port_input, std::string pass_input, int &port, std::string
     }
     std::stringstream portStream(port_input);
     portStream >> port;
-    if (port < 0 || port > (pow(2, 16) - 1)) {
+    if (port < 0 || port > 65535) {
         std::cerr << "Error: port out of range!\n";
         return (1);
     }
@@ -58,7 +50,6 @@ int parse(std::string port_input, std::string pass_input, int &port, std::string
 }
 
 int main(int argc, char *argv[]) {
-    // atexit(test);
     signal(SIGINT, signalHandler);
     signal(SIGQUIT, signalHandler);
     int port;
