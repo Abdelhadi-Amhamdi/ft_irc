@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Connection.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/07 16:20:02 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/11 16:31:19 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Connection.hpp"
+#include "commands/ACommand.hpp"
 
 
 Connection::Connection(const int &serverSocket)
@@ -150,11 +151,16 @@ const std::string& Connection::getNickname() const {
     return nickname; 
 }
 void    Connection::setNickname(const std::string &nickname_, ClientSource& clientSource) {
+    if (nickname_ == this->nickname)
+        return;
     Client*	client = clientSource.getClientByNickname(nickname_);
     if (client)
         throw std::logic_error(ERR_ALREADYINUSE(nickname_));
     if (!this->nickname.empty())
+    {
+        ACommand::sendResponse(RPL_NICK(this->nickname, nickname_), connection_fd);
         clientSource.deleteClient(this->nickname);
+    }
     clientSource.createClient(this, nickname_);
     nickname = nickname_;
 }

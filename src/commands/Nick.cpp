@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:40:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/01 19:35:49 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/11 16:22:11 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Nick.hpp"
+#include <map>
 #include <stdexcept>
+#include <string>
 
 Nick::Nick() : ACommand("Nick") {}
 
@@ -37,8 +39,9 @@ void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
     if (params.size() > 1 || isValidNickname(nick) == false)
         throw std::logic_error(ERR_ERRONNICK((userNickname.empty() ? "" : userNickname), nick));
     
+    // sendResponse(RPL_NICK(user.getNickname(), user.getUser(), user.getHostname(), nick), user.getFd());
     user.setNickname(nick, client_manager);
-    sendResponse("your are now known as " + nick + "\r\n", user.getFd());
+    client_manager.print();
 }
 
 Nick::~Nick(){}

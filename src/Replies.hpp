@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 21:57:07 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 22:22:55 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/11 17:00:05 by nmaazouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,4 +125,4 @@
 (client, networkname, user, host) "001 " + client + " :Welcome to the " + networkname + " Network, " + client + "!" + user + "@" + host + "\r\n"
 
 #define RPL_NICK\
-(user, oldNick, nick)  user + ":" + oldNick + " NICK " + nick + "\r\n"
+(oldNick, newNick) ":" + oldNick + " NICK " + newNick + "\r\n"
