@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Connection.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/11 16:31:19 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/11 21:50:17 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,8 @@ return hostname;
 const std::string& Connection::getNickname() const {
     return nickname; 
 }
-void    Connection::setNickname(const std::string &nickname_, ClientSource& clientSource) {
+void    Connection::setNickname(const std::string &nickname_, ClientSource& clientSource, std::string &message) {
+    std::vector<std::string> channels_temp;
     if (nickname_ == this->nickname)
         return;
     Client*	client = clientSource.getClientByNickname(nickname_);
@@ -158,10 +159,16 @@ void    Connection::setNickname(const std::string &nickname_, ClientSource& clie
         throw std::logic_error(ERR_ALREADYINUSE(nickname_));
     if (!this->nickname.empty())
     {
-        ACommand::sendResponse(RPL_NICK(this->nickname, nickname_), connection_fd);
+        message = RPL_NICK(this->nickname, nickname_);
+        client = clientSource.getClientByNickname(this->nickname);
+        if (client)
+            channels_temp = client->getgroupsin();
         clientSource.deleteClient(this->nickname);
     }
     clientSource.createClient(this, nickname_);
+    client = clientSource.getClientByNickname(nickname_);
+    if (client)
+        const_cast<std::vector<std::string>&>(client->getgroupsin()) = channels_temp;
     nickname = nickname_;
 }
 const std::string& Connection::getPass() const { return pass; }

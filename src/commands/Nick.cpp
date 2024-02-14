@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:40:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/11 16:22:11 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:59:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ bool Nick::isValidNickname(const std::string &nickname) const {
 
 void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
     ClientSource &client_manager = server.getClientManager();
+    ChannelSource &channel_manager = server.getChannelManager();
     commandFormater(buffer);
 
     if (params.empty())
@@ -38,9 +39,25 @@ void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
     std::string     userNickname = user.getNickname();
     if (params.size() > 1 || isValidNickname(nick) == false)
         throw std::logic_error(ERR_ERRONNICK((userNickname.empty() ? "" : userNickname), nick));
-    
-    // sendResponse(RPL_NICK(user.getNickname(), user.getUser(), user.getHostname(), nick), user.getFd());
-    user.setNickname(nick, client_manager);
+    std::string message;
+    user.setNickname(nick, client_manager, message);
+    if (!message.empty()) {
+        Client *client = client_manager.getClientByNickname(user.getNickname());
+        if (client)
+        {
+            std::vector<std::string> channels = client->getgroupsin();
+            std::vector<std::string>::const_iterator it = channels.begin();
+            for (; it != channels.end(); it++)
+            {
+                Channel *ch = channel_manager.getChannelByName(*it);
+                if (ch) {
+                    ch->delUserFromChannel(user.getFd());
+                    ch->addUserToChannel(user.getFd(), nick);
+                    ch->broadCastResponse(message);
+                }
+            }
+        }
+    }
     client_manager.print();
 }
 

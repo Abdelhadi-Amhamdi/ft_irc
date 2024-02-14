@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 21:58:42 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:56:50 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ bool Channel::isMemberInChannel(const int &fd) {
 void Channel::delUserFromChannel(const int &fd) {
     std::map<int, std::string>::iterator it = members.find(fd);
     if (it != members.end()) {
-        delAdmin(fd);
         members.erase(it);
     }
 }

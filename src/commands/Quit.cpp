@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 20:54:14 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/02/06 22:53:40 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:59:32 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void Quit::Execute(std::string &buffer, Connection &user, Server &server)
 	   tmp = channel_manager.getChannelByName(joined_channels[i]);
 	   tmp->broadCastResponse(message_to_send);
 	   tmp->delUserFromChannel(user.getFd());
+	   tmp->delAdmin(user.getFd());
 	   if(tmp->getMembersCount() == 0)
 			channel_manager.deleteChannel(tmp->getName());
 	}

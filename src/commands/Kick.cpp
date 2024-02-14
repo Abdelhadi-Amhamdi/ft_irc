@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/05 20:32:29 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:57:41 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
                 }
                 channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Kick #" + channel_name + " " + username + " " + comment + "\r\n");
                 channel->delUserFromChannel(client->getFd());
+                channel->delAdmin(client->getFd());
                 executer->deletefromgroupsin(channel_name);
                 channel->broadCastResponse(channel->generateMemebrsList());
                 channel->broadCastResponse(RPL_NAMESEND(executer->getNickname(), channel_name));

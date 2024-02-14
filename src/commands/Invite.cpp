@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 08:47:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 14:43:18 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/11 22:39:01 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void Invite::Execute(std::string &buffer, Connection &user, Server &server) {
         channel_name.erase(channel_name.begin());
     else
         throw (sendResponse(ERR_NOSUCHCHANNEL(user.getNickname(), "INVITE"), user.getFd()));
-    
     Channel *channel = channels_manager.getChannelByName(channel_name);
     if (channel && !channel->isMemberInChannel(user.getFd())) {
         throw (sendResponse(ERR_NOTONCHANNELL(user.getNickname(), channel_name), user.getFd()));

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:31 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 22:06:06 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/11 21:28:42 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class Connection {
 		~Connection();
 		int		getFd() const;
 		void	receiveDataFromConnection();
-		void    setNickname(const std::string &nickname_, ClientSource& clientSource);
+		void    setNickname(const std::string &nickname_, ClientSource& clientSource, std::string &message);
 		void	setPass(const std::string &pass_);
 		void	setUser(const std::string &user_);
 		bool	getIsConnected() const;

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 13:08:42 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:59:11 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
             }
             channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Part #" + channel_name + " " + reason + "\r\n");
             channel->delUserFromChannel(user.getFd());
+            channel->delAdmin(user.getFd());
             executer->deletefromgroupsin(channel_name);
         } else {
             sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
