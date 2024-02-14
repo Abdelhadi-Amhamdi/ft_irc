@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:40:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/12 12:59:54 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/14 20:19:13 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
         Client *client = client_manager.getClientByNickname(user.getNickname());
         if (client)
         {
+            sendResponse(message, user.getFd());
             std::vector<std::string> channels = client->getgroupsin();
             std::vector<std::string>::const_iterator it = channels.begin();
             for (; it != channels.end(); it++)
@@ -58,7 +59,6 @@ void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
             }
         }
     }
-    client_manager.print();
 }
 
 Nick::~Nick(){}

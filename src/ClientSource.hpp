@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientSource.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 20:08:25 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/10 22:48:58 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/14 20:19:08 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,4 @@ class ClientSource {
         Client*         getClientByNickname(const std::string &nickname);
         size_t          getClientsCount() const;
         ~ClientSource();
-        void    print()const
-        {
-            std::map<std::string, Client*>::const_iterator it = clients.begin();
-            for (; it != clients.end(); ++it) {
-                std::string key = it->first;
-                Client* value = it->second;
-                std::cout << "key: " << key << " fd: " << value->getFd() << std::endl;
-            }
-            std::cout << "------------------------\n";
-        }
 };
