@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:27:49 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/12 12:59:11 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/14 21:29:34 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
         return ;
     commandFormater(buffer);
     if (!params.size()) {
-        throw sendResponse(ERR_NEEDMOREPARAMSS(executer->getNickname(), this->name), user.getFd());
+        throw sendResponse(ERR_NEEDMOREPARAMS(executer->getNickname(), this->name), user.getFd());
     }
     std::string channel_name;
     std::stringstream channelsStream(params[0]);
@@ -41,7 +41,7 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
         if (!channel_name.empty() && channel_name[0] == '#')
             channel_name.erase(channel_name.begin());
         else {
-            sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
+            sendResponse(ERR_NOSUCHCHANNEL(executer->getNickname(), channel_name), user.getFd());
             continue; 
         }
         Channel *channel = channel_manager.getChannelByName(channel_name);
@@ -55,7 +55,7 @@ void Part::Execute(std::string &buffer, Connection &user, Server &server) {
             channel->delAdmin(user.getFd());
             executer->deletefromgroupsin(channel_name);
         } else {
-            sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
+            sendResponse(ERR_NOSUCHCHANNEL(executer->getNickname(), channel_name), user.getFd());
             continue;
         }
         if (channel && !channel->getMembersCount()) {

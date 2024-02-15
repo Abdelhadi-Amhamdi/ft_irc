@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 11:53:32 by kben-ham          #+#    #+#             */
-/*   Updated: 2024/02/04 13:30:17 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/15 00:04:39 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void Topic::Execute(std::string &buffer, Connection &user, Server &server)
 			if (channel_mode.getTopic() == true)
 			{
 				if (tmp->checkIfAdmin(user.getFd()) == false)
-					throw sendResponse(ERR_CHANOPRIVSNEEDED(user.getNickname() , params[0]), user.getFd());
+					throw sendResponse(ERR_NOTCHANOPER(user.getNickname() , params[0]), user.getFd());
 			}
 			tmp->setTopic(params[1]);
 			tmp->broadCastResponse(":" +  user.getNickname() + " TOPIC #" + params[0] + " :" + params[1] + " \r\n");

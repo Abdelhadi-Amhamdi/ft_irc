@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:40:05 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/14 20:19:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/15 00:23:26 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Nick::Execute(std::string &buffer, Connection &user, Server &server) {
     std::string&    nick = params[0];
     std::string     userNickname = user.getNickname();
     if (params.size() > 1 || isValidNickname(nick) == false)
-        throw std::logic_error(ERR_ERRONNICK((userNickname.empty() ? "" : userNickname), nick));
+        throw std::logic_error(ERR_ERRONNICK((userNickname.empty() ? "*" : userNickname), nick));
     std::string message;
     user.setNickname(nick, client_manager, message);
     if (!message.empty()) {

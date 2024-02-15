@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 15:23:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 13:07:42 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/15 10:21:51 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
             {
                 channel->addAdmin(user.getFd());
                 channel->addUserToChannel(user.getFd(), user.getNickname());
-                channel->broadCastResponse(":" + user.getNickname() +"!~" + executer->getLogin() + "@" + executer->getHostname() + " JOIN #" + it->first + "\r\n");
-                channel->broadCastResponse(channel->generateMemebrsList());
-                channel->broadCastResponse(RPL_NAMESEND(executer->getNickname(), it->first));
+                sendResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " JOIN #" + it->first + "\r\n", user.getFd());
+                sendResponse(channel->generateMemebrsList(user.getNickname()), user.getFd());
+                sendResponse(RPL_NAMESEND(executer->getNickname(), it->first), user.getFd());
                 executer->setgroupsin(it->first);
             }
         } 
@@ -96,9 +96,9 @@ void Join::Execute(std::string &buffer, Connection &user, Server &server) {
                 }
                 channel->addUserToChannel(user.getFd(), user.getNickname());
                 channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " JOIN #" + it->first + "\r\n");
-                channel->broadCastResponse(channel->generateMemebrsList());
-                channel->broadCastResponse(RPL_NAMESEND(executer->getNickname(), it->first));
-                sendResponse(":server_name 332 nick #" + it->first + " :" + channel->getTopic() + "\r\n" , user.getFd());
+                sendResponse(channel->generateMemebrsList(user.getNickname()), user.getFd());
+                sendResponse(RPL_NAMESEND(executer->getNickname(), it->first), user.getFd());
+                sendResponse("332 " + user.getNickname() + " #" + it->first + " :" + channel->getTopic() + "\r\n" , user.getFd());
                 executer->setgroupsin(it->first);
                 channel->delInvite(user.getFd());
             }

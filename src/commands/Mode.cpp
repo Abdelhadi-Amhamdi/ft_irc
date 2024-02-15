@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 13:07:59 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/04 13:08:00 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/15 00:36:41 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,9 +163,13 @@ void Mode::setOMode(char sign, std::string::iterator& flag, Connection& user)
         if (client == NULL)
             throw std::logic_error(ERR_NOSUCHNICK(user.getNickname(), target));
         if (channel->isMemberInChannel(user.getFd()) == false)
-            throw std::logic_error(ERR_USERNOTINCHANNEL(user.getNickname(), target, channelName));
+            throw std::logic_error(ERR_USERNOTONCHANNEL(user.getNickname(), target, channelName));
         if (sign == '+')
+        {
+            if (channel->isMemberInChannel(client->getFd()) == false)
+                return;
             channel->addAdmin(client->getFd());
+        }
         else
             channel->delAdmin(client->getFd());
         valideArgs += " " + target;
@@ -226,7 +230,7 @@ void Mode::Execute(std::string &buffer, Connection &user, Server &server)
         formate(buffer, user);
         if (channel->checkIfAdmin(user.getFd()) == false)
         {
-            sendResponse(ERR_CHANOPRIVSNEEDED(user.getNickname(), channelName), user.getFd());
+            sendResponse(ERR_NOTCHANOPER(user.getNickname(), channelName), user.getFd());
             return;
         }
         setModes(user);

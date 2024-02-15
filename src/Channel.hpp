@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:20 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/11 22:16:39 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/15 00:50:56 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Channel {
         void    setTopic(const std::string &topic);
         
         Channel(const std::string &channel_name);
-        std::string generateMemebrsList();
+        std::string generateMemebrsList(const std::string &nickname);
         bool    isMemberInChannel(const int &fd);
         bool    checkIfAdmin(const int &user_fd);
         bool    checkIfInvited(const int &user_fd);

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 00:14:48 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/12 12:56:50 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/15 10:16:30 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ size_t Channel::getMembersCount() const {
     return (members.size());
 }
 
-std::string Channel::generateMemebrsList() {
-    std::string members_list = ":server_name 353 nick = #" + name + "   :";
+std::string Channel::generateMemebrsList(const std::string &nickname) {
+    std::string members_list = "353 " + nickname +" = #" + name + " :";
     for (std::map<int, std::string>::iterator it = members.begin(); it != members.end(); it++) {
         if (std::find(admins.begin(), admins.end(), it->first) != admins.end())
             members_list += "@";

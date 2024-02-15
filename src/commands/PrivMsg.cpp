@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:44:01 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/06 22:31:11 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/14 21:29:25 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void PrivMsg::Execute(std::string &buffer, Connection &user, Server &server) {
                 else
                     sendResponse(ERR_CANNOTSENDTOCHAN(executer->getNickname(), target), user.getFd());
             } else
-                sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), target), user.getFd());
+                sendResponse(ERR_NOSUCHCHANNEL(executer->getNickname(), target), user.getFd());
         } 
         else
         {

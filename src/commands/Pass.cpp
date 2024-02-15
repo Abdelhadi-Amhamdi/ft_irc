@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmaazouz <nmaazouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 11:52:11 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/01/31 18:52:58 by nmaazouz         ###   ########.fr       */
+/*   Updated: 2024/02/14 21:33:32 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Pass::Pass() : ACommand("PASS") {}
 void Pass::Execute(std::string &buffer, Connection &user, Server &server) {
     commandFormater(buffer);
     if (!params.size())
-        throw std::logic_error(ERR_NEEDMOREPARAMS(std::string(""), this->name));
+        throw std::logic_error(ERR_NEEDMOREPARAMS(std::string("nick"), this->name));
     if (user.getIsAuthentificated() == true || !user.getNickname().empty())
         throw std::logic_error(ERR_ALREADYREGISTRED(user.getNickname()));
     

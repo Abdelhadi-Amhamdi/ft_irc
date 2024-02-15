@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 15:19:12 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/11 21:50:17 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/15 10:28:33 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void    Connection::setNickname(const std::string &nickname_, ClientSource& clie
         return;
     Client*	client = clientSource.getClientByNickname(nickname_);
     if (client)
-        throw std::logic_error(ERR_ALREADYINUSE(nickname_));
+        throw std::logic_error(ERR_ALREADYINUSE(this->nickname, nickname_));
     if (!this->nickname.empty())
     {
         message = RPL_NICK(this->nickname, nickname_);

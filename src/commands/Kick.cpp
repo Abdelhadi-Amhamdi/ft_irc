@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 13:37:26 by aamhamdi          #+#    #+#             */
-/*   Updated: 2024/02/12 12:57:41 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2024/02/15 00:51:50 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
         return;
     commandFormater(buffer);
     if (params.size() < 2) {
-        throw sendResponse(ERR_NEEDMOREPARAMSS(user.getNickname(), this->name), user.getFd());
+        throw sendResponse(ERR_NEEDMOREPARAMS(user.getNickname(), this->name), user.getFd());
     }
     std::string channel_name,users;
     channel_name = params[0];
@@ -41,7 +41,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
     if (channel_name[0] == '#')
         channel_name.erase(channel_name.begin());
     else {
-        throw sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
+        throw sendResponse(ERR_NOSUCHCHANNEL(executer->getNickname(), channel_name), user.getFd());
     }
     Channel *channel = channels_manager.getChannelByName(channel_name);
     if (channel) 
@@ -60,14 +60,14 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
             if (client) 
             {
                 if (!channel->isMemberInChannel(client->getFd())) {
-                    sendResponse(ERR_USERNOTONCHANNEL(executer->getNickname(), username), user.getFd());
+                    sendResponse(ERR_USERNOTONCHANNEL(executer->getNickname(), username, channel_name), user.getFd());
                     continue;
                 }
                 channel->broadCastResponse(":" + user.getNickname() + "!~" + executer->getLogin() + "@" + executer->getHostname() + " Kick #" + channel_name + " " + username + " " + comment + "\r\n");
                 channel->delUserFromChannel(client->getFd());
                 channel->delAdmin(client->getFd());
                 executer->deletefromgroupsin(channel_name);
-                channel->broadCastResponse(channel->generateMemebrsList());
+                channel->broadCastResponse(channel->generateMemebrsList(user.getNickname()));
                 channel->broadCastResponse(RPL_NAMESEND(executer->getNickname(), channel_name));
             } 
             else 
@@ -78,7 +78,7 @@ void Kick::Execute(std::string &buffer, Connection &user, Server &server) {
         }
     } 
     else {
-        throw sendResponse(ERR_NOSUCHCHANNELL(executer->getNickname(), channel_name), user.getFd());
+        throw sendResponse(ERR_NOSUCHCHANNEL(executer->getNickname(), channel_name), user.getFd());
     }
 }
 
